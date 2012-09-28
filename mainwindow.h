@@ -16,7 +16,11 @@ public:
     ~MainWindow();
     
 private slots:
-
+    void openFile();
+    void saveFile();
+    void closeFile();
+    void saveFileAs();
+    void quit();
 
 private:
     void createActions();
@@ -35,7 +39,7 @@ private:
     QAction *fileSaveAct;
     QAction *fileSaveAsAct;
     QAction *fileCloseAct;
-    QAction *fileQuitAct;
+    QAction *quitAct;
 
     ImageView *imageView;
     QWidget *centralWidget;

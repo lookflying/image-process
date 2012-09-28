@@ -16,18 +16,18 @@ public:
 signals:
     
 public slots:
-    void openImage(QString file);
+    bool openImage(QString fileName);
     void saveImage();
-    void saveImageAs(QString file);
+    void saveImageAs(QString fileName);
 public:
-    void showImage(QImage img);
+    void showImage(QImage *img);
 
 private:
 
-    QGraphicsScene* m_scene;
-    QMutex m_mutex;
-    QString m_file;
-    QImage m_img;
+    QGraphicsScene *scene;
+    QMutex mutex;
+    QString file;
+    QImage *image;
 
 
 

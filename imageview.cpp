@@ -2,38 +2,48 @@
 
 
 #include <QDebug>
+#include <QImageReader>
 
 
 ImageView::ImageView(QWidget *parent) :
     QGraphicsView(parent)
 {
-    m_scene = new QGraphicsScene(this);
+    scene = new QGraphicsScene(this);
+    image = new QImage();
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
 }
 
 
-void ImageView::openImage(QString file){
-    this->m_file = file;
-    bool rst = this->m_img.load(this->m_file);
-    showImage(m_img);
+bool ImageView::openImage(QString fileName){
+    qDebug()<<fileName;
+    qDebug()<<QImageReader::supportedImageFormats();
+    this->file = file;
+    this->image = new QImage();
+    bool rst = this->image->load(this->file, "BMP");
+    qDebug()<<rst<<" "<< fileName.right(fileName.length() - fileName.lastIndexOf("."))<<" "<<fileName.length()<<" "<<fileName.lastIndexOf(".");
+    if (rst){
+        showImage(image);
+    }
+    return rst;
 }
 
 void ImageView::saveImage(){
 
 }
 
-void ImageView::saveImageAs(QString file){
+void ImageView::saveImageAs(QString fileName){
 
 }
 
-void ImageView::showImage(QImage img){
-    this->m_mutex.lock();
-    m_scene->clear();
-    m_scene->addPixmap(QPixmap::fromImage(img));
-    this->setScene(m_scene);
-    this->m_mutex.unlock();
+void ImageView::showImage(QImage *img){
+    this->mutex.lock();
+    scene->clear();
+    scene->addPixmap(QPixmap::fromImage(*img));
+    this->setScene(scene);
+    this->repaint();
+    this->mutex.unlock();
 }
 
 
