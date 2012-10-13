@@ -105,7 +105,7 @@ void MainWindow::create_tool_box(){
                                  0,
                                  width() * 2 / 7,
                                  height() - menu_bar_->height() -  main_tool_bar_->height() - status_bar_->height() - 30));
-    qDebug()<<tab_widght_->height();
+    qDebug()<<tab_widget_->height();
     qDebug()<<height() - main_tool_bar_->height() - status_bar_->height();
     qDebug()<<tab_1_->height();
 //    tool_box_->setFrameShape(QFrame::Box);
@@ -129,18 +129,24 @@ void MainWindow::create_tool_box(){
 }
 
 void MainWindow::create_tab_widget(){
-    tab_widght_ = new QTabWidget(central_widget_);
-    tab_widght_->setObjectName(QString::fromUtf8("tabWidget"));
-    tab_widght_->setGeometry(QRect(0,
+    tab_widget_ = new QTabWidget(central_widget_);
+    tab_widget_->setObjectName(QString::fromUtf8("tabWidget"));
+    tab_widget_->setGeometry(QRect(0,
                                    main_tool_bar_->height(),
                                    width() * 2 / 7,
                                    height() - menu_bar_->height() - main_tool_bar_->height() - status_bar_->height()));
     tab_1_ = new QWidget();
     tab_1_->setObjectName(QString::fromUtf8("Tab1"));
-    tab_widght_->addTab(tab_1_, QString::fromUtf8("tab1"));
+    tab_widget_->addTab(tab_1_, QString::fromUtf8("tab1"));
     tab_2_ = new QWidget();
     tab_2_->setObjectName(QString::fromUtf8("Tab2"));
-    tab_widght_->addTab(tab_2_, QString::fromUtf8("tab2"));
+    tab_widget_->addTab(tab_2_, QString::fromUtf8("tab2"));
+    tab_gray_ = new GrayScaleTransfromWidget(tab_widget_->width(), tab_widget_->height());
+    tab_widget_->addTab(tab_gray_, QString::fromUtf8("Gray"));
+}
+
+void MainWindow::create_function_widget_1(){
+
 }
 
 void MainWindow::open_file(){

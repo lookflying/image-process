@@ -9,8 +9,9 @@
 #include <QToolBox>
 #include <QWidget>
 #include <QTabWidget>
-
+#include <QLabel>
 #include "imageview.h"
+#include "grayscaletransfromwidget.h"
 
 
 namespace Ui {
@@ -41,6 +42,7 @@ private:
     void create_menu_bar();
     void create_tool_box();
     void create_tab_widget();
+    void create_function_widget_1();
     QMenu *file_menu_;
     QMenu *edit_menu_;
 
@@ -59,15 +61,27 @@ private:
     QToolBar *main_tool_bar_;
     QStatusBar *status_bar_;
 
-    QTabWidget *tab_widght_;
+    QTabWidget *tab_widget_;
     QWidget * tab_1_;
     QWidget * tab_2_;
+
+    GrayScaleTransfromWidget *tab_gray_;
 
     QToolBox *tool_box_;
     QWidget *tool_page_1_;
     QWidget *tool_page_2_;
     QWidget *tool_page_3_;
     QWidget *tool_page_4_;
+
+    //for page 1
+    QSpinBox *spin_box_1_1_;
+    QSpinBox *spin_box_1_2_;
+    QSpinBox *spin_box_1_3_;
+    QSpinBox *spin_box_1_4_;
+    QLabel *label_1_1;
+    QLabel *label_1_2;
+    QLabel *label_1_3;
+    QLabel *label_1_4;
 
 
 };

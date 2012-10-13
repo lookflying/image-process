@@ -13,11 +13,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     imageview.cpp \
-    fimage.cpp
+    fimage.cpp \
+    grayscaletransfromwidget.cpp \
+    geometrytransfromwidget.cpp \
+    basicoperationwidget.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
-    fimage.h
+    fimage.h \
+    grayscaletransfromwidget.h \
+    geometrytransfromwidget.h \
+    basicoperationwidget.h
 
 FORMS    +=
 
