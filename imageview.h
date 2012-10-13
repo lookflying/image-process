@@ -4,7 +4,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMutex>
-
+#include "fimage.h"
 
 
 class ImageView : public QGraphicsView
@@ -17,17 +17,17 @@ signals:
     
 public slots:
     bool openImage(QString fileName);
-    void saveImage();
-    void saveImageAs(QString fileName);
+    void save_image();
+    void save_image_as(QString fileName);
 public:
-    void showImage(QImage *img);
+    void show_image(QImage img);
 
 private:
 
-    QGraphicsScene *scene;
-    QMutex mutex;
-    QString file;
-    QImage *image;
+    QGraphicsScene *scene_;
+    QMutex mutex_;
+    QString file_;
+    FImage image_data_;
 
 
 
