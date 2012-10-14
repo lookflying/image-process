@@ -10,12 +10,10 @@ class ChartWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ChartWidget(int w, int h, QWidget *parent = 0);
+    explicit ChartWidget(QWidget *parent = 0);
     enum chart_types{LINE, HISTOGRAM};
     typedef int chart_type;
-    void set_property(int width,
-                      int height,
-                      int x_min = 0,
+    void set_property(int x_min = 0,
                       int x_max = 255,
                       int y_min = 0,
                       int y_max = 255,

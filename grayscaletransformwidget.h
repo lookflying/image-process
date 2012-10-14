@@ -48,7 +48,10 @@ private:
     QPushButton *button_exponent_;
 
     QWidget *tool_page_histogram_;
-    ChartWidget *chart_hitogram_;
+    ChartWidget *chart_histogram_;
+    QPushButton *button_show_;
+    QPushButton *button_match_;
+    QPushButton *button_balance_;
 
 
     

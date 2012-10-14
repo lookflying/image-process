@@ -3,8 +3,8 @@
 GrayScaleTransfromWidget::GrayScaleTransfromWidget(int width, int height, QWidget *parent) :
     QWidget(parent)
 {
-    page_height_ = 160;
-    this->resize(width, height * 2 / 3);
+    page_height_ = 200;
+    this->resize(width, height * 5 / 6);
     create_widget();
     create_page_linear();
     create_page_non_linear();
@@ -83,8 +83,17 @@ void GrayScaleTransfromWidget::create_page_non_linear(){
 void GrayScaleTransfromWidget::create_page_histogram(){
     tool_page_histogram_ = new QWidget();
     tool_page_histogram_->setGeometry(QRect(0, 0, width(), page_height_));
-    chart_hitogram_ = new ChartWidget(width(), page_height_ , tool_page_histogram_);
-    chart_hitogram_ ->setGeometry(0, 0, width(), page_height_);
-    chart_hitogram_->set_property(width(), page_height_);
+    chart_histogram_ = new ChartWidget(tool_page_histogram_);
+    chart_histogram_ ->setGeometry(0, 0, width(), page_height_ - 60);
+    chart_histogram_->set_property(0, 255, 0, 255, ChartWidget::HISTOGRAM);
+    button_show_ = new QPushButton(tool_page_histogram_);
+    button_show_->setGeometry(QRect(width() / 3, chart_histogram_->height(), width() / 3, 24));
+    button_show_->setText("Show");
+    button_balance_ = new QPushButton(tool_page_histogram_);
+    button_balance_->setGeometry(QRect(width() / 7, chart_histogram_->height() + button_show_->height(), width() *2 / 7, 24));
+    button_balance_->setText("Balance");
+    button_match_ = new QPushButton(tool_page_histogram_);
+    button_match_->setGeometry(QRect(width() * 4 / 7, chart_histogram_->height() + button_show_->height(), width() * 2 / 7, 24));
+    button_match_->setText("Match");
     tool_box_->addItem(tool_page_histogram_, QString::fromUtf8("Histogram"));
 }

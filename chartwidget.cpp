@@ -1,9 +1,8 @@
 #include "chartwidget.h"
 #include <QDebug>
-ChartWidget::ChartWidget(int w, int h, QWidget *parent):
+ChartWidget::ChartWidget(QWidget *parent):
     QWidget(parent)
 {
-    set_property(w, h);
     pressed_ = false;
     continous_ = false;
 }
@@ -30,7 +29,15 @@ void ChartWidget::paintEvent(QPaintEvent *){
             }
         }
     }else if (type_ == HISTOGRAM){
-
+        for (int x = x_min_ ; x <= x_max_; ++x){
+            int y;
+            if(fun.get(x, y)){
+                painter.drawLine(24 + (x - x_min_) * w_ / range_x_,
+                                 (y_max_ - y) * h_ / range_y_,
+                                 24 + (x - x_min_) * w_ / range_x_,
+                                 h_);
+            }
+        }
     }
 }
 
@@ -73,8 +80,7 @@ void ChartWidget::mouseReleaseEvent(QMouseEvent *){
     continous_ = false;
 }
 
-void ChartWidget::set_property(int width, int height, int x_min, int x_max, int y_min, int y_max, chart_type type){
-    resize(width, height);
+void ChartWidget::set_property( int x_min, int x_max, int y_min, int y_max, chart_type type){
     x_min_ = x_min;
     x_max_ = x_max;
     y_min_ = y_min;
