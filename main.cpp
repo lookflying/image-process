@@ -1,5 +1,7 @@
 #include <QtGui/QApplication>
 #include "mainwindow.h"
+#include "linearfunction.h"
+#include <cstdlib>
 
 int main(int argc, char *argv[])
 {
@@ -8,4 +10,6 @@ int main(int argc, char *argv[])
     w.show();
     
     return a.exec();
+
+
 }

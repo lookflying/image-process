@@ -3,11 +3,12 @@
 GrayScaleTransfromWidget::GrayScaleTransfromWidget(int width, int height, QWidget *parent) :
     QWidget(parent)
 {
-    page_height_ = 80;
-    this->resize(width, height / 2);
+    page_height_ = 160;
+    this->resize(width, height * 2 / 3);
     create_widget();
     create_page_linear();
     create_page_non_linear();
+    create_page_histogram();
 }
 
 void GrayScaleTransfromWidget::create_widget(){
@@ -77,4 +78,13 @@ void GrayScaleTransfromWidget::create_page_non_linear(){
     button_exponent_->setText(QString::fromUtf8("Exponent"));
     tool_box_->addItem(tool_page_non_linear_, QString::fromUtf8("Non Linear"));
 
+}
+
+void GrayScaleTransfromWidget::create_page_histogram(){
+    tool_page_histogram_ = new QWidget();
+    tool_page_histogram_->setGeometry(QRect(0, 0, width(), page_height_));
+    chart_hitogram_ = new ChartWidget(width(), page_height_ , tool_page_histogram_);
+    chart_hitogram_ ->setGeometry(0, 0, width(), page_height_);
+    chart_hitogram_->set_property(width(), page_height_);
+    tool_box_->addItem(tool_page_histogram_, QString::fromUtf8("Histogram"));
 }

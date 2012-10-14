@@ -16,14 +16,18 @@ SOURCES += main.cpp\
     fimage.cpp \
     grayscaletransfromwidget.cpp \
     geometrytransfromwidget.cpp \
-    basicoperationwidget.cpp
+    basicoperationwidget.cpp \
+    chartwidget.cpp \
+    linearfunction.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
     fimage.h \
     grayscaletransfromwidget.h \
     geometrytransfromwidget.h \
-    basicoperationwidget.h
+    basicoperationwidget.h \
+    chartwidget.h \
+    linearfunction.h
 
 FORMS    +=
 

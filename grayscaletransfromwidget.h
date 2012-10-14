@@ -7,7 +7,7 @@
 #include <QSpinBox>
 #include <QPushButton>
 #include <QDoubleSpinBox>
-
+#include "chartwidget.h"
 class GrayScaleTransfromWidget : public QWidget
 {
     Q_OBJECT
@@ -22,7 +22,7 @@ private:
     void create_widget();
     void create_page_linear();
     void create_page_non_linear();
-    void create_page_histrgram();
+    void create_page_histogram();
 
     int page_height_;
 
@@ -48,7 +48,7 @@ private:
     QPushButton *button_exponent_;
 
     QWidget *tool_page_histogram_;
-
+    ChartWidget *chart_hitogram_;
 
 
     

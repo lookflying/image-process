@@ -105,9 +105,6 @@ void MainWindow::create_tool_box(){
                                  0,
                                  width() * 2 / 7,
                                  height() - menu_bar_->height() -  main_tool_bar_->height() - status_bar_->height() - 30));
-    qDebug()<<tab_widget_->height();
-    qDebug()<<height() - main_tool_bar_->height() - status_bar_->height();
-    qDebug()<<tab_1_->height();
 //    tool_box_->setFrameShape(QFrame::Box);
 //    tool_box_->setLineWidth(1);
     tool_page_1_ = new QWidget();
