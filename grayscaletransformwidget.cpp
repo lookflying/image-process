@@ -1,6 +1,6 @@
-#include "grayscaletransfromwidget.h"
+#include "grayscaletransformwidget.h"
 
-GrayScaleTransfromWidget::GrayScaleTransfromWidget(int width, int height, QWidget *parent) :
+GrayScaleTransformWidget::GrayScaleTransformWidget(int width, int height, QWidget *parent) :
     QWidget(parent)
 {
     page_height_ = 200;
@@ -11,12 +11,12 @@ GrayScaleTransfromWidget::GrayScaleTransfromWidget(int width, int height, QWidge
     create_page_histogram();
 }
 
-void GrayScaleTransfromWidget::create_widget(){
+void GrayScaleTransformWidget::create_widget(){
     tool_box_ = new QToolBox(this);
     tool_box_->setGeometry(QRect(0, 0, width(), height()));
 }
 
-void GrayScaleTransfromWidget::create_page_linear(){
+void GrayScaleTransformWidget::create_page_linear(){
     tool_page_linear_ = new QWidget();
     tool_page_linear_->setGeometry(QRect(0, 0, width(), page_height_));
     label_input_ = new QLabel(tool_page_linear_);
@@ -46,7 +46,7 @@ void GrayScaleTransfromWidget::create_page_linear(){
     tool_box_->addItem(tool_page_linear_, "Linear");
 }
 
-void GrayScaleTransfromWidget::create_page_non_linear(){
+void GrayScaleTransformWidget::create_page_non_linear(){
     tool_page_non_linear_ = new QWidget();
     tool_page_non_linear_->setGeometry(QRect(0, 0, width(), page_height_));
     label_a_ = new QLabel(tool_page_non_linear_);
@@ -80,7 +80,7 @@ void GrayScaleTransfromWidget::create_page_non_linear(){
 
 }
 
-void GrayScaleTransfromWidget::create_page_histogram(){
+void GrayScaleTransformWidget::create_page_histogram(){
     tool_page_histogram_ = new QWidget();
     tool_page_histogram_->setGeometry(QRect(0, 0, width(), page_height_));
     chart_histogram_ = new ChartWidget(tool_page_histogram_);

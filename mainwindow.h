@@ -11,7 +11,8 @@
 #include <QTabWidget>
 #include <QLabel>
 #include "imageview.h"
-#include "grayscaletransfromwidget.h"
+#include "grayscaletransformwidget.h"
+#include "basicoperationwidget.h"
 
 
 namespace Ui {
@@ -65,7 +66,9 @@ private:
     QWidget * tab_1_;
     QWidget * tab_2_;
 
-    GrayScaleTransfromWidget *tab_gray_;
+    GrayScaleTransformWidget *tab_gray_;
+
+    BasicOperationWidget *tab_basic_;
 
     QToolBox *tool_box_;
     QWidget *tool_page_1_;

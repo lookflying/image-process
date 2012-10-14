@@ -135,10 +135,11 @@ void MainWindow::create_tab_widget(){
     tab_1_ = new QWidget();
     tab_1_->setObjectName(QString::fromUtf8("Tab1"));
     tab_widget_->addTab(tab_1_, QString::fromUtf8("tab1"));
-    tab_2_ = new QWidget();
-    tab_2_->setObjectName(QString::fromUtf8("Tab2"));
-    tab_widget_->addTab(tab_2_, QString::fromUtf8("tab2"));
-    tab_gray_ = new GrayScaleTransfromWidget(tab_widget_->width(), tab_widget_->height());
+
+    tab_basic_ = new BasicOperationWidget(tab_widget_->width(), tab_widget_->height());
+    tab_widget_->addTab(tab_basic_, QString::fromUtf8("Basic"));
+
+    tab_gray_ = new GrayScaleTransformWidget(tab_widget_->width(), tab_widget_->height());
     tab_widget_->addTab(tab_gray_, QString::fromUtf8("Gray"));
 }
 

@@ -8,11 +8,11 @@
 #include <QPushButton>
 #include <QDoubleSpinBox>
 #include "chartwidget.h"
-class GrayScaleTransfromWidget : public QWidget
+class GrayScaleTransformWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GrayScaleTransfromWidget(int width, int height, QWidget *parent = 0);
+    explicit GrayScaleTransformWidget(int width, int height, QWidget *parent = 0);
     
 signals:
     
