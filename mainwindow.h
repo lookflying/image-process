@@ -63,28 +63,13 @@ private:
     QStatusBar *status_bar_;
 
     QTabWidget *tab_widget_;
-    QWidget * tab_1_;
-    QWidget * tab_2_;
 
     GrayScaleTransformWidget *tab_gray_;
 
     BasicOperationWidget *tab_basic_;
 
-    QToolBox *tool_box_;
-    QWidget *tool_page_1_;
-    QWidget *tool_page_2_;
-    QWidget *tool_page_3_;
-    QWidget *tool_page_4_;
 
-    //for page 1
-    QSpinBox *spin_box_1_1_;
-    QSpinBox *spin_box_1_2_;
-    QSpinBox *spin_box_1_3_;
-    QSpinBox *spin_box_1_4_;
-    QLabel *label_1_1;
-    QLabel *label_1_2;
-    QLabel *label_1_3;
-    QLabel *label_1_4;
+
 
 
 };

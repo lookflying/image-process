@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     create_status_bar();
     create_image_view();
     create_tab_widget();
-    create_tool_box();
     setCentralWidget(central_widget_);
     show();
 }
@@ -98,32 +97,7 @@ void MainWindow::create_menu_bar(){
     menu_bar_->setGeometry(QRect(0, 0, width(), 25));
 }
 
-void MainWindow::create_tool_box(){
-    tool_box_ = new QToolBox(tab_1_);
-    tool_box_->setObjectName(QString::fromUtf8("toolBar"));
-    tool_box_->setGeometry(QRect(0,
-                                 0,
-                                 width() * 2 / 7,
-                                 height() - menu_bar_->height() -  main_tool_bar_->height() - status_bar_->height() - 30));
-//    tool_box_->setFrameShape(QFrame::Box);
-//    tool_box_->setLineWidth(1);
-    tool_page_1_ = new QWidget();
-    tool_page_1_->setObjectName(QString::fromUtf8("toolPage1"));
-    tool_page_1_->setGeometry(QRect(0, 0, tool_box_->width() , 80));
-    tool_box_->addItem(tool_page_1_, QString::fromUtf8("Page 1"));
-    tool_page_2_ = new QWidget();
-    tool_page_2_->setObjectName(QString::fromUtf8("toolPage2"));
-    tool_page_2_->setGeometry(QRect(0, 0, tool_box_->width(), 80));
-    tool_box_->addItem(tool_page_2_, QString::fromUtf8("Page 2"));
-    tool_page_3_ = new QWidget();
-    tool_page_3_->setObjectName(QString::fromUtf8("toolPage3"));
-    tool_page_3_->setGeometry(QRect(0, 0, tool_box_->width(), 80));
-    tool_box_->addItem(tool_page_3_, QString::fromUtf8("Page 3"));
-    tool_page_4_ = new QWidget();
-    tool_page_4_->setObjectName(QString::fromUtf8("toolPage4"));
-    tool_page_4_->setGeometry(QRect(0, 0, tool_box_->width(), 80));
-    tool_box_->addItem(tool_page_4_, QString::fromUtf8("Page 4"));
-}
+
 
 void MainWindow::create_tab_widget(){
     tab_widget_ = new QTabWidget(central_widget_);
@@ -132,9 +106,7 @@ void MainWindow::create_tab_widget(){
                                    main_tool_bar_->height(),
                                    width() * 2 / 7,
                                    height() - menu_bar_->height() - main_tool_bar_->height() - status_bar_->height()));
-    tab_1_ = new QWidget();
-    tab_1_->setObjectName(QString::fromUtf8("Tab1"));
-    tab_widget_->addTab(tab_1_, QString::fromUtf8("tab1"));
+
 
     tab_basic_ = new BasicOperationWidget(tab_widget_->width(), tab_widget_->height());
     tab_widget_->addTab(tab_basic_, QString::fromUtf8("Basic"));

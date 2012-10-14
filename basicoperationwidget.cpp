@@ -50,10 +50,15 @@ void BasicOperationWidget::create_page_algebra(){
 void BasicOperationWidget::create_page_geometry(){
     tool_page_geometry_ = new QWidget();
     tool_page_geometry_->setGeometry(QRect(0, 0, width(), page_height_));
+    combo_zoom_ = new QComboBox(tool_page_geometry_);
+    combo_zoom_->setGeometry(0, 0, width(), 24);
+    combo_zoom_->insertItem(0, QString::fromUtf8("Nearest Neighbour Interpolation"));
+    combo_zoom_->insertItem(1, QString::fromUtf8("Bilinear Interpolation"));
+    combo_zoom_->insertItem(2, QString::fromUtf8("Bicubic Interpolation"));
     label_zoom_ = new QLabel(tool_page_geometry_);
-    label_zoom_->setGeometry(QRect(width() / 6, 0, width() / 3, 24));
+    label_zoom_->setGeometry(QRect(width() / 6, combo_zoom_->height(), width() / 3, 24));
     label_zoom_->setText(QString::fromUtf8("Zoom"));
     spin_box_zoom_ = new QSpinBox(tool_page_geometry_);
-    spin_box_zoom_->setGeometry(QRect(width() / 2, 0, width() / 3, 24));
+    spin_box_zoom_->setGeometry(QRect(width() / 2, combo_zoom_->height(), width() / 3, 24));
     tool_box_->addItem(tool_page_geometry_, QString::fromUtf8("Geometry"));
 }
