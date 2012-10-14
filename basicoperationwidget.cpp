@@ -51,14 +51,39 @@ void BasicOperationWidget::create_page_geometry(){
     tool_page_geometry_ = new QWidget();
     tool_page_geometry_->setGeometry(QRect(0, 0, width(), page_height_));
     combo_zoom_ = new QComboBox(tool_page_geometry_);
-    combo_zoom_->setGeometry(0, 0, width(), 24);
-    combo_zoom_->insertItem(0, QString::fromUtf8("Nearest Neighbour Interpolation"));
-    combo_zoom_->insertItem(1, QString::fromUtf8("Bilinear Interpolation"));
-    combo_zoom_->insertItem(2, QString::fromUtf8("Bicubic Interpolation"));
+    combo_zoom_->setGeometry(width() / 6, 0, width() * 2 / 3, 24);
+    combo_zoom_->insertItem(0, QString::fromUtf8("Nearest Neighbour"));
+    combo_zoom_->insertItem(1, QString::fromUtf8("Bilinear"));
+    combo_zoom_->insertItem(2, QString::fromUtf8("Bicubic"));
     label_zoom_ = new QLabel(tool_page_geometry_);
     label_zoom_->setGeometry(QRect(width() / 6, combo_zoom_->height(), width() / 3, 24));
     label_zoom_->setText(QString::fromUtf8("Zoom"));
     spin_box_zoom_ = new QSpinBox(tool_page_geometry_);
     spin_box_zoom_->setGeometry(QRect(width() / 2, combo_zoom_->height(), width() / 3, 24));
+    button_zoom_ = new QPushButton(tool_page_geometry_);
+    button_zoom_->setGeometry(QRect(width() / 3,
+                                    combo_zoom_->height() + label_zoom_->height(),
+                                    width() / 3,
+                                    24));
+    button_zoom_->setText(QString::fromUtf8("Zoom"));
+    label_rotate_ = new QLabel(tool_page_geometry_);
+    label_rotate_->setGeometry(QRect(width() / 5,
+                                     combo_zoom_->height() + label_zoom_->height() + 48,
+                                     width() * 3 / 5,
+                                     24));
+    label_rotate_->setText(QString::fromUtf8("Rotate(clockwise)"));
+    spin_box_rotate_ = new QSpinBox(tool_page_geometry_);
+    spin_box_rotate_->setGeometry(QRect(width() / 3,
+                                        combo_zoom_->height() + label_zoom_->height() + label_rotate_->height() + 48,
+                                        width() / 3,
+                                        24));
+    spin_box_rotate_->setMinimum(-360);
+    spin_box_rotate_->setMaximum(360);
+    button_rotate_ = new QPushButton(tool_page_geometry_);
+    button_rotate_->setGeometry(QRect(width() / 5,
+                                      combo_zoom_->height() + label_zoom_->height() + label_rotate_->height() + spin_box_rotate_->height() + 48,
+                                      width() * 3 / 5,
+                                      24));
+    button_rotate_->setText(QString::fromUtf8("Rotate"));
     tool_box_->addItem(tool_page_geometry_, QString::fromUtf8("Geometry"));
 }

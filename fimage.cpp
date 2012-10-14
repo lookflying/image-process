@@ -18,7 +18,7 @@ bool FImage::load(QString file_name){
 }
 
 bool FImage::save(QString file_name){
-    imwrite(file_name.toStdString(), img_);
+    return imwrite(file_name.toStdString(), img_);
 }
 
 

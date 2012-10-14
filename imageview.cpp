@@ -17,9 +17,7 @@ ImageView::ImageView(QWidget *parent) :
 
 bool ImageView::openImage(QString file_name){
     file_ = file_name;
-    image_data_;
     bool rst = image_data_.load(file_name);
-
     if (rst){
         show_image(image_data_.data());
     }

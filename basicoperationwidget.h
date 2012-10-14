@@ -39,7 +39,9 @@ private:
     QLabel *label_zoom_;
     QComboBox *combo_zoom_;
     QSpinBox *spin_box_zoom_;
+    QPushButton *button_zoom_;
     QLabel *label_rotate_;
+    QPushButton *button_rotate_;
     QSpinBox *spin_box_rotate_;
     
 };
