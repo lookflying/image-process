@@ -8,6 +8,8 @@
 
 #include <QMessageBox>
 
+#include "imageprocess.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -25,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     create_image_view();
     create_tab_widget();
     setCentralWidget(central_widget_);
+    connect_signal_slot();
     show();
 }
 
@@ -125,6 +128,11 @@ void MainWindow::open_file(){
 
 }
 
+void MainWindow::connect_signal_slot(){
+    connect(tab_gray_->button_linear_, SIGNAL(clicked()), this, SLOT(gray_linear_transform()));
+    connect(this, SIGNAL(refresh_image_view()), image_view_, SLOT(refresh()));
+}
+
 void MainWindow::save_file(){
 
 }
@@ -139,4 +147,13 @@ void MainWindow::close_file(){
 
 void MainWindow::quit(){
 
+}
+
+void MainWindow::gray_linear_transform(){
+    int min_x = tab_gray_->spin_box_input_1_->value();
+    int max_x = tab_gray_->spin_box_input_2_->value();
+    int min_y = tab_gray_->spin_box_output_1_->value();
+    int max_y = tab_gray_->spin_box_output_2_->value();
+    ImageProcess::gray_linear_transform(image_view_->image_data_, min_x, max_x, min_y, max_y);
+    emit refresh_image_view();
 }

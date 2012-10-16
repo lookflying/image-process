@@ -14,17 +14,6 @@ class GrayScaleTransformWidget : public QWidget
 public:
     explicit GrayScaleTransformWidget(int width, int height, QWidget *parent = 0);
     
-signals:
-    
-public slots:
-
-private:
-    void create_widget();
-    void create_page_linear();
-    void create_page_non_linear();
-    void create_page_histogram();
-
-    int page_height_;
 
     QToolBox *tool_box_;
 
@@ -52,6 +41,19 @@ private:
     QPushButton *button_show_;
     QPushButton *button_match_;
     QPushButton *button_balance_;
+signals:
+    
+public slots:
+
+private:
+    void create_widget();
+    void create_page_linear();
+    void create_page_non_linear();
+    void create_page_histogram();
+
+    int page_height_;
+
+
 
 
     

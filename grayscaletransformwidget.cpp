@@ -23,20 +23,28 @@ void GrayScaleTransformWidget::create_page_linear(){
     label_input_->setGeometry(QRect(0, 0, width(), 24));
     label_input_->setText(QString::fromUtf8("Input Range"));
     spin_box_input_1_ = new QSpinBox(tool_page_linear_);
-    spin_box_input_1_->setGeometry(width() / 5, 24, width() / 5, 24);
+    spin_box_input_1_->setGeometry(width() / 6, 24, width() / 3, 24);
+    spin_box_input_1_->setMaximum(255);
+    spin_box_input_1_->setMinimum(0);
     spin_box_input_2_ = new QSpinBox(tool_page_linear_);
-    spin_box_input_2_->setGeometry(width() * 3 / 5, 24, width() / 5, 24);
+    spin_box_input_2_->setGeometry(width() / 2, 24, width() / 3, 24);
+    spin_box_input_2_->setMaximum(255);
+    spin_box_input_2_->setMinimum(0);
     label_output_ = new QLabel(tool_page_linear_);
     label_output_->setGeometry(QRect(0, spin_box_input_1_->height() + label_input_->height(), width(), 24));
     label_output_->setText(QString::fromUtf8("Output Range"));
     spin_box_output_1_ = new QSpinBox(tool_page_linear_);
-    spin_box_output_1_->setGeometry(width() / 5,
+    spin_box_output_1_->setGeometry(width() / 6,
                                     spin_box_input_1_->height() + label_input_->height() + label_output_->height()
-                                    , width() / 5, 24);
+                                    , width() / 3, 24);
+    spin_box_output_1_->setMaximum(255);
+    spin_box_output_1_->setMinimum(0);
     spin_box_output_2_ = new QSpinBox(tool_page_linear_);
-    spin_box_output_2_->setGeometry(width() * 3 / 5,
+    spin_box_output_2_->setGeometry(width() / 2,
                                     spin_box_input_1_->height() + label_input_->height() + label_output_->height(),
-                                    width() / 5, 24);
+                                    width() / 3, 24);
+    spin_box_output_2_->setMaximum(255);
+    spin_box_output_2_->setMinimum(0);
     button_linear_ = new QPushButton(tool_page_linear_);
     button_linear_->setGeometry(QRect(width() / 3,
                                 spin_box_input_1_->height() + label_input_->height() + label_output_->height() + spin_box_output_1_->height(),

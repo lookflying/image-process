@@ -41,4 +41,7 @@ void ImageView::show_image(QImage img){
     mutex_.unlock();
 }
 
+void ImageView::refresh(){
+     show_image(image_data_.data());
+}
 

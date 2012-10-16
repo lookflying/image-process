@@ -19,15 +19,16 @@ public slots:
     bool openImage(QString fileName);
     void save_image();
     void save_image_as(QString fileName);
+    void refresh();
 public:
     void show_image(QImage img);
+    FImage image_data_;
 
 private:
 
     QGraphicsScene *scene_;
     QMutex mutex_;
     QString file_;
-    FImage image_data_;
 
 
 

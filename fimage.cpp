@@ -29,8 +29,6 @@ QImage FImage::data(){
 QImage FImage::get_qimage(Mat &img){
     if (img.channels() == 3){
          return QImage((uchar*)img.data, img.cols, img.rows, img.channels() * img.cols, QImage::Format_RGB888);
-    }else{
-        return QImage((uchar*)img.data, img.cols, img.rows, img.channels() * img.cols, QImage::Format_Mono);
     }
     return QImage();
 }

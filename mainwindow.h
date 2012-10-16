@@ -27,12 +27,16 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     
+signals:
+    void refresh_image_view();
 private slots:
     void open_file();
     void save_file();
     void close_file();
     void save_file_as();
     void quit();
+
+    void gray_linear_transform();
 
 private:
     void create_actions();
@@ -43,6 +47,7 @@ private:
     void create_menu_bar();
     void create_tool_box();
     void create_tab_widget();
+    void connect_signal_slot();
     QMenu *file_menu_;
     QMenu *edit_menu_;
 
