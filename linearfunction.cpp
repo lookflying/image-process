@@ -2,28 +2,21 @@
 #include <cassert>
 #include <cstdio>
 using namespace std;
-LinearFunction::LinearFunction(int min_in, int max_in, int min_out, int max_out, int gran){
+LinearFunction::LinearFunction(int min_in, int max_in, int min_out, int max_out, int gran):
+    Function(min_in, max_in, min_out, max_out)
+{
     assert(min_in < max_in && min_out <= max_out);
-    min_in_ = min_in;
-    max_in_ = max_in;
-    min_out_ = min_out;
-    max_out_ = max_out;
-    data_.resize(max_in - min_in + 1);
     parameters_[min_in_] = min_out_;
     parameters_[max_out_] = min_out_;
     granularity_ = gran;
-    for (unsigned int i = 0; i < data_.size(); ++i){
-        data_[i] = min_out_;
-    }
-    ready_ = true;
 }
 
-LinearFunction::LinearFunction(){
-    ready_ = false;
+LinearFunction::LinearFunction()
+{
 }
 
-LinearFunction::~LinearFunction(){
-    data_.clear();
+LinearFunction::~LinearFunction()
+{
     parameters_.clear();
 }
 
@@ -88,15 +81,15 @@ void LinearFunction::set(int in, int out){
 
 }
 
-bool LinearFunction::get(int in, int& out){
-    assert(ready_);
-    if (in < min_in_ || in > max_in_ ){
-        return false;
-    }else{
-        out = data_[in - min_in_];
-        return true;
-    }
-}
+//bool LinearFunction::get(int in, int& out){
+//    assert(ready_);
+//    if (in < min_in_ || in > max_in_ ){
+//        return false;
+//    }else{
+//        out = data_[in - min_in_];
+//        return true;
+//    }
+//}
 
 void LinearFunction::remove(int in){
     assert(ready_);

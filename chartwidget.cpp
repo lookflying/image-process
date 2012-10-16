@@ -23,20 +23,18 @@ void ChartWidget::paintEvent(QPaintEvent *){
     painter.drawText(w_, height(), QString("%1").arg(x_max_));
     if (type_ == LINE){
         for (int x = x_min_ ; x <= x_max_; ++x){
-            int y;
-            if(fun.get(x, y)){
-                painter.drawPoint(24 + (x - x_min_) * w_ / range_x_, (y_max_ - y) * h_ / range_y_);
-            }
+            int y = fun.get(x);
+            painter.drawPoint(24 + (x - x_min_) * w_ / range_x_, (y_max_ - y) * h_ / range_y_);
+
         }
     }else if (type_ == HISTOGRAM){
         for (int x = x_min_ ; x <= x_max_; ++x){
-            int y;
-            if(fun.get(x, y)){
-                painter.drawLine(24 + (x - x_min_) * w_ / range_x_,
-                                 (y_max_ - y) * h_ / range_y_,
-                                 24 + (x - x_min_) * w_ / range_x_,
-                                 h_);
-            }
+            int y = fun.get(x);
+            painter.drawLine(24 + (x - x_min_) * w_ / range_x_,
+                             (y_max_ - y) * h_ / range_y_,
+                             24 + (x - x_min_) * w_ / range_x_,
+                             h_);
+
         }
     }
 }

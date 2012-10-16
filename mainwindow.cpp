@@ -115,9 +115,6 @@ void MainWindow::create_tab_widget(){
     tab_widget_->addTab(tab_gray_, QString::fromUtf8("Gray"));
 }
 
-void MainWindow::create_function_widget_1(){
-
-}
 
 void MainWindow::open_file(){
     QString fileName = QFileDialog::getOpenFileName(this);

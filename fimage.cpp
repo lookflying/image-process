@@ -27,6 +27,14 @@ QImage FImage::data(){
 }
 
 QImage FImage::get_qimage(Mat &img){
-    QImage rst((uchar*)img.data, img.cols, img.rows, img.channels() * img.cols, QImage::Format_RGB888);
-    return rst;
+    if (img.channels() == 3){
+         return QImage((uchar*)img.data, img.cols, img.rows, img.channels() * img.cols, QImage::Format_RGB888);
+    }else{
+        return QImage((uchar*)img.data, img.cols, img.rows, img.channels() * img.cols, QImage::Format_Mono);
+    }
+    return QImage();
+}
+
+Mat& FImage::get_opencv_image(){
+    return img_;
 }

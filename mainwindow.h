@@ -43,7 +43,6 @@ private:
     void create_menu_bar();
     void create_tool_box();
     void create_tab_widget();
-    void create_function_widget_1();
     QMenu *file_menu_;
     QMenu *edit_menu_;
 

@@ -17,7 +17,9 @@ SOURCES += main.cpp\
     basicoperationwidget.cpp \
     chartwidget.cpp \
     linearfunction.cpp \
-    grayscaletransformwidget.cpp
+    grayscaletransformwidget.cpp \
+    function.cpp \
+    imageprocess.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -25,7 +27,9 @@ HEADERS  += mainwindow.h \
     basicoperationwidget.h \
     chartwidget.h \
     linearfunction.h \
-    grayscaletransformwidget.h
+    grayscaletransformwidget.h \
+    function.h \
+    imageprocess.h
 
 FORMS    +=
 
