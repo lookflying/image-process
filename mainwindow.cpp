@@ -226,5 +226,3 @@ void MainWindow::gray_histogram_display(){
      tab_gray_->chart_histogram_->fun_ = fun;
      tab_gray_->chart_histogram_->repaint();
 }
-
-
