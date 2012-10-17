@@ -73,17 +73,29 @@ void GrayScaleTransformWidget::create_page_non_linear(){
     spin_box_c_ = new QDoubleSpinBox(tool_page_non_linear_);
     spin_box_c_->setGeometry(width() / 2, label_a_->height() + label_b_->height(), width() / 4, 24);
     button_log_ = new QPushButton(tool_page_non_linear_);
-    button_log_->setGeometry(width() / 9,
+    button_log_->setGeometry(width() / 12,
                              label_a_->height() + label_b_->height() + label_c_->height(),
-                             width() / 3,
+                             width() / 4,
                              24);
     button_log_->setText(QString::fromUtf8("Log"));
     button_exponent_ = new QPushButton(tool_page_non_linear_);
-    button_exponent_->setGeometry(width() * 5 / 9,
+    button_exponent_->setGeometry(width() * 5 / 12,
                              label_a_->height() + label_b_->height() + label_c_->height(),
                              width() / 3,
                              24);
     button_exponent_->setText(QString::fromUtf8("Exponent"));
+    button_non_linear_do_ = new QPushButton(tool_page_non_linear_);
+    button_non_linear_do_->setGeometry(QRect(width() * 5 / 6,
+                                             label_a_->height() + label_b_->height() + label_c_->height(),
+                                             width() / 8,
+                                             24));
+    button_non_linear_do_->setText(QString::fromUtf8("Do"));
+    char_non_linear_ = new ChartWidget(tool_page_non_linear_);
+    char_non_linear_->setGeometry(QRect(0,
+                                        label_a_->height() + label_b_->height() + label_c_->height() + button_log_->height()
+                                        , width(),
+                                        page_height_ - 60));
+    char_non_linear_->set_property(0, 255, 0, 255, ChartWidget::TABLE, ChartWidget::LINE);
     tool_box_->addItem(tool_page_non_linear_, QString::fromUtf8("Non Linear"));
 
 }

@@ -20,6 +20,8 @@ public:
                       int y_max = 255,
                       fun_type ft = TABLE,
                       chart_type ct = LINE);
+
+    Function *fun_;
 signals:
     
 public slots:
@@ -40,7 +42,6 @@ private:
     int range_y_;
     chart_type chart_type_;
     fun_type fun_type_;
-    Function *fun_;
     bool pressed_;
     bool continous_;
 };

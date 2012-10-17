@@ -8,6 +8,7 @@ ChartWidget::ChartWidget(QWidget *parent):
 {
     pressed_ = false;
     continous_ = false;
+    fun_ = NULL;
 }
 
 void ChartWidget::paintEvent(QPaintEvent *){
@@ -88,6 +89,9 @@ void ChartWidget::set_property( int x_min, int x_max, int y_min, int y_max, fun_
     y_max_ = y_max;
     chart_type_ = ct;
     fun_type_ = ft;
+    if (fun_ != NULL){
+        delete fun_;
+    }
     if (fun_type_ == LINEAR){
         fun_ = new LinearFunction(x_min, x_max, y_min, y_max);
     }else if (ft == LOG){
