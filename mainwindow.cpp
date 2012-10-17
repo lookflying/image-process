@@ -144,6 +144,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_gray_->button_equalize_, SIGNAL(clicked()), this, SLOT(gray_histogram_equalization()));
     connect(tab_gray_->button_match_, SIGNAL(clicked()), this, SLOT(gray_histogram_match()));
     connect(tab_basic_->button_zoom_, SIGNAL(clicked()), this, SLOT(geometry_zoom()));
+    connect(tab_basic_->button_rotate_, SIGNAL(clicked()), this, SLOT(geometry_rotate()));
 }
 
 void MainWindow::save_file(){
@@ -294,5 +295,24 @@ void MainWindow::geometry_zoom(){
     }
     int percentage = tab_basic_->spin_box_zoom_->value();
     ImageProcess::geometry_zoom(image_view_->image_data_, percentage, type);
+    emit refresh_image_view();
+}
+
+void MainWindow::geometry_rotate(){
+    ImageProcess::zoom_type type = ImageProcess::Nearest;
+    switch(tab_basic_->combo_zoom_->currentIndex()){
+    case 0:
+        type = ImageProcess::Nearest;
+        break;
+    case 1:
+        type = ImageProcess::BILINEAR;
+        break;
+    case 2:
+        type = ImageProcess::BICUBIC;
+        break;
+    }
+    int degree = tab_basic_->spin_box_rotate_->value();
+    double rad = static_cast<double>(degree) * 3.14159 / 180.0;
+    ImageProcess::geometry_rotate(image_view_->image_data_, rad, type);
     emit refresh_image_view();
 }

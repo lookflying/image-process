@@ -19,10 +19,13 @@ public:
     enum zoom_types{Nearest, BILINEAR, BICUBIC};
     typedef int zoom_type;
     static void geometry_zoom(FImage &in_out, int percentage, zoom_type type = BICUBIC);
+    static void geometry_rotate(FImage &in_out, double rad, zoom_type type = BICUBIC);
 private:
     static int get_gray_scale(cv::Vec3b color);
     static cv::Vec3b to_gray_vec3b(int gray);
     static cv::Vec3b add(cv::Vec3b v1, cv::Vec3b v2);
+    static void get_postion_after_rotation(int x, int y, double rad, int &x_r, int &y_r);
+    static void get_edge(int x, int y, int &pos_x, int &neg_x, int &pos_y, int &neg_y);
 };
 
 #endif // IMAGEPROCESS_H

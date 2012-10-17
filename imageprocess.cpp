@@ -1,6 +1,7 @@
 #include "imageprocess.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <cmath>
 
 #include <QDebug>
 using namespace std;
@@ -29,6 +30,24 @@ Vec3b ImageProcess::add(Vec3b v1, Vec3b v2){
         v[i] = static_cast<uchar>(a[i]);
     }
     return v;
+}
+
+void ImageProcess::get_postion_after_rotation(int x, int y, double rad, int &x_r, int &y_r){
+    double xx = static_cast<double>(x);
+    double yy = static_cast<double>(y);
+    x_r = static_cast<int>(xx * cos(rad) - yy * sin(rad));
+    y_r = static_cast<int>(xx * sin(rad) + yy * cos(rad));
+}
+
+void ImageProcess::get_edge(int x, int y, int &pos_x, int &neg_x, int &pos_y, int &neg_y){
+    if (x > pos_x)
+        pos_x = x;
+    else if (x < neg_x)
+        neg_x = x;
+    if (y > pos_y)
+        pos_y = y;
+    else if (y < neg_y)
+        neg_y = y;
 }
 
 void ImageProcess::gray_linear_transform(FImage &in_out, int x_min, int x_max, int y_min, int y_max){
@@ -201,6 +220,72 @@ void ImageProcess::geometry_zoom(FImage &in_out, int percentage, zoom_type type)
                     v11[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py1, px1)[k]) * coe11);
                 }
                 new_img.at<Vec3b>(j, i) = add(
+                            add(v00,
+                                v01),
+                            add(v10,
+                                v11));
+            }
+                break;
+            case BICUBIC:
+                break;
+            default:
+                return;
+            }
+        }
+    }
+    img->release();
+    new_img.copyTo(in_out.get_opencv_image());
+}
+
+void ImageProcess::geometry_rotate(FImage &in_out, double rad, zoom_type type){
+    Mat *img = &in_out.get_opencv_image();
+    if (img->empty())
+        return;
+    int width = 0;
+    int height = 0;
+    int ori_h = img->rows;
+    int ori_w = img->cols;
+    int pos_x, neg_x, pos_y, neg_y;
+    pos_x = neg_x = pos_y = neg_y = 0;
+    {
+        int x_r, y_r;
+        get_postion_after_rotation(0, ori_h, rad, x_r, y_r);
+        get_edge(x_r, y_r, pos_x, neg_x, pos_y, neg_y);
+        get_postion_after_rotation(ori_w, 0, rad, x_r, y_r);
+        get_edge(x_r, y_r, pos_x, neg_x, pos_y, neg_y);
+        get_postion_after_rotation(ori_w, ori_h, rad, x_r, y_r);
+        get_edge(x_r, y_r, pos_x, neg_x, pos_y, neg_y);
+        width = pos_x - neg_x;
+        height = pos_y - neg_y;
+    }
+    Mat new_img = Mat::zeros(height, width, CV_8UC3);
+    for (int i = 0; i < ori_h; ++i){
+        for (int j = 0; j < ori_w; j++){
+            int x, y;
+            get_postion_after_rotation(i, j, rad, x, y);
+            switch (type){
+            case Nearest:
+                new_img.at<Vec3b>(y - neg_y, x - neg_x) = img->at<Vec3b>(j, i);
+                break;
+            case BILINEAR:
+            {
+                int py = j;
+                int px = i;
+                int py1 = py >= ori_h? py: py + 1;
+                int px1 = px >= ori_w? px: px + 1;
+                double coe00, coe01, coe10, coe11;
+                coe00 = 0.25;
+                coe01 = 0.25;
+                coe10 = 0.25;
+                coe11 = 0.25;
+                Vec3b v00, v01, v10, v11;
+                for (int k = 0; k < 3; ++k){
+                    v00[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py, px)[k]) * coe00);
+                    v01[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py1, px)[k]) * coe01);
+                    v10[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py, px1)[k]) * coe10);
+                    v11[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py1, px1)[k]) * coe11);
+                }
+                new_img.at<Vec3b>(y - neg_y, x - neg_x) = add(
                             add(v00,
                                 v01),
                             add(v10,

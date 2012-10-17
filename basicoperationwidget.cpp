@@ -76,7 +76,7 @@ void BasicOperationWidget::create_page_geometry(){
                                      combo_zoom_->height() + label_zoom_->height() + 48,
                                      width() * 3 / 5,
                                      24));
-    label_rotate_->setText(QString::fromUtf8("Rotate(clockwise)"));
+    label_rotate_->setText(QString::fromUtf8("Rotate(CW)"));
     spin_box_rotate_ = new QSpinBox(tool_page_geometry_);
     spin_box_rotate_->setGeometry(QRect(width() / 3,
                                         combo_zoom_->height() + label_zoom_->height() + label_rotate_->height() + 48,

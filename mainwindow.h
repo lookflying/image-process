@@ -47,6 +47,7 @@ private slots:
     void gray_histogram_match();
 
     void geometry_zoom();
+    void geometry_rotate();
 
 private:
 
