@@ -12,7 +12,6 @@ public:
     explicit LinearFunction(int min_in, int max_in, int min_out, int max_out, int gran = 1);
     ~LinearFunction();
     void set(int in, int out);
-//    bool get(int in, int& out);
     void remove(int in);
 private:
     int granularity_;

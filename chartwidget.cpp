@@ -1,4 +1,7 @@
 #include "chartwidget.h"
+#include "linearfunction.h"
+#include "logfunction.h"
+#include "exponentfunction.h"
 #include <QDebug>
 ChartWidget::ChartWidget(QWidget *parent):
     QWidget(parent)
@@ -21,15 +24,15 @@ void ChartWidget::paintEvent(QPaintEvent *){
     painter.drawText(0, h_, QString("%1").arg(y_min_));
     painter.drawText(24, height(), QString("%1").arg(x_min_));
     painter.drawText(w_, height(), QString("%1").arg(x_max_));
-    if (type_ == LINE){
+    if (chart_type_ == LINE){
         for (int x = x_min_ ; x <= x_max_; ++x){
-            int y = fun.get(x);
+            int y = fun_->get(x);
             painter.drawPoint(24 + (x - x_min_) * w_ / range_x_, (y_max_ - y) * h_ / range_y_);
 
         }
-    }else if (type_ == HISTOGRAM){
+    }else if (chart_type_ == HISTOGRAM){
         for (int x = x_min_ ; x <= x_max_; ++x){
-            int y = fun.get(x);
+            int y = fun_->get(x);
             painter.drawLine(24 + (x - x_min_) * w_ / range_x_,
                              (y_max_ - y) * h_ / range_y_,
                              24 + (x - x_min_) * w_ / range_x_,
@@ -43,7 +46,7 @@ void ChartWidget::mousePressEvent(QMouseEvent * event){
     pressed_ = true;
     int in = (event->x() - 24) * range_x_ / w_;
     int out = y_max_ - event->y() * range_y_ / h_;
-    fun.set(in, out);
+    fun_->set(in, out);
     repaint();
 }
 
@@ -55,15 +58,15 @@ void ChartWidget::mouseMoveEvent(QMouseEvent *event){
         if (continous_){
             if (last_in < in){
                 for (int i = last_in + 1; i <= in; ++i){
-                    fun.set(i, out);
+                    fun_->set(i, out);
                 }
             }else{
                 for (int i = in; i < last_in; ++i){
-                    fun.set(i, out);
+                    fun_->set(i, out);
                 }
             }
         }else{
-            fun.set(in, out);
+            fun_->set(in, out);
         }
         last_in = in;
         continous_ = true;
@@ -78,12 +81,21 @@ void ChartWidget::mouseReleaseEvent(QMouseEvent *){
     continous_ = false;
 }
 
-void ChartWidget::set_property( int x_min, int x_max, int y_min, int y_max, chart_type type){
+void ChartWidget::set_property( int x_min, int x_max, int y_min, int y_max, fun_type ft, chart_type ct){
     x_min_ = x_min;
     x_max_ = x_max;
     y_min_ = y_min;
     y_max_ = y_max;
-    type_ = type;
-    fun = LinearFunction(x_min, x_max, y_min, y_max, 1);
+    chart_type_ = ct;
+    fun_type_ = ft;
+    if (fun_type_ == LINEAR){
+        fun_ = new LinearFunction(x_min, x_max, y_min, y_max);
+    }else if (ft == LOG){
+        fun_ = new LogFunction(x_min, x_max, y_min, y_max);
+    }else if (ft == EXPONENT){
+        fun_ = new ExponentFunction(x_min, x_max, y_min, y_max);
+    }else{
+        fun_ = new Function(x_min, x_max, y_min, y_max);
+    }
     repaint();
 }

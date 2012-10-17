@@ -28,8 +28,9 @@ Function::~Function(){
 
 void Function::set(int in, int out){
     assert(ready_);
-    assert(in >= min_in_ && in <= max_in_ && out <= max_out_ && out >= min_out_);
-    data_[in] = out;
+     if (in < min_in_ || in > max_in_ || out < min_out_ || out > max_out_)
+         return;
+     data_[in] = out;
 }
 
 int Function::get(int in){

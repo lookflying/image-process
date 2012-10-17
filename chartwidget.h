@@ -4,20 +4,22 @@
 #include <QWidget>
 #include <QPainter>
 #include <QMouseEvent>
-#include "linearfunction.h"
-
+#include "function.h"
 class ChartWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ChartWidget(QWidget *parent = 0);
-    enum chart_types{LINE, HISTOGRAM};
     typedef int chart_type;
+    typedef int fun_type;
+    enum chart_types{LINE, HISTOGRAM};
+    enum fun_types{TABLE, LINEAR, LOG, EXPONENT};
+    explicit ChartWidget(QWidget *parent = 0);
     void set_property(int x_min = 0,
                       int x_max = 255,
                       int y_min = 0,
                       int y_max = 255,
-                      chart_type type = LINE);
+                      fun_type ft = TABLE,
+                      chart_type ct = LINE);
 signals:
     
 public slots:
@@ -36,8 +38,9 @@ private:
     int h_;
     int range_x_;
     int range_y_;
-    chart_type type_;
-    LinearFunction fun;
+    chart_type chart_type_;
+    fun_type fun_type_;
+    Function *fun_;
     bool pressed_;
     bool continous_;
 };

@@ -93,7 +93,7 @@ void GrayScaleTransformWidget::create_page_histogram(){
     tool_page_histogram_->setGeometry(QRect(0, 0, width(), page_height_));
     chart_histogram_ = new ChartWidget(tool_page_histogram_);
     chart_histogram_ ->setGeometry(0, 0, width(), page_height_ - 60);
-    chart_histogram_->set_property(0, 255, 0, 255, ChartWidget::HISTOGRAM);
+    chart_histogram_->set_property(0, 255, 0, 255, ChartWidget::TABLE, ChartWidget::HISTOGRAM);
     button_show_ = new QPushButton(tool_page_histogram_);
     button_show_->setGeometry(QRect(width() / 3, chart_histogram_->height(), width() / 3, 24));
     button_show_->setText("Show");

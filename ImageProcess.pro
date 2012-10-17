@@ -19,7 +19,9 @@ SOURCES += main.cpp\
     linearfunction.cpp \
     grayscaletransformwidget.cpp \
     function.cpp \
-    imageprocess.cpp
+    imageprocess.cpp \
+    logfunction.cpp \
+    exponentfunction.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -29,7 +31,9 @@ HEADERS  += mainwindow.h \
     linearfunction.h \
     grayscaletransformwidget.h \
     function.h \
-    imageprocess.h
+    imageprocess.h \
+    logfunction.h \
+    exponentfunction.h
 
 FORMS    +=
 
