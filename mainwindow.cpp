@@ -143,6 +143,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_gray_->button_show_histogram_, SIGNAL(clicked()), this, SLOT(gray_histogram_display()));
     connect(tab_gray_->button_equalize_, SIGNAL(clicked()), this, SLOT(gray_histogram_equalization()));
     connect(tab_gray_->button_match_, SIGNAL(clicked()), this, SLOT(gray_histogram_match()));
+    connect(tab_basic_->button_zoom_, SIGNAL(clicked()), this, SLOT(geometry_zoom()));
 }
 
 void MainWindow::save_file(){
@@ -276,4 +277,22 @@ void MainWindow::gray_histogram_match(){
     emit refresh_image_view();
 
 
+}
+
+void MainWindow::geometry_zoom(){
+    ImageProcess::zoom_type type = ImageProcess::Nearest;
+    switch(tab_basic_->combo_zoom_->currentIndex()){
+    case 0:
+        type = ImageProcess::Nearest;
+        break;
+    case 1:
+        type = ImageProcess::BILINEAR;
+        break;
+    case 2:
+        type = ImageProcess::BICUBIC;
+        break;
+    }
+    int percentage = tab_basic_->spin_box_zoom_->value();
+    ImageProcess::geometry_zoom(image_view_->image_data_, percentage, type);
+    emit refresh_image_view();
 }

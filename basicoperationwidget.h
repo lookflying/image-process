@@ -14,17 +14,6 @@ class BasicOperationWidget : public QWidget
     Q_OBJECT
 public:
     explicit BasicOperationWidget(int width, int height, QWidget *parent = 0);
-    
-signals:
-    
-public slots:
-
-private:
-    void create_widget();
-    void create_page_algebra();
-    void create_page_geometry();
-
-    int page_height_;
 
     QToolBox *tool_box_;
 
@@ -43,6 +32,17 @@ private:
     QLabel *label_rotate_;
     QPushButton *button_rotate_;
     QSpinBox *spin_box_rotate_;
+signals:
+    
+public slots:
+
+private:
+    int page_height_;
+    void create_widget();
+    void create_page_algebra();
+    void create_page_geometry();
+
+
     
 };
 

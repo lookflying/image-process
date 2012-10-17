@@ -12,7 +12,7 @@ public:
     QImage data();
     static QImage get_qimage(cv::Mat& img);
     cv::Mat& get_opencv_image();
-
+    void set_opencv_image(cv::Mat* new_img);
 private:
     cv::Mat img_;
 };

@@ -60,6 +60,11 @@ void BasicOperationWidget::create_page_geometry(){
     label_zoom_->setText(QString::fromUtf8("Zoom"));
     spin_box_zoom_ = new QSpinBox(tool_page_geometry_);
     spin_box_zoom_->setGeometry(QRect(width() / 2, combo_zoom_->height(), width() / 3, 24));
+    spin_box_zoom_->setMaximum(800);
+    spin_box_zoom_->setMinimum(0);
+    spin_box_zoom_->setSuffix(QString::fromUtf8("%"));
+    spin_box_zoom_->setSingleStep(50);
+    spin_box_zoom_->setValue(100);
     button_zoom_ = new QPushButton(tool_page_geometry_);
     button_zoom_->setGeometry(QRect(width() / 3,
                                     combo_zoom_->height() + label_zoom_->height(),
@@ -79,6 +84,9 @@ void BasicOperationWidget::create_page_geometry(){
                                         24));
     spin_box_rotate_->setMinimum(-360);
     spin_box_rotate_->setMaximum(360);
+    char degree = 176;
+    spin_box_rotate_->setSuffix(QString::fromAscii(&degree, 1));
+    spin_box_rotate_->setSingleStep(30);
     button_rotate_ = new QPushButton(tool_page_geometry_);
     button_rotate_->setGeometry(QRect(width() / 5,
                                       combo_zoom_->height() + label_zoom_->height() + label_rotate_->height() + spin_box_rotate_->height() + 48,

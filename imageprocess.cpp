@@ -19,6 +19,18 @@ Vec3b ImageProcess::to_gray_vec3b(int gray){
     return color;
 }
 
+Vec3b ImageProcess::add(Vec3b v1, Vec3b v2){
+    int a[3];
+    Vec3b v;
+    for (int i = 0; i < 3; i++){
+        a[i] = static_cast<int>(v1[i]) + static_cast<int>(v2[i]);
+        if (a[i] > 255)
+            a[i] = 255;
+        v[i] = static_cast<uchar>(a[i]);
+    }
+    return v;
+}
+
 void ImageProcess::gray_linear_transform(FImage &in_out, int x_min, int x_max, int y_min, int y_max){
     LinearFunction fun(0, 255, 0, 255);
     fun.set(255, 255);
@@ -146,4 +158,62 @@ Function* ImageProcess::get_histogram_match_fun(Function *origin, Function *targ
     }
     return fun;
 
+}
+
+
+
+void ImageProcess::geometry_zoom(FImage &in_out, int percentage, zoom_type type){
+    Mat *img = &in_out.get_opencv_image();
+    if (img->empty())
+        return;
+    if (percentage == 100 || percentage == 0)
+        return;
+    int width = img->cols * percentage / 100;
+    int height = img->rows * percentage / 100;
+    int ori_h = img->rows;
+    int ori_w = img->cols;
+    Mat new_img = Mat(height, width, CV_8UC3);
+    for (int i = 0; i < height; ++i){
+        for (int j = 0; j < width; j++){
+            switch (type){
+            case Nearest:
+                new_img.at<Vec3b>(j, i) = img->at<Vec3b>(j * 100 / percentage, i * 100 / percentage);
+                break;
+            case BILINEAR:
+            {
+                int py = j * 100 / percentage;
+                int px = i * 100 / percentage;
+                int py1 = py >= ori_h? py: py + 1;
+                int px1 = px >= ori_w? px: px + 1;
+                double y = static_cast<double>(j) * 100.0 / static_cast<double>(percentage) - static_cast<double>(py);
+                double x = static_cast<double>(i) * 100.0 / static_cast<double>(percentage) - static_cast<double>(px);
+                double xy = x * y;
+                double coe00, coe01, coe10, coe11;
+                coe00 = 1.0 - x - y + xy;
+                coe01 = y - xy;
+                coe10 = x - xy;
+                coe11 = xy;
+                Vec3b v00, v01, v10, v11;
+                for (int k = 0; k < 3; ++k){
+                    v00[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py, px)[k]) * coe00);
+                    v01[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py1, px)[k]) * coe01);
+                    v10[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py, px1)[k]) * coe10);
+                    v11[k] = static_cast<uchar>(static_cast<double>(img->at<Vec3b>(py1, px1)[k]) * coe11);
+                }
+                new_img.at<Vec3b>(j, i) = add(
+                            add(v00,
+                                v01),
+                            add(v10,
+                                v11));
+            }
+                break;
+            case BICUBIC:
+                break;
+            default:
+                return;
+            }
+        }
+    }
+    img->release();
+    new_img.copyTo(in_out.get_opencv_image());
 }

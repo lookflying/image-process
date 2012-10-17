@@ -1,11 +1,13 @@
 #include "fimage.h"
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <QDebug>
 
 using namespace cv;
 FImage::FImage()
 {
 }
+
 
 bool FImage::load(QString file_name){
     bool ret;
@@ -35,4 +37,8 @@ QImage FImage::get_qimage(Mat &img){
 
 Mat& FImage::get_opencv_image(){
     return img_;
+}
+
+void FImage::set_opencv_image(Mat *new_img){
+    img_.release();
 }

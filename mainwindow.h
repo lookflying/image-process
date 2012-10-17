@@ -46,6 +46,8 @@ private slots:
     void gray_histogram_equalization();
     void gray_histogram_match();
 
+    void geometry_zoom();
+
 private:
 
     void create_actions();
