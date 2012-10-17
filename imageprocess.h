@@ -15,6 +15,7 @@ public:
     typedef int histogram_type;
     static Function* get_gray_histogram(FImage &in, histogram_type type = PROBABILITY);
     static Function* get_histogram_equalization_fun(Function *fun);
+    static Function* get_histogram_match_fun(Function *origin, Function *target);
 private:
     static int get_gray_scale(cv::Vec3b color);
     static cv::Vec3b to_gray_vec3b(int gray);

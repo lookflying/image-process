@@ -90,23 +90,60 @@ Function* ImageProcess::get_gray_histogram(FImage &in, histogram_type type){
 }
 
 Function* ImageProcess::get_histogram_equalization_fun(Function *fun){
-        double sum = 0;
-        int min_in, max_in, min_out, max_out;
-        fun->get_range(min_in, max_in, min_out, max_out);
-        if (min_in != 0 || max_in != 255)
-            return new Function();
-        int l = 255;
-        vector<double> temp(l + 1);
-        for (int i = 0; i <= l; ++i){
-            sum += static_cast<double>(fun->get(min_in + i));
-            temp[i] = sum;
+    double sum = 0;
+    int min_in, max_in, min_out, max_out;
+    fun->get_range(min_in, max_in, min_out, max_out);
+    if (min_in != 0 || max_in != 255)
+        return new Function();
+    int l = 255;
+    vector<double> temp(l + 1);
+    for (int i = 0; i <= l; ++i){
+        sum += static_cast<double>(fun->get(min_in + i));
+        temp[i] = sum;
+    }
+    for (int i = 0; i <= l; ++i){
+        temp[i] = temp[i] * l / sum;
+    }
+    Function *new_fun = new Function(0, 255, 0, 255);
+    for (int i = 0; i <= l; ++i){
+        new_fun->set(i, static_cast<int>(temp[i]));
+    }
+    return new_fun;
+}
+
+Function* ImageProcess::get_histogram_match_fun(Function *origin, Function *target){
+    double sum_origin = 0;
+    double sum_target = 0;
+    int min_in, max_in, min_out, max_out;
+    origin->get_range(min_in, max_in, min_out, max_out);
+    if (min_in != 0 || max_in != 255)
+        return new Function();
+    target->get_range(min_in, max_in, min_out, max_out);
+    if (min_in != 0 || max_in != 255)
+        return new Function();
+    int l = 255;
+    vector<double> temp_origin(l + 1);
+    vector<double> temp_target(l + 1);
+    Function *fun = new Function(0, 255, 0, 255);
+    for (int i = 0; i <= l; ++i){
+        sum_origin += static_cast<double>(origin->get(min_in + i));
+        temp_origin[i] = sum_origin;
+        sum_target += static_cast<double>(target->get(min_in + i));
+        temp_target[i] = sum_target;
+    }
+    for (int i = 0; i <= l; ++i){
+        temp_origin[i] = temp_origin[i] / sum_origin;
+        temp_target[i] = temp_target[i] / sum_target;
+    }
+    for (int i = 0, j = 0; j <= l; ++j){
+        for (; i <= l; ++i){
+            if (temp_origin[i] <= temp_target[j]){
+                fun->set(i, j);
+            }else{
+                break;
+            }
         }
-        for (int i = 0; i <= l; ++i){
-            temp[i] = temp[i] * l / sum;
-        }
-        Function *new_fun = new Function(0, 255, 0, 255);
-        for (int i = 0; i <= l; ++i){
-            new_fun->set(i, static_cast<int>(temp[i]));
-        }
-        return new_fun;
+    }
+    return fun;
+
 }
