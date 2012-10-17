@@ -36,11 +36,11 @@ public:
     QPushButton *button_log_;
     QPushButton *button_exponent_;
     QPushButton *button_non_linear_do_;
-    ChartWidget *char_non_linear_;
+    ChartWidget *chart_non_linear_;
 
     QWidget *tool_page_histogram_;
     ChartWidget *chart_histogram_;
-    QPushButton *button_show_;
+    QPushButton *button_show_histogram_;
     QPushButton *button_match_;
     QPushButton *button_balance_;
 signals:

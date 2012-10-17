@@ -38,7 +38,13 @@ private slots:
     void quit();
 
     void gray_linear_transform();
-    void non_linear_transform(non_linear_action action);
+    void gray_non_linear_transform(non_linear_action action);
+    void gray_log_transform();
+    void gray_exponent_transform();
+    void gray_non_linear_do();
+    void gray_histogram_display();
+//    void gray_histogram_balance();
+//    void gray_histogram_match();
 
 private:
 

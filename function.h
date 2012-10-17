@@ -10,6 +10,7 @@ public:
     virtual ~Function();
     virtual void set(int in, int out);
     virtual int get(int in);
+    virtual void get_range(int &min_in, int &max_in, int &min_out, int &max_out);
 protected:
     int min_in_;
     int max_in_;

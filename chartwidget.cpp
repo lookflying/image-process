@@ -19,7 +19,7 @@ ChartWidget::~ChartWidget(){
 
 void ChartWidget::paintEvent(QPaintEvent *){
     QPainter painter(this);
-
+    fun_->get_range(x_min_, x_max_, y_min_, y_max_);
     w_ = width() - 32;
     h_ = height() - 12;
     range_x_ = x_max_ - x_min_;

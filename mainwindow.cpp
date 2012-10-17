@@ -135,8 +135,12 @@ void MainWindow::open_file(){
 }
 
 void MainWindow::connect_signal_slot(){
-    connect(tab_gray_->button_linear_, SIGNAL(clicked()), this, SLOT(gray_linear_transform()));
     connect(this, SIGNAL(refresh_image_view()), image_view_, SLOT(refresh()));
+    connect(tab_gray_->button_linear_, SIGNAL(clicked()), this, SLOT(gray_linear_transform()));
+    connect(tab_gray_->button_log_, SIGNAL(clicked()), this, SLOT(gray_log_transform()));
+    connect(tab_gray_->button_exponent_, SIGNAL(clicked()), this, SLOT(gray_exponent_transform()));
+    connect(tab_gray_->button_non_linear_do_, SIGNAL(clicked()), this, SLOT(gray_non_linear_do()));
+    connect(tab_gray_->button_show_histogram_, SIGNAL(clicked()), this, SLOT(gray_histogram_display()));
 }
 
 void MainWindow::save_file(){
@@ -163,8 +167,19 @@ void MainWindow::gray_linear_transform(){
     ImageProcess::gray_linear_transform(image_view_->image_data_, min_x, max_x, min_y, max_y);
     emit refresh_image_view();
 }
+void MainWindow::gray_log_transform(){
+    gray_non_linear_transform(LOG);
+}
 
-void MainWindow::non_linear_transform(non_linear_action action){
+void MainWindow::gray_exponent_transform(){
+    gray_non_linear_transform(EXPONENT);
+}
+
+void MainWindow::gray_non_linear_do(){
+    gray_non_linear_transform(DO);
+}
+
+void MainWindow::gray_non_linear_transform(non_linear_action action){
     double a = tab_gray_->spin_box_a_->value();
     double b = tab_gray_->spin_box_b_->value();
     double c = tab_gray_->spin_box_c_->value();
@@ -173,31 +188,43 @@ void MainWindow::non_linear_transform(non_linear_action action){
     {
         if (c <= 0 || c == 1 || c == 0)
             return;
-        tab_gray_->char_non_linear_->set_property(0, 255, 0, 255, ChartWidget::LOG, ChartWidget::LINE);
+        tab_gray_->chart_non_linear_->set_property(0, 255, 0, 255, ChartWidget::LOG, ChartWidget::LINE);
         LogFunction* fun;
-        assert((fun = dynamic_cast<LogFunction*>(tab_gray_->char_non_linear_->fun_)) != 0);
+        assert((fun = dynamic_cast<LogFunction*>(tab_gray_->chart_non_linear_->fun_)) != 0);
         fun->set_value(a, b, c);
-        tab_gray_->char_non_linear_->repaint();
+        tab_gray_->chart_non_linear_->repaint();
         break;
     }
     case EXPONENT:
     {
-        tab_gray_->char_non_linear_->set_property(0, 255, 0, 255, ChartWidget::EXPONENT, ChartWidget::LINE);
+        tab_gray_->chart_non_linear_->set_property(0, 255, 0, 255, ChartWidget::EXPONENT, ChartWidget::LINE);
         ExponentFunction* fun;
-        assert((fun = dynamic_cast<ExponentFunction*>(tab_gray_->char_non_linear_->fun_)) != 0);
+        assert((fun = dynamic_cast<ExponentFunction*>(tab_gray_->chart_non_linear_->fun_)) != 0);
         fun->set_value(a, b, c);
-        tab_gray_->char_non_linear_->repaint();
+        tab_gray_->chart_non_linear_->repaint();
         break;
     }
     case DO:
     {
-
-
+        if (tab_gray_->chart_non_linear_->fun_ != NULL){
+            ImageProcess::gray_fun_transform(image_view_->image_data_, tab_gray_->chart_non_linear_->fun_);
+            emit refresh_image_view();
+        }
         break;
     }
     default:
         break;
     }
+}
+
+void MainWindow::gray_histogram_display(){
+     Function *fun  = ImageProcess::get_gray_histogram(image_view_->image_data_, ImageProcess::PROBABILITY);
+     Function *old = tab_gray_->chart_histogram_->fun_;
+     if (old != NULL){
+         delete old;
+     }
+     tab_gray_->chart_histogram_->fun_ = fun;
+     tab_gray_->chart_histogram_->repaint();
 }
 
 

@@ -38,3 +38,10 @@ int Function::get(int in){
     assert(in >= min_in_ && in <= max_in_);
     return data_[in];
 }
+
+void Function::get_range(int &min_in, int &max_in, int &min_out, int &max_out){
+    min_in = min_in_;
+    max_in = max_in_;
+    min_out = min_out_;
+    max_out = max_out_;
+}

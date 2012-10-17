@@ -64,6 +64,7 @@ void GrayScaleTransformWidget::create_page_non_linear(){
     spin_box_a_->setGeometry(width() * 2 / 5, 0, width() / 3, 24);
     spin_box_a_->setMaximum(100);
     spin_box_a_->setMinimum(-100);
+    spin_box_a_->setDecimals(3);
     label_b_ = new QLabel(tool_page_non_linear_);
     label_b_->setGeometry(width() / 5, label_a_->height(), width() / 5, 24);
     label_b_->setText(QString::fromUtf8("b = "));
@@ -71,6 +72,7 @@ void GrayScaleTransformWidget::create_page_non_linear(){
     spin_box_b_->setGeometry(width() * 2 / 5, label_a_->height(), width() / 3, 24);
     spin_box_b_->setMaximum(100);
     spin_box_b_->setMinimum(-100);
+    spin_box_b_->setDecimals(3);
     label_c_ = new QLabel(tool_page_non_linear_);
     label_c_->setGeometry(width() / 5, label_a_->height() + label_b_->height(), width() / 5, 24);
     label_c_->setText(QString::fromUtf8("c = "));
@@ -78,6 +80,7 @@ void GrayScaleTransformWidget::create_page_non_linear(){
     spin_box_c_->setGeometry(width() * 2 / 5, label_a_->height() + label_b_->height(), width() / 3, 24);
     spin_box_c_->setMaximum(100);
     spin_box_c_->setMinimum(-100);
+    spin_box_c_->setDecimals(3);
     button_log_ = new QPushButton(tool_page_non_linear_);
     button_log_->setGeometry(width() / 12,
                              label_a_->height() + label_b_->height() + label_c_->height(),
@@ -96,12 +99,12 @@ void GrayScaleTransformWidget::create_page_non_linear(){
                                              width() / 8,
                                              24));
     button_non_linear_do_->setText(QString::fromUtf8("Do"));
-    char_non_linear_ = new ChartWidget(tool_page_non_linear_);
-    char_non_linear_->setGeometry(QRect(0,
+    chart_non_linear_ = new ChartWidget(tool_page_non_linear_);
+    chart_non_linear_->setGeometry(QRect(0,
                                         label_a_->height() + label_b_->height() + label_c_->height() + button_log_->height()
                                         , width(),
                                         page_height_ - 60));
-    char_non_linear_->set_property(0, 255, 0, 255, ChartWidget::TABLE, ChartWidget::LINE);
+    chart_non_linear_->set_property(0, 255, 0, 255, ChartWidget::TABLE, ChartWidget::LINE);
     tool_box_->addItem(tool_page_non_linear_, QString::fromUtf8("Non Linear"));
 
 }
@@ -112,14 +115,14 @@ void GrayScaleTransformWidget::create_page_histogram(){
     chart_histogram_ = new ChartWidget(tool_page_histogram_);
     chart_histogram_ ->setGeometry(0, 0, width(), page_height_ - 60);
     chart_histogram_->set_property(0, 255, 0, 255, ChartWidget::TABLE, ChartWidget::HISTOGRAM);
-    button_show_ = new QPushButton(tool_page_histogram_);
-    button_show_->setGeometry(QRect(width() / 3, chart_histogram_->height(), width() / 3, 24));
-    button_show_->setText("Show");
+    button_show_histogram_ = new QPushButton(tool_page_histogram_);
+    button_show_histogram_->setGeometry(QRect(width() / 3, chart_histogram_->height(), width() / 3, 24));
+    button_show_histogram_->setText("Show");
     button_balance_ = new QPushButton(tool_page_histogram_);
-    button_balance_->setGeometry(QRect(width() / 7, chart_histogram_->height() + button_show_->height(), width() *2 / 7, 24));
+    button_balance_->setGeometry(QRect(width() / 7, chart_histogram_->height() + button_show_histogram_->height(), width() *2 / 7, 24));
     button_balance_->setText("Balance");
     button_match_ = new QPushButton(tool_page_histogram_);
-    button_match_->setGeometry(QRect(width() * 4 / 7, chart_histogram_->height() + button_show_->height(), width() * 2 / 7, 24));
+    button_match_->setGeometry(QRect(width() * 4 / 7, chart_histogram_->height() + button_show_histogram_->height(), width() * 2 / 7, 24));
     button_match_->setText("Match");
     tool_box_->addItem(tool_page_histogram_, QString::fromUtf8("Histogram"));
 }
