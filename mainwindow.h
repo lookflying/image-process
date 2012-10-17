@@ -48,6 +48,8 @@ private slots:
 
     void geometry_zoom();
     void geometry_rotate();
+    void basic_algebra();
+    void basic_algebra_pic();
 
 private:
 

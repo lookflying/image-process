@@ -32,6 +32,37 @@ Vec3b ImageProcess::add(Vec3b v1, Vec3b v2){
     return v;
 }
 
+Vec3b ImageProcess::subtract(Vec3b v1, Vec3b v2){
+    int a[3];
+    Vec3b v;
+    for (int i = 0; i < 3; i++){
+        a[i] = static_cast<int>(v1[i]) - static_cast<int>(v2[i]);
+        if (a[i] < 0)
+            a[i] = 0;
+        v[i] = static_cast<uchar>(a[i]);
+    }
+    return v;
+}
+
+Vec3b ImageProcess::multiply(Vec3b v1, Vec3b v2){
+    int a1, a2;
+    a1 = get_gray_scale(v1);
+    a2 = get_gray_scale(v2);
+    return to_gray_vec3b(a1 * a2);
+}
+
+Vec3b ImageProcess::divide(Vec3b v1, Vec3b v2){
+    int a1, a2;
+    a1 = get_gray_scale(v1);
+    a2 = get_gray_scale(v2);
+    if (a2 != 0){
+        return to_gray_vec3b(a1 * a2);
+    }else{
+        return to_gray_vec3b(a1);
+    }
+}
+
+
 void ImageProcess::get_postion_after_rotation(int x, int y, double rad, int &x_r, int &y_r){
     double xx = static_cast<double>(x);
     double yy = static_cast<double>(y);
@@ -301,4 +332,32 @@ void ImageProcess::geometry_rotate(FImage &in_out, double rad, zoom_type type){
     }
     img->release();
     new_img.copyTo(in_out.get_opencv_image());
+}
+
+void ImageProcess::algebra(FImage &in_out, FImage &another, algebra_type type){
+    Mat *img, *a_img;
+    img = &in_out.get_opencv_image();
+    a_img = &another.get_opencv_image();
+    if (img->empty() || a_img->empty() || img->rows != a_img->rows || img->cols != a_img->cols)
+        return;
+    for (int j = 0; j < img->rows; ++j){
+        for (int i = 0; i < img->cols; ++i){
+            switch(type){
+            case ADD:
+                img->at<Vec3b>(j, i) = add(img->at<Vec3b>(j, i), a_img->at<Vec3b>(j, i));
+                break;
+            case SUB:
+                img->at<Vec3b>(j, i) = subtract(img->at<Vec3b>(j, i), a_img->at<Vec3b>(j, i));
+                break;
+            case MUL:
+                img->at<Vec3b>(j, i) = multiply(img->at<Vec3b>(j, i), a_img->at<Vec3b>(j, i));
+                break;
+            case DIV:
+                img->at<Vec3b>(j, i) = divide(img->at<Vec3b>(j, i), a_img->at<Vec3b>(j, i));
+                break;
+            default:
+                return;
+            }
+        }
+    }
 }

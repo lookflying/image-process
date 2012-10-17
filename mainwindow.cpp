@@ -126,9 +126,9 @@ void MainWindow::create_tab_widget(){
 
 
 void MainWindow::open_file(){
-    QString fileName = QFileDialog::getOpenFileName(this);
-    if (!image_view_->openImage(fileName)){
-        QMessageBox::warning(this, tr("Application"), tr("Can't open file %1:\n").arg(fileName));
+    QString file_name = QFileDialog::getOpenFileName(this);
+    if (!image_view_->openImage(file_name)){
+        QMessageBox::warning(this, tr("Application"), tr("Can't open file %1:\n").arg(file_name));
         return;
     }
 
@@ -145,6 +145,9 @@ void MainWindow::connect_signal_slot(){
     connect(tab_gray_->button_match_, SIGNAL(clicked()), this, SLOT(gray_histogram_match()));
     connect(tab_basic_->button_zoom_, SIGNAL(clicked()), this, SLOT(geometry_zoom()));
     connect(tab_basic_->button_rotate_, SIGNAL(clicked()), this, SLOT(geometry_rotate()));
+    connect(tab_basic_->button_algebra_, SIGNAL(clicked()), this, SLOT(basic_algebra()));
+    connect(tab_basic_->tool_button_algebra_, SIGNAL(clicked()), this, SLOT(basic_algebra_pic()));
+
 }
 
 void MainWindow::save_file(){
@@ -315,4 +318,30 @@ void MainWindow::geometry_rotate(){
     double rad = static_cast<double>(degree) * 3.14159 / 180.0;
     ImageProcess::geometry_rotate(image_view_->image_data_, rad, type);
     emit refresh_image_view();
+}
+
+void MainWindow::basic_algebra(){
+   ImageProcess::algebra_type type = ImageProcess::ADD;
+   switch(tab_basic_->combo_algebra_->currentIndex()){
+   case 0:
+       type = ImageProcess::ADD;
+       break;
+   case 1:
+       type = ImageProcess::SUB;
+       break;
+   case 2:
+       type = ImageProcess::MUL;
+       break;
+   case 3:
+       type = ImageProcess::DIV;
+   }
+   FImage another;
+   another.load(tab_basic_->label_algebra_pic_->text());
+   ImageProcess::algebra(image_view_->image_data_, another, type);
+   emit refresh_image_view();
+}
+
+void MainWindow::basic_algebra_pic(){
+     QString file_name = QFileDialog::getOpenFileName(this);
+     tab_basic_->label_algebra_pic_->setText(file_name);
 }
