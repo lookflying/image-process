@@ -41,9 +41,12 @@ void ImageProcess::gray_fun_transform(FImage &in_out, Function *fun){
     }
 }
 
-Function* ImageProcess::get_gray_histogram(FImage in, histogram_type type){
+Function* ImageProcess::get_gray_histogram(FImage &in, histogram_type type){
     Mat *img = &in.get_opencv_image();
+    if(img->empty())
+        return new Function();
     vector<int> count(256);
+    count.assign(count.size(), 0);
     for (int i = 0; i < img->rows; ++i){
         for (int j = 0; j < img->cols; ++j){
             count[get_gray_scale(img->at<Vec3b>(i, j))] += 1;
@@ -57,7 +60,6 @@ Function* ImageProcess::get_gray_histogram(FImage in, histogram_type type){
         for (unsigned int i = 0; i < count.size(); ++i){
             if (count[i] > max){
                 max = count[i];
-                qDebug()<<QString("%1 %2").arg(i).arg(max);
             }
         }
         fun = new Function(0, 255, 0, max);
@@ -77,7 +79,6 @@ Function* ImageProcess::get_gray_histogram(FImage in, histogram_type type){
         }
         fun = new Function(0, 255, 0, max);
         for (unsigned int i = 0; i < count.size(); ++i){
-            qDebug()<<QString("%1  %2").arg(i).arg(count[i]);
             fun->set(i, count[i]);
         }
         break;
@@ -86,4 +87,26 @@ Function* ImageProcess::get_gray_histogram(FImage in, histogram_type type){
         break;
     }
     return fun;
+}
+
+Function* ImageProcess::get_histogram_equalization_fun(Function *fun){
+        double sum = 0;
+        int min_in, max_in, min_out, max_out;
+        fun->get_range(min_in, max_in, min_out, max_out);
+        if (min_in != 0 || max_in != 255)
+            return new Function();
+        int l = 255;
+        vector<double> temp(l + 1);
+        for (int i = 0; i <= l; ++i){
+            sum += static_cast<double>(fun->get(min_in + i));
+            temp[i] = sum;
+        }
+        for (int i = 0; i <= l; ++i){
+            temp[i] = temp[i] * l / sum;
+        }
+        Function *new_fun = new Function(0, 255, 0, 255);
+        for (int i = 0; i <= l; ++i){
+            new_fun->set(i, static_cast<int>(temp[i]));
+        }
+        return new_fun;
 }

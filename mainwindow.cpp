@@ -141,6 +141,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_gray_->button_exponent_, SIGNAL(clicked()), this, SLOT(gray_exponent_transform()));
     connect(tab_gray_->button_non_linear_do_, SIGNAL(clicked()), this, SLOT(gray_non_linear_do()));
     connect(tab_gray_->button_show_histogram_, SIGNAL(clicked()), this, SLOT(gray_histogram_display()));
+    connect(tab_gray_->button_equalize_, SIGNAL(clicked()), this, SLOT(gray_histogram_equalization()));
 }
 
 void MainWindow::save_file(){
@@ -218,11 +219,33 @@ void MainWindow::gray_non_linear_transform(non_linear_action action){
 }
 
 void MainWindow::gray_histogram_display(){
-     Function *fun  = ImageProcess::get_gray_histogram(image_view_->image_data_, ImageProcess::PROBABILITY);
+     Function *fun  = ImageProcess::get_gray_histogram(image_view_->image_data_, ImageProcess::FREQUENCE);
+     if (!fun->ready()){
+         delete fun;
+         return;
+     }
      Function *old = tab_gray_->chart_histogram_->fun_;
      if (old != NULL){
          delete old;
      }
      tab_gray_->chart_histogram_->fun_ = fun;
      tab_gray_->chart_histogram_->repaint();
+}
+
+void MainWindow::gray_histogram_equalization(){
+    Function *fun  = ImageProcess::get_gray_histogram(image_view_->image_data_, ImageProcess::FREQUENCE);
+    if (!fun->ready()){
+        delete fun;
+        return;
+    }
+    Function *equal = ImageProcess::get_histogram_equalization_fun(fun);
+    if (!equal->ready()){
+        delete equal;
+        return;
+    }
+    ImageProcess::gray_fun_transform(image_view_->image_data_, equal);
+    delete equal;
+    delete fun;
+    gray_histogram_display();
+
 }

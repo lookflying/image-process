@@ -30,13 +30,13 @@ void Function::set(int in, int out){
     assert(ready_);
      if (in < min_in_ || in > max_in_ || out < min_out_ || out > max_out_)
          return;
-     data_[in] = out;
+     data_[in - min_in_] = out;
 }
 
 int Function::get(int in){
     assert(ready_);
     assert(in >= min_in_ && in <= max_in_);
-    return data_[in];
+    return data_[in - min_in_];
 }
 
 void Function::get_range(int &min_in, int &max_in, int &min_out, int &max_out){
@@ -44,4 +44,8 @@ void Function::get_range(int &min_in, int &max_in, int &min_out, int &max_out){
     max_in = max_in_;
     min_out = min_out_;
     max_out = max_out_;
+}
+
+bool Function::ready(){
+    return ready_;
 }

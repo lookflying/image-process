@@ -43,7 +43,7 @@ private slots:
     void gray_exponent_transform();
     void gray_non_linear_do();
     void gray_histogram_display();
-//    void gray_histogram_balance();
+    void gray_histogram_equalization();
 //    void gray_histogram_match();
 
 private:

@@ -42,7 +42,7 @@ public:
     ChartWidget *chart_histogram_;
     QPushButton *button_show_histogram_;
     QPushButton *button_match_;
-    QPushButton *button_balance_;
+    QPushButton *button_equalize_;
 signals:
     
 public slots:

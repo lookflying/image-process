@@ -118,9 +118,9 @@ void GrayScaleTransformWidget::create_page_histogram(){
     button_show_histogram_ = new QPushButton(tool_page_histogram_);
     button_show_histogram_->setGeometry(QRect(width() / 3, chart_histogram_->height(), width() / 3, 24));
     button_show_histogram_->setText("Show");
-    button_balance_ = new QPushButton(tool_page_histogram_);
-    button_balance_->setGeometry(QRect(width() / 7, chart_histogram_->height() + button_show_histogram_->height(), width() *2 / 7, 24));
-    button_balance_->setText("Balance");
+    button_equalize_ = new QPushButton(tool_page_histogram_);
+    button_equalize_->setGeometry(QRect(width() / 7, chart_histogram_->height() + button_show_histogram_->height(), width() *2 / 7, 24));
+    button_equalize_->setText("Equalize");
     button_match_ = new QPushButton(tool_page_histogram_);
     button_match_->setGeometry(QRect(width() * 4 / 7, chart_histogram_->height() + button_show_histogram_->height(), width() * 2 / 7, 24));
     button_match_->setText("Match");
