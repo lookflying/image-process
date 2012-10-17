@@ -26,7 +26,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    
+    enum non_linear_actions{LOG, EXPONENT, DO};
+    typedef int non_linear_action ;
 signals:
     void refresh_image_view();
 private slots:
@@ -37,8 +38,10 @@ private slots:
     void quit();
 
     void gray_linear_transform();
+    void non_linear_transform(non_linear_action action);
 
 private:
+
     void create_actions();
     void create_menus();
     void create_tool_bar();

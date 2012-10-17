@@ -32,10 +32,11 @@ void ImageProcess::gray_linear_transform(FImage &in_out, int x_min, int x_max, i
     }
 }
 
-void ImageProcess::gray_log_transform(FImage &in_out, double a, double b, double c){
-
-}
-
-void ImageProcess::gray_exponent_transform(FImage &in_out, double a, double b, double c){
-
+void ImageProcess::gray_fun_transform(FImage &in_out, Function *fun){
+    Mat* img = &in_out.get_opencv_image();
+    for (int i = 0; i < img->rows; ++i){
+        for (int j = 0; j < img->cols; ++j){
+            img->at<Vec3b>(i, j) = to_gray_scale(fun->get(get_gray_scale(img->at<Vec3b>(i, j))));
+        }
+    }
 }

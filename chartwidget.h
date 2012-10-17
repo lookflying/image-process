@@ -14,6 +14,7 @@ public:
     enum chart_types{LINE, HISTOGRAM};
     enum fun_types{TABLE, LINEAR, LOG, EXPONENT};
     explicit ChartWidget(QWidget *parent = 0);
+    ~ChartWidget();
     void set_property(int x_min = 0,
                       int x_max = 255,
                       int y_min = 0,

@@ -11,6 +11,12 @@ ChartWidget::ChartWidget(QWidget *parent):
     fun_ = NULL;
 }
 
+ChartWidget::~ChartWidget(){
+    if (fun_ != NULL){
+        delete fun_;
+    }
+}
+
 void ChartWidget::paintEvent(QPaintEvent *){
     QPainter painter(this);
 

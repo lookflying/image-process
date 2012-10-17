@@ -58,20 +58,26 @@ void GrayScaleTransformWidget::create_page_non_linear(){
     tool_page_non_linear_ = new QWidget();
     tool_page_non_linear_->setGeometry(QRect(0, 0, width(), page_height_));
     label_a_ = new QLabel(tool_page_non_linear_);
-    label_a_->setGeometry(width() / 4, 0, width() / 4, 24);
+    label_a_->setGeometry(width() / 5, 0, width() / 5, 24);
     label_a_->setText(QString::fromUtf8("a = "));
     spin_box_a_ = new QDoubleSpinBox(tool_page_non_linear_);
-    spin_box_a_->setGeometry(width() / 2, 0, width() / 4, 24);
+    spin_box_a_->setGeometry(width() * 2 / 5, 0, width() / 3, 24);
+    spin_box_a_->setMaximum(100);
+    spin_box_a_->setMinimum(-100);
     label_b_ = new QLabel(tool_page_non_linear_);
-    label_b_->setGeometry(width() / 4, label_a_->height(), width() / 4, 24);
+    label_b_->setGeometry(width() / 5, label_a_->height(), width() / 5, 24);
     label_b_->setText(QString::fromUtf8("b = "));
     spin_box_b_ = new QDoubleSpinBox(tool_page_non_linear_);
-    spin_box_b_->setGeometry(width() / 2, label_a_->height(), width() / 4, 24);
+    spin_box_b_->setGeometry(width() * 2 / 5, label_a_->height(), width() / 3, 24);
+    spin_box_b_->setMaximum(100);
+    spin_box_b_->setMinimum(-100);
     label_c_ = new QLabel(tool_page_non_linear_);
-    label_c_->setGeometry(width() / 4, label_a_->height() + label_b_->height(), width() / 4, 24);
+    label_c_->setGeometry(width() / 5, label_a_->height() + label_b_->height(), width() / 5, 24);
     label_c_->setText(QString::fromUtf8("c = "));
     spin_box_c_ = new QDoubleSpinBox(tool_page_non_linear_);
-    spin_box_c_->setGeometry(width() / 2, label_a_->height() + label_b_->height(), width() / 4, 24);
+    spin_box_c_->setGeometry(width() * 2 / 5, label_a_->height() + label_b_->height(), width() / 3, 24);
+    spin_box_c_->setMaximum(100);
+    spin_box_c_->setMinimum(-100);
     button_log_ = new QPushButton(tool_page_non_linear_);
     button_log_->setGeometry(width() / 12,
                              label_a_->height() + label_b_->height() + label_c_->height(),

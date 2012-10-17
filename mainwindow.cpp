@@ -8,7 +8,13 @@
 
 #include <QMessageBox>
 
+
 #include "imageprocess.h"
+
+#include "function.h"
+#include "linearfunction.h"
+#include "logfunction.h"
+#include "exponentfunction.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -157,3 +163,41 @@ void MainWindow::gray_linear_transform(){
     ImageProcess::gray_linear_transform(image_view_->image_data_, min_x, max_x, min_y, max_y);
     emit refresh_image_view();
 }
+
+void MainWindow::non_linear_transform(non_linear_action action){
+    double a = tab_gray_->spin_box_a_->value();
+    double b = tab_gray_->spin_box_b_->value();
+    double c = tab_gray_->spin_box_c_->value();
+    switch (action){
+    case LOG:
+    {
+        if (c <= 0 || c == 1 || c == 0)
+            return;
+        tab_gray_->char_non_linear_->set_property(0, 255, 0, 255, ChartWidget::LOG, ChartWidget::LINE);
+        LogFunction* fun;
+        assert((fun = dynamic_cast<LogFunction*>(tab_gray_->char_non_linear_->fun_)) != 0);
+        fun->set_value(a, b, c);
+        tab_gray_->char_non_linear_->repaint();
+        break;
+    }
+    case EXPONENT:
+    {
+        tab_gray_->char_non_linear_->set_property(0, 255, 0, 255, ChartWidget::EXPONENT, ChartWidget::LINE);
+        ExponentFunction* fun;
+        assert((fun = dynamic_cast<ExponentFunction*>(tab_gray_->char_non_linear_->fun_)) != 0);
+        fun->set_value(a, b, c);
+        tab_gray_->char_non_linear_->repaint();
+        break;
+    }
+    case DO:
+    {
+
+
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+

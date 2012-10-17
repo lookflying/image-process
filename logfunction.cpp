@@ -10,14 +10,14 @@ LogFunction::LogFunction(int min_in, int max_in, int min_out, int max_out, doubl
     a_ = a;
     b_ = b;
     c_ = c;
-    setValue(a_, b_, c_);
+    set_value(a_, b_, c_);
 }
 
 LogFunction::LogFunction()
 {
 }
 
-void LogFunction::setValue(double a, double b, double c){
+void LogFunction::set_value(double a, double b, double c){
     if (!ready_)
         return;
     double bottom = b * log(c);
