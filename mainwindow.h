@@ -10,6 +10,7 @@
 #include <QWidget>
 #include <QTabWidget>
 #include <QLabel>
+#include <QMouseEvent>
 #include "imageview.h"
 #include "grayscaletransformwidget.h"
 #include "basicoperationwidget.h"
@@ -36,6 +37,9 @@ private slots:
     void close_file();
     void save_file_as();
     void quit();
+
+    void redo();
+    void undo();
 
     void gray_linear_transform();
     void gray_non_linear_transform(non_linear_action action);
@@ -73,7 +77,10 @@ private:
     QAction *file_save_act_;
     QAction *file_save_as_act_;
     QAction *file_close_act_;
-    QAction *quit_act_;
+    QAction *file_quit_act_;
+
+    QAction *edit_undo_act_;
+    QAction *edit_redo_act_;
 
     ImageView *image_view_;
     QWidget *central_widget_;
@@ -89,7 +96,8 @@ private:
     BasicOperationWidget *tab_basic_;
 
 
-
+protected:
+    void mouseMoveEvent(QMouseEvent *);
 
 
 };

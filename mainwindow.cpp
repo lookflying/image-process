@@ -34,7 +34,9 @@ MainWindow::MainWindow(QWidget *parent) :
     create_tab_widget();
     setCentralWidget(central_widget_);
     connect_signal_slot();
+    setMouseTracking(true);
     show();
+
 }
 
 MainWindow::~MainWindow()
@@ -62,11 +64,20 @@ void MainWindow::create_actions(){
     file_close_act_->setStatusTip(tr("Close current file"));
     connect(file_close_act_, SIGNAL(triggered()), this, SLOT(close_file()));
 
-    quit_act_ = new QAction(tr("&Quit"), this);
-    quit_act_->setShortcut(QKeySequence::Quit);
-    quit_act_->setStatusTip(tr("Quit the software"));
-    connect(quit_act_, SIGNAL(triggered()), this, SLOT(quit()));
+    file_quit_act_ = new QAction(tr("&Quit"), this);
+    file_quit_act_->setShortcut(QKeySequence::Quit);
+    file_quit_act_->setStatusTip(tr("Quit the software"));
+    connect(file_quit_act_, SIGNAL(triggered()), this, SLOT(quit()));
 
+    edit_undo_act_ = new QAction(tr("&Undo"), this);
+    edit_undo_act_->setShortcut(QKeySequence::Undo);
+    edit_undo_act_->setStatusTip(tr("Undo last step"));
+    connect(edit_undo_act_, SIGNAL(triggered()), this, SLOT(undo()));
+
+    edit_redo_act_ = new QAction(tr("&Redo"), this);
+    edit_redo_act_->setShortcut(QKeySequence::Redo);
+    edit_redo_act_->setStatusTip(tr("Redo last step"));
+    connect(edit_redo_act_, SIGNAL(triggered()), this, SLOT(redo()));
 }
 
 void MainWindow::create_menus(){
@@ -76,7 +87,11 @@ void MainWindow::create_menus(){
     file_menu_->addAction(file_save_act_);
     file_menu_->addAction(file_close_act_);
     file_menu_->addSeparator();
-    file_menu_->addAction(quit_act_);
+    file_menu_->addAction(file_quit_act_);
+
+    edit_menu_ = menu_bar_->addMenu(tr("&Edit"));
+    edit_menu_->addAction(edit_undo_act_);
+    edit_menu_->addAction(edit_redo_act_);
 
 }
 void MainWindow::create_image_view(){
@@ -165,6 +180,14 @@ void MainWindow::close_file(){
 }
 
 void MainWindow::quit(){
+
+}
+
+void MainWindow::redo(){
+
+}
+
+void MainWindow::undo(){
 
 }
 
@@ -350,4 +373,9 @@ void MainWindow::basic_algebra_pic(){
 
 void MainWindow::status_show_position(int x, int y){
     label_position_->setText(QString("(%1 , %2)").arg(x).arg(y));
+}
+
+
+void MainWindow::mouseMoveEvent(QMouseEvent * event){
+//    qDebug()<<QString("(%1 , %2)").arg(event->x(), event->y());
 }
