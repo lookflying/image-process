@@ -51,6 +51,7 @@ private slots:
     void basic_algebra();
     void basic_algebra_pic();
 
+    void status_show_position(int x, int y);
 private:
 
     void create_actions();
@@ -79,6 +80,7 @@ private:
     QMenuBar *menu_bar_;
     QToolBar *main_tool_bar_;
     QStatusBar *status_bar_;
+    QLabel *label_position_;//may delete
 
     QTabWidget *tab_widget_;
 

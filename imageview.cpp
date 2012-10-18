@@ -11,7 +11,7 @@ ImageView::ImageView(QWidget *parent) :
     scene_ = new QGraphicsScene(this);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
+    setMouseTracking(true);
 }
 
 
@@ -43,5 +43,8 @@ void ImageView::show_image(QImage img){
 
 void ImageView::refresh(){
      show_image(image_data_.data());
+}
+void ImageView::mouseMoveEvent(QMouseEvent *event){
+    emit mouse_position(event->x(), event->y());
 }
 

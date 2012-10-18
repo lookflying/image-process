@@ -8,7 +8,9 @@ ChartWidget::ChartWidget(QWidget *parent):
 {
     pressed_ = false;
     continous_ = false;
+    in_cur_ = out_cur_ = 0;
     fun_ = NULL;
+    setMouseTracking(true);
 }
 
 ChartWidget::~ChartWidget(){
@@ -21,7 +23,7 @@ void ChartWidget::paintEvent(QPaintEvent *){
     QPainter painter(this);
     fun_->get_range(x_min_, x_max_, y_min_, y_max_);
     w_ = width() - 32;
-    h_ = height() - 12;
+    h_ = height() - 30;
     range_x_ = x_max_ - x_min_;
     range_y_ = y_max_ - y_min_;
     painter.setPen(Qt::black);
@@ -29,8 +31,8 @@ void ChartWidget::paintEvent(QPaintEvent *){
     painter.drawLine(24, h_, width(), h_);
     painter.drawText(0, 12, QString("%1").arg(y_max_));
     painter.drawText(0, h_, QString("%1").arg(y_min_));
-    painter.drawText(24, height(), QString("%1").arg(x_min_));
-    painter.drawText(w_, height(), QString("%1").arg(x_max_));
+    painter.drawText(24, height() - 18, QString("%1").arg(x_min_));
+    painter.drawText(w_, height() - 18, QString("%1").arg(x_max_));
     if (chart_type_ == LINE){
         for (int x = x_min_ ; x <= x_max_; ++x){
             int y = fun_->get(x);
@@ -47,6 +49,7 @@ void ChartWidget::paintEvent(QPaintEvent *){
 
         }
     }
+    painter.drawText(0, height() - 6, QString("(%1 , %2)").arg(in_cur_).arg(out_cur_));
 }
 
 void ChartWidget::mousePressEvent(QMouseEvent * event){
@@ -80,6 +83,13 @@ void ChartWidget::mouseMoveEvent(QMouseEvent *event){
         repaint();
     }else{
         continous_ = false;
+    }
+    if (in < x_min_ || in > x_max_ || out < y_min_ || out > y_max_){
+        return;
+    } else{
+        in_cur_ = in;
+        out_cur_ = out;
+        repaint();
     }
 }
 

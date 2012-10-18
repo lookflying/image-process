@@ -45,6 +45,9 @@ private:
     fun_type fun_type_;
     bool pressed_;
     bool continous_;
+
+    int in_cur_;
+    int out_cur_;
 };
 
 #endif // CHARTWIDGET_H

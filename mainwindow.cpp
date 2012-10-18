@@ -90,7 +90,8 @@ void MainWindow::create_image_view(){
 
 void MainWindow::create_status_bar(){
     status_bar_ = new QStatusBar(this);
-    status_bar_->setObjectName(QString::fromUtf8("statusBar"));
+    label_position_ = new QLabel(status_bar_);
+    label_position_->setGeometry(QRect(0, 0, status_bar_->width(), status_bar_->height()));
     setStatusBar(status_bar_);
 }
 
@@ -147,6 +148,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_basic_->button_rotate_, SIGNAL(clicked()), this, SLOT(geometry_rotate()));
     connect(tab_basic_->button_algebra_, SIGNAL(clicked()), this, SLOT(basic_algebra()));
     connect(tab_basic_->tool_button_algebra_, SIGNAL(clicked()), this, SLOT(basic_algebra_pic()));
+    connect(image_view_, SIGNAL(mouse_position(int,int)), this, SLOT(status_show_position(int,int)));
 
 }
 
@@ -344,4 +346,8 @@ void MainWindow::basic_algebra(){
 void MainWindow::basic_algebra_pic(){
      QString file_name = QFileDialog::getOpenFileName(this);
      tab_basic_->label_algebra_pic_->setText(file_name);
+}
+
+void MainWindow::status_show_position(int x, int y){
+    label_position_->setText(QString("(%1 , %2)").arg(x).arg(y));
 }
