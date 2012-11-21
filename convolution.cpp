@@ -41,6 +41,20 @@ void Convolution::to_uchar_mat(Mat &in, Mat &out){
         out = tmp_out;
     }
 }
+
+void Convolution::to_normalized_uchar_mat(Mat &in, Mat &out, float max){
+    CV_Assert(max > 0 && in.elemSize() == sizeof(float));
+    float coe = 255.0 / max;
+    Mat tmp_out = Mat(in.rows, in.cols, CV_8UC1);
+    for (int i = 0; i < in.rows; ++i){
+        for (int j = 0; j < in.cols; ++j){
+            tmp_out.at<uchar>(i, j) = static_cast<uchar>(in.at<float>(i, j) * coe);
+        }
+    }
+    out = tmp_out;
+}
+
+
 double Convolution::element_mul_sum(Mat& a, Mat& b){
     double rst = 0;
     CV_Assert(a.channels() == 1 && b.channels() == 1);

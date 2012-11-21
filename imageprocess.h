@@ -5,6 +5,10 @@
 #include "linearfunction.h"
 #include <opencv2/core/core.hpp>
 #include "function.h"
+#include "edgedetect.h"
+#include "blur.h"
+#include "morphology.h"
+#include "convolutionengine.h"
 class ImageProcess
 {
 public:
@@ -23,6 +27,10 @@ public:
     enum algebra_types{ADD, SUB, MUL, DIV};
     typedef int algebra_type;
     static void algebra(FImage &in_out, FImage &another, algebra_type type);
+
+    static void edge_detect(FImage &in_out, EdgeDetect::edge_detect_type_t type);
+    static void blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma);
+    static void morphology_transform(FImage &in_out, Blur::blur_type_t type, cv::Mat se, int center_x, int center_y);
 private:
     static int get_gray_scale(cv::Vec3b color);
     static cv::Vec3b to_gray_vec3b(int gray);

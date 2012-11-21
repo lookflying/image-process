@@ -14,7 +14,8 @@ public:
 
 
     static double element_mul_sum(cv::Mat& a, cv::Mat& b);
-    void static to_uchar_mat(cv::Mat& in, cv::Mat& out);
+    static void to_uchar_mat(cv::Mat& in, cv::Mat& out);
+    static void to_normalized_uchar_mat(cv::Mat& in, cv::Mat& out, float max);
     static void to_float_mat(cv::Mat &in, cv::Mat& out);
     static uchar double_to_valid_uchar(double d);
 private:

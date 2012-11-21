@@ -6,14 +6,14 @@
 using namespace cv;
 FImage::FImage()
 {
-    using_gray_ = false;
+    is_gray_ = false;
 }
 
 
 bool FImage::load(QString file_name){
     bool ret;
     img_ = imread(file_name.toStdString());
-    using_gray_ = false;
+    is_gray_ = false;
 
 //   Mat test = Mat::zeros(3, 4, CV_8UC1);
 //   test.at<uchar>(2, 2) = 255;
@@ -57,7 +57,7 @@ QImage FImage::data(){
     return get_display_image();
 }
 QImage FImage::get_display_image(){
-    if (using_gray_){
+    if (is_gray_){
         cvtColor(gray_img_, img_, CV_GRAY2RGB);
     }
     return QImage((uchar*)img_.data, img_.cols, img_.rows, img_.channels() * img_.cols, QImage::Format_RGB888);
@@ -77,20 +77,22 @@ QImage FImage::get_qimage(Mat &img){
 }
 
 Mat& FImage::get_opencv_image_3channels(){
-    if (using_gray_){
+    if (is_gray_){
         cvtColor(gray_img_, img_, CV_GRAY2RGB);
         need_sync_ = true;
     }
     return img_;
 }
 
-void FImage::use_gray(){
-    cvtColor(img_, gray_img_, CV_RGB2GRAY);
-    using_gray_ = true;
+void FImage::turn_gray(){
+    if (!is_gray_){
+        cvtColor(img_, gray_img_, CV_RGB2GRAY);
+        is_gray_ = true;
+    }
 }
 
 Mat& FImage::get_opencv_image_gray(){
-    if (!using_gray_){
+    if (!is_gray_){
         cvtColor(img_, gray_img_, CV_RGB2GRAY);
         need_sync_ = true;
     }
@@ -98,7 +100,7 @@ Mat& FImage::get_opencv_image_gray(){
 }
 
 void FImage::sync_changes(){
-    if (using_gray_){
+    if (is_gray_){
         cvtColor(img_, gray_img_, CV_RGB2GRAY);
         need_sync_ = false;
     }else{

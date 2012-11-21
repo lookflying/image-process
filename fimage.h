@@ -15,11 +15,13 @@ public:
     cv::Mat& get_opencv_image_3channels();
     cv::Mat& get_opencv_image_gray();
     void sync_changes();
-    void use_gray();
+    void turn_gray();
+    void turn_binary();
 private:
     cv::Mat img_;
     cv::Mat gray_img_;
-    bool using_gray_;
+    bool is_gray_;
+    bool is_binary_;
     bool need_sync_;
 };
 

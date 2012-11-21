@@ -361,3 +361,27 @@ void ImageProcess::algebra(FImage &in_out, FImage &another, algebra_type type){
         }
     }
 }
+
+void ImageProcess::edge_detect(FImage &in_out, EdgeDetect::edge_detect_type_t type){
+    EdgeDetect::run(in_out.get_opencv_image_gray(),
+                    in_out.get_opencv_image_gray(),
+                    type);
+}
+
+void ImageProcess::blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma){
+        Blur::run(in_out.get_opencv_image_gray(),
+                  in_out.get_opencv_image_gray(),
+                  type,
+                  size,
+                  sigma);
+
+}
+
+void ImageProcess::morphology_transform(FImage &in_out, Blur::blur_type_t type, Mat se, int center_x, int center_y){
+    Morphology::run(in_out.get_opencv_image_gray(),
+                    in_out.get_opencv_image_gray(),
+                    type,
+                    se,
+                    center_x,
+                    center_y);
+}

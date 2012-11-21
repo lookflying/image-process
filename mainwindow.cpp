@@ -174,7 +174,9 @@ void MainWindow::connect_signal_slot(){
     connect(tab_basic_->tool_button_algebra_, SIGNAL(clicked()), this, SLOT(basic_algebra_pic()));
     connect(image_view_, SIGNAL(mouse_position(int,int)), this, SLOT(status_show_position(int,int)));
 
-    connect(tab_filter_->button_test_, SIGNAL(clicked()), this, SLOT(filter_test()));
+    connect(tab_filter_->button_edge_detect_, SIGNAL(clicked()), this, SLOT(filter_edge_detect()));
+    connect(tab_filter_->button_blur_, SIGNAL(clicked()), this, SLOT(filter_blur()));
+    connect(tab_filter_->button_morphology_, SIGNAL(clicked()), this, SLOT(filter_morphology()));
 }
 
 void MainWindow::save_file(){
@@ -381,13 +383,41 @@ void MainWindow::basic_algebra_pic(){
      tab_basic_->label_algebra_pic_->setText(file_name);
 }
 
-void MainWindow::filter_test(){
-    image_view_->image_data_.use_gray();
+void MainWindow::filter_morphology(){
+    image_view_->image_data_.turn_gray();
     cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
                   image_view_->image_data_.get_opencv_image_gray(),
                   100,
                   255,
                   cv::THRESH_BINARY);
+
+
+    emit refresh_image_view();
+}
+
+void MainWindow::filter_blur(){
+    image_view_->image_data_.turn_gray();
+    cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
+                  image_view_->image_data_.get_opencv_image_gray(),
+                  100,
+                  255,
+                  cv::THRESH_BINARY);
+    ImageProcess::blur(image_view_->image_data_,
+                       tab_filter_->combo_box_blur_->currentIndex(),
+                       tab_filter_->spin_box_blur_size_->value(),
+                       tab_filter_->double_spin_box_blur_sigma_->value());
+    emit refresh_image_view();
+}
+
+void MainWindow::filter_edge_detect(){
+    image_view_->image_data_.turn_gray();
+    cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
+                  image_view_->image_data_.get_opencv_image_gray(),
+                  100,
+                  255,
+                  cv::THRESH_BINARY);
+    ImageProcess::edge_detect(image_view_->image_data_,
+                              tab_filter_->combo_box_edge_detect_->currentIndex());
 //    EdgeDetect::run(image_view_->image_data_.get_opencv_image_gray(),
 //                    image_view_->image_data_.get_opencv_image_gray(),
 //                    EdgeDetect::PREWITT);
@@ -396,18 +426,18 @@ void MainWindow::filter_test(){
 //              Blur::MEAN,
 //              4,
 //              -1);
-    uchar se[] = {
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    };
-    cv::Mat se_mat = cv::Mat(5, 5, CV_8UC1, (uchar*)se);
-    Morphology::run(image_view_->image_data_.get_opencv_image_gray(),
-                    image_view_->image_data_.get_opencv_image_gray(),
-                    Morphology::CLOSING,
-                    se_mat);
+//    uchar se[] = {
+//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+//    };
+//    cv::Mat se_mat = cv::Mat(5, 5, CV_8UC1, (uchar*)Morphology::distance_metric_);
+//    Morphology::run(image_view_->image_data_.get_opencv_image_gray(),
+//                    image_view_->image_data_.get_opencv_image_gray(),
+//                    Morphology::DISTANCE_TRANSFORM,
+//                    se_mat);
 
 
 
@@ -415,7 +445,9 @@ void MainWindow::filter_test(){
 }
 
 void MainWindow::status_show_position(int x, int y){
+
     label_position_->setText(QString("(%1 , %2)").arg(x).arg(y));
+//    image_view_->
 }
 
 
