@@ -30,6 +30,19 @@ void Convolution::to_float_mat(Mat &in, Mat& out){
     }
 }
 
+void Convolution::to_uchar_mat(Mat &in, Mat &out){
+    if (in.elemSize() == 1){
+        out = in;
+    }else{
+        Mat tmp_out = Mat(in.rows, in.cols, CV_8UC1);
+        for (int i = 0; i < in.rows; ++i){
+            for (int j = 0; j < in.cols; ++j){
+                tmp_out.at<uchar>(i, j) = static_cast<uchar>(in.at<float>(i, j));
+            }
+        }
+        out = tmp_out;
+    }
+}
 double Convolution::element_mul_sum(Mat& a, Mat& b){
     double rst = 0;
     CV_Assert(a.channels() == 1 && b.channels() == 1);

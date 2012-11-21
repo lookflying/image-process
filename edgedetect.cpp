@@ -51,34 +51,22 @@ void EdgeDetect::sqrt(Mat &src, Mat &dst){
     dst = temp;
 }
 
-void EdgeDetect::to_uchar_mat(Mat &in, Mat &out){
-    if (in.elemSize() == 1){
-        out = in;
-    }else{
-        Mat tmp_out = Mat(in.rows, in.cols, CV_8UC1);
-        for (int i = 0; i < in.rows; ++i){
-            for (int j = 0; j < in.cols; ++j){
-                tmp_out.at<uchar>(i, j) = static_cast<uchar>(in.at<float>(i, j));
-            }
-        }
-        out = tmp_out;
-    }
-}
+
 
 void EdgeDetect::run(Mat &src, Mat &dst, edge_detect_type_t type){
     Mat kernel_x, kernel_y;
+    Mat temp_x, temp_y, temp;
     switch(type){
     case ROBERTS:
     {
         kernel_x = Mat(2, 2, CV_32FC1, (float*)roberts_operator_x_);
         kernel_y = Mat(2, 2, CV_32FC1, (float*)roberts_operator_y_);
-        Mat temp_x, temp_y, temp;
         ConvolutionEngine::run_raw(src, temp_x, kernel_x, Convolution::normal_raw_convolution_action, 0, 0);
         ConvolutionEngine::run_raw(src, temp_y, kernel_y, Convolution::normal_raw_convolution_action, 0, 0);
         add(temp_x, temp_y, temp);
         multiply(temp, temp, temp);
         sqrt(temp, temp);
-        to_uchar_mat(temp, temp);
+        Convolution::to_uchar_mat(temp, temp);
         dst = temp;
     }
         break;
@@ -86,13 +74,12 @@ void EdgeDetect::run(Mat &src, Mat &dst, edge_detect_type_t type){
     {
         kernel_x = Mat(3, 3, CV_32FC1, (float*)sobel_operator_x_);
         kernel_y = Mat(3, 3, CV_32FC1, (float*)sobel_operator_y_);
-        Mat temp_x, temp_y, temp;
         ConvolutionEngine::run_raw(src, temp_x, kernel_x, Convolution::normal_raw_convolution_action, 0, 0);
         ConvolutionEngine::run_raw(src, temp_y, kernel_y, Convolution::normal_raw_convolution_action, 0, 0);
         temp_x = abs(temp_x);
         temp_y = abs(temp_y);
         temp = max(temp_x, temp_y);
-        to_uchar_mat(temp, temp);
+        Convolution::to_uchar_mat(temp, temp);
         dst = temp;
     }
         break;
@@ -100,13 +87,12 @@ void EdgeDetect::run(Mat &src, Mat &dst, edge_detect_type_t type){
     {
         kernel_x = Mat(3, 3, CV_32FC1, (float*)prewitt_operator_x_);
         kernel_y = Mat(3, 3, CV_32FC1, (float*)prewitt_operator_y_);
-        Mat temp_x, temp_y, temp;
         ConvolutionEngine::run_raw(src, temp_x, kernel_x, Convolution::normal_raw_convolution_action, 0, 0);
         ConvolutionEngine::run_raw(src, temp_y, kernel_y, Convolution::normal_raw_convolution_action, 0, 0);
         temp_x = abs(temp_x);
         temp_y = abs(temp_y);
         temp = max(temp_x, temp_y);
-        to_uchar_mat(temp, temp);
+        Convolution::to_uchar_mat(temp, temp);
         dst = temp;
     }
         break;

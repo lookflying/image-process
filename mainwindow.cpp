@@ -11,6 +11,7 @@
 
 #include "imageprocess.h"
 #include "edgedetect.h"
+#include "blur.h"
 
 #include "function.h"
 #include "linearfunction.h"
@@ -380,9 +381,14 @@ void MainWindow::basic_algebra_pic(){
 
 void MainWindow::filter_test(){
     image_view_->image_data_.use_gray();
-    EdgeDetect::run(image_view_->image_data_.get_opencv_image_gray(),
-                    image_view_->image_data_.get_opencv_image_gray(),
-                    EdgeDetect::PREWITT);
+//    EdgeDetect::run(image_view_->image_data_.get_opencv_image_gray(),
+//                    image_view_->image_data_.get_opencv_image_gray(),
+//                    EdgeDetect::PREWITT);
+    Blur::run(image_view_->image_data_.get_opencv_image_gray(),
+              image_view_->image_data_.get_opencv_image_gray(),
+              Blur::MEAN,
+              4,
+              -1);
     emit refresh_image_view();
 }
 

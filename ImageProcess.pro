@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     convolution.cpp \
     convolutionengine.cpp \
     filterwidget.cpp \
-    edgedetect.cpp
+    edgedetect.cpp \
+    blur.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -41,7 +42,8 @@ HEADERS  += mainwindow.h \
     convolution.h \
     convolutionengine.h \
     filterwidget.h \
-    edgedetect.h
+    edgedetect.h \
+    blur.h
 
 FORMS    +=
 

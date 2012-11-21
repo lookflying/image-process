@@ -17,7 +17,6 @@ public:
     static void run(cv::Mat& src, cv::Mat& dst, edge_detect_type_t type);
 private:
     void static sqrt(cv::Mat& src, cv::Mat& dst);
-    void static to_uchar_mat(cv::Mat& in, cv::Mat& out);
 };
 
 
