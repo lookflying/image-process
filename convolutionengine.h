@@ -6,7 +6,8 @@
 class ConvolutionEngine
 {
 public:
-    static void run(cv::Mat &src, cv::Mat &dst, cv::Mat &kernel, convolution_action* action, int center_x = -1, int center_y = -1);
+    static void run(cv::Mat& src, cv::Mat &dst, cv::Mat &kernel, convolution_action* action = Convolution::normal_convolution_action, int center_x = -1, int center_y = -1);
+    static void run_raw(cv::Mat &src, cv::Mat &dst, cv::Mat &kernel, convolution_action_raw* action = Convolution::normal_raw_convolution_action, int center_x = -1, int center_y = -1);
 //    void init(cv::Mat &src, cv::Mat &dst, cv::Mat &kernel, int center_x = -1 , int center_y = -1);
 //private:
 //    cv::Mat src_;

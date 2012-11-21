@@ -9,18 +9,36 @@ FImage::FImage()
     using_gray_ = false;
 }
 
-void FImage::use_gray(){
-    cvtColor(img_, gray_img_, CV_RGB2GRAY);
-    using_gray_ = true;
-}
 
 bool FImage::load(QString file_name){
     bool ret;
     img_ = imread(file_name.toStdString());
     using_gray_ = false;
 
-//    Mat test = Mat::zeros(3, 4, CV_32FC1);
-//    qDebug()<<QString("test.element size = %1, length of float %2, length of double %3").arg(test.elemSize()).arg(sizeof(float)).arg(sizeof(double));
+//   Mat test = Mat::zeros(3, 4, CV_8UC1);
+//   test.at<uchar>(2, 2) = 255;
+
+//   for (int i = 0; i < 3; ++i){
+//       for (int j = 0; j < 4; ++j){
+//           printf("%d\t", (int)(*(test.data + i * 4 + j)));
+//       }
+//       printf("\n");
+//   }
+//   printf("----------------\n");
+//   const uchar a[] = {
+//       0, 0, 0, 0,
+//       0, 1, 1, 3,
+//       3, 4, 6, 35,
+//   };
+//   test = Mat(3, 4, CV_8UC1, (uchar*)a);
+
+//   for (int i = 0; i < 3; ++i){
+//       for (int j = 0; j < 4; ++j){
+//           printf("%d\t", (int)(*(test.data + i * 4 + j)));
+//       }
+//       printf("\n");
+//   }
+//   fflush(stdout);
     ret = !img_.empty();
     if (ret){
         cvtColor(img_, img_, CV_BGR2RGB);
@@ -34,16 +52,21 @@ bool FImage::save(QString file_name){
 
 
 QImage FImage::data(){
+    if (need_sync_)
+        sync_changes();
+    return get_display_image();
+}
+QImage FImage::get_display_image(){
     if (using_gray_){
-        return get_qimage(gray_img_);
-    }else{
-        return get_qimage(img_);
+        cvtColor(gray_img_, img_, CV_GRAY2RGB);
     }
+    return QImage((uchar*)img_.data, img_.cols, img_.rows, img_.channels() * img_.cols, QImage::Format_RGB888);
+
 }
 
 QImage FImage::get_qimage(Mat &img){
     if (img.channels() == 1){
-        Mat tmp;
+        static Mat tmp;
         cvtColor(img, tmp, CV_GRAY2RGB);
         return QImage((uchar*)tmp.data, tmp.cols, tmp.rows, tmp.channels() * img.cols, QImage::Format_RGB888);
     }else if (img.channels() == 3){
@@ -59,6 +82,11 @@ Mat& FImage::get_opencv_image_3channels(){
         need_sync_ = true;
     }
     return img_;
+}
+
+void FImage::use_gray(){
+    cvtColor(img_, gray_img_, CV_RGB2GRAY);
+    using_gray_ = true;
 }
 
 Mat& FImage::get_opencv_image_gray(){

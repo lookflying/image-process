@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QToolBox>
+#include <QPushButton>
 
 class FilterWidget : public QWidget
 {
@@ -12,6 +13,7 @@ public:
     QToolBox *tool_box_;
     
     QWidget *tool_page_edge_detect_;
+    QPushButton *button_test_;
 
     QWidget *tool_page_blur_;
 

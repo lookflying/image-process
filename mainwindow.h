@@ -56,6 +56,8 @@ private slots:
     void basic_algebra();
     void basic_algebra_pic();
 
+    void filter_test();
+
     void status_show_position(int x, int y);
 private:
 

@@ -20,6 +20,8 @@ void FilterWidget::create_page_edge_detect(){
     tool_page_edge_detect_ = new QWidget();
     tool_page_edge_detect_->setGeometry(QRect(0, 0, width(), height()));
 
+    button_test_ = new QPushButton(QString::fromUtf8("test"), tool_page_edge_detect_);
+    button_test_->setGeometry(QRect(width() / 3, 0, width() / 3, 24));
 
     tool_box_->addItem(tool_page_edge_detect_, QString::fromUtf8("Edge Detect"));
 }

@@ -10,11 +10,14 @@
 
 
 #include "imageprocess.h"
+#include "edgedetect.h"
 
 #include "function.h"
 #include "linearfunction.h"
 #include "logfunction.h"
 #include "exponentfunction.h"
+
+#include <opencv2/highgui/highgui.hpp>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -168,6 +171,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_basic_->tool_button_algebra_, SIGNAL(clicked()), this, SLOT(basic_algebra_pic()));
     connect(image_view_, SIGNAL(mouse_position(int,int)), this, SLOT(status_show_position(int,int)));
 
+    connect(tab_filter_->button_test_, SIGNAL(clicked()), this, SLOT(filter_test()));
 }
 
 void MainWindow::save_file(){
@@ -372,6 +376,14 @@ void MainWindow::basic_algebra(){
 void MainWindow::basic_algebra_pic(){
      QString file_name = QFileDialog::getOpenFileName(this);
      tab_basic_->label_algebra_pic_->setText(file_name);
+}
+
+void MainWindow::filter_test(){
+    image_view_->image_data_.use_gray();
+    EdgeDetect::run(image_view_->image_data_.get_opencv_image_gray(),
+                    image_view_->image_data_.get_opencv_image_gray(),
+                    EdgeDetect::PREWITT);
+    emit refresh_image_view();
 }
 
 void MainWindow::status_show_position(int x, int y){

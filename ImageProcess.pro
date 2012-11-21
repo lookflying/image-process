@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     exponentfunction.cpp \
     convolution.cpp \
     convolutionengine.cpp \
-    filterwidget.cpp
+    filterwidget.cpp \
+    edgedetect.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     exponentfunction.h \
     convolution.h \
     convolutionengine.h \
-    filterwidget.h
+    filterwidget.h \
+    edgedetect.h
 
 FORMS    +=
 

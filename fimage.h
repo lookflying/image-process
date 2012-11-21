@@ -11,6 +11,7 @@ public:
     bool save(QString file_name);
     QImage data();
     static QImage get_qimage(cv::Mat& img);
+    QImage get_display_image();
     cv::Mat& get_opencv_image_3channels();
     cv::Mat& get_opencv_image_gray();
     void sync_changes();
