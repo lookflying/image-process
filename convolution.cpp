@@ -12,9 +12,7 @@ double Convolution::normal_raw_convolution_action(Mat& input, Mat& kernel){
 }
 
 
-uchar Convolution::morphology_action(Mat& input, Mat& kernel){
 
-}
 
 void Convolution::to_float_mat(Mat &in, Mat& out){
     if (in.elemSize() == 1){

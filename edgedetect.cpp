@@ -56,6 +56,7 @@ void EdgeDetect::sqrt(Mat &src, Mat &dst){
 void EdgeDetect::run(Mat &src, Mat &dst, edge_detect_type_t type){
     Mat kernel_x, kernel_y;
     Mat temp_x, temp_y, temp;
+    CV_Assert(src.channels() == 1);
     switch(type){
     case ROBERTS:
     {

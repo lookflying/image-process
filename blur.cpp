@@ -9,6 +9,7 @@ using namespace cv;
 
 void Blur::run(Mat &src, Mat &dst, blur_type_t type, int size, double sigma){
     Mat kernel, temp;
+    CV_Assert(src.channels() == 1);
     switch(type){
     case GAUSSIAN:{
         get_gaussian_kernel(kernel, size, sigma);

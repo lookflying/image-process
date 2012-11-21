@@ -11,7 +11,7 @@ class Convolution
 public:
     static uchar normal_convolution_action(cv::Mat& input, cv::Mat& kernel);
     static double normal_raw_convolution_action(cv::Mat& input, cv::Mat& kernel);
-    static uchar morphology_action(cv::Mat& input, cv::Mat& kernel);
+
 
     static double element_mul_sum(cv::Mat& a, cv::Mat& b);
     void static to_uchar_mat(cv::Mat& in, cv::Mat& out);

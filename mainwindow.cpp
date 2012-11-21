@@ -12,6 +12,7 @@
 #include "imageprocess.h"
 #include "edgedetect.h"
 #include "blur.h"
+#include "morphology.h"
 
 #include "function.h"
 #include "linearfunction.h"
@@ -19,6 +20,7 @@
 #include "exponentfunction.h"
 
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -381,14 +383,34 @@ void MainWindow::basic_algebra_pic(){
 
 void MainWindow::filter_test(){
     image_view_->image_data_.use_gray();
+    cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
+                  image_view_->image_data_.get_opencv_image_gray(),
+                  100,
+                  255,
+                  cv::THRESH_BINARY);
 //    EdgeDetect::run(image_view_->image_data_.get_opencv_image_gray(),
 //                    image_view_->image_data_.get_opencv_image_gray(),
 //                    EdgeDetect::PREWITT);
-    Blur::run(image_view_->image_data_.get_opencv_image_gray(),
-              image_view_->image_data_.get_opencv_image_gray(),
-              Blur::MEAN,
-              4,
-              -1);
+//    Blur::run(image_view_->image_data_.get_opencv_image_gray(),
+//              image_view_->image_data_.get_opencv_image_gray(),
+//              Blur::MEAN,
+//              4,
+//              -1);
+    uchar se[] = {
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    };
+    cv::Mat se_mat = cv::Mat(5, 5, CV_8UC1, (uchar*)se);
+    Morphology::run(image_view_->image_data_.get_opencv_image_gray(),
+                    image_view_->image_data_.get_opencv_image_gray(),
+                    Morphology::CLOSING,
+                    se_mat);
+
+
+
     emit refresh_image_view();
 }
 
