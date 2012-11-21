@@ -138,6 +138,9 @@ void MainWindow::create_tab_widget(){
 
     tab_gray_ = new GrayScaleTransformWidget(tab_widget_->width(), tab_widget_->height());
     tab_widget_->addTab(tab_gray_, QString::fromUtf8("Gray"));
+
+    tab_filter_ = new FilterWidget(tab_widget_->width(), tab_widget_->height());
+    tab_widget_->addTab(tab_filter_, QString::fromUtf8("Filter"));
 }
 
 

@@ -84,7 +84,7 @@ void ImageProcess::get_edge(int x, int y, int &pos_x, int &neg_x, int &pos_y, in
 void ImageProcess::gray_linear_transform(FImage &in_out, int x_min, int x_max, int y_min, int y_max){
     LinearFunction fun(0, 255, 0, 255);
     fun.set(255, 255);
-    Mat *img = &in_out.get_opencv_image();
+    Mat *img = &in_out.get_opencv_image_3channels();
     fun.set(x_min, y_min);
     fun.set(x_max, y_max);
     for (int i = 0; i < img->rows; ++i){
@@ -95,7 +95,7 @@ void ImageProcess::gray_linear_transform(FImage &in_out, int x_min, int x_max, i
 }
 
 void ImageProcess::gray_fun_transform(FImage &in_out, Function *fun){
-    Mat* img = &in_out.get_opencv_image();
+    Mat* img = &in_out.get_opencv_image_3channels();
     for (int i = 0; i < img->rows; ++i){
         for (int j = 0; j < img->cols; ++j){
             img->at<Vec3b>(i, j) = to_gray_vec3b(fun->get(get_gray_scale(img->at<Vec3b>(i, j))));
@@ -104,7 +104,7 @@ void ImageProcess::gray_fun_transform(FImage &in_out, Function *fun){
 }
 
 Function* ImageProcess::get_gray_histogram(FImage &in, histogram_type type){
-    Mat *img = &in.get_opencv_image();
+    Mat *img = &in.get_opencv_image_3channels();
     if(img->empty())
         return new Function();
     vector<int> count(256);
@@ -213,7 +213,7 @@ Function* ImageProcess::get_histogram_match_fun(Function *origin, Function *targ
 
 
 void ImageProcess::geometry_zoom(FImage &in_out, int percentage, zoom_type type){
-    Mat *img = &in_out.get_opencv_image();
+    Mat *img = &in_out.get_opencv_image_3channels();
     if (img->empty())
         return;
     if (percentage == 100 || percentage == 0)
@@ -265,11 +265,11 @@ void ImageProcess::geometry_zoom(FImage &in_out, int percentage, zoom_type type)
         }
     }
     img->release();
-    new_img.copyTo(in_out.get_opencv_image());
+    new_img.copyTo(in_out.get_opencv_image_3channels());
 }
 
 void ImageProcess::geometry_rotate(FImage &in_out, double rad, zoom_type type){
-    Mat *img = &in_out.get_opencv_image();
+    Mat *img = &in_out.get_opencv_image_3channels();
     if (img->empty())
         return;
     int width = 0;
@@ -331,13 +331,13 @@ void ImageProcess::geometry_rotate(FImage &in_out, double rad, zoom_type type){
         }
     }
     img->release();
-    new_img.copyTo(in_out.get_opencv_image());
+    new_img.copyTo(in_out.get_opencv_image_3channels());
 }
 
 void ImageProcess::algebra(FImage &in_out, FImage &another, algebra_type type){
     Mat *img, *a_img;
-    img = &in_out.get_opencv_image();
-    a_img = &another.get_opencv_image();
+    img = &in_out.get_opencv_image_3channels();
+    a_img = &another.get_opencv_image_3channels();
     if (img->empty() || a_img->empty() || img->rows != a_img->rows || img->cols != a_img->cols)
         return;
     for (int j = 0; j < img->rows; ++j){

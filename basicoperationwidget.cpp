@@ -4,7 +4,7 @@ BasicOperationWidget::BasicOperationWidget(int width, int height, QWidget *paren
     QWidget(parent)
 {
     page_height_ = 200;
-    this->resize(width, height * 5 / 6);
+    resize(width, height * 8 / 9);
     create_widget();
     create_page_algebra();
     create_page_geometry();

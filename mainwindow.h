@@ -14,6 +14,7 @@
 #include "imageview.h"
 #include "grayscaletransformwidget.h"
 #include "basicoperationwidget.h"
+#include "filterwidget.h"
 
 
 namespace Ui {
@@ -94,6 +95,8 @@ private:
     GrayScaleTransformWidget *tab_gray_;
 
     BasicOperationWidget *tab_basic_;
+
+    FilterWidget *tab_filter_;
 
 
 protected:

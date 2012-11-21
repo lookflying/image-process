@@ -21,7 +21,10 @@ SOURCES += main.cpp\
     function.cpp \
     imageprocess.cpp \
     logfunction.cpp \
-    exponentfunction.cpp
+    exponentfunction.cpp \
+    convolution.cpp \
+    convolutionengine.cpp \
+    filterwidget.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -33,7 +36,10 @@ HEADERS  += mainwindow.h \
     function.h \
     imageprocess.h \
     logfunction.h \
-    exponentfunction.h
+    exponentfunction.h \
+    convolution.h \
+    convolutionengine.h \
+    filterwidget.h
 
 FORMS    +=
 

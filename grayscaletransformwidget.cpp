@@ -4,7 +4,7 @@ GrayScaleTransformWidget::GrayScaleTransformWidget(int width, int height, QWidge
     QWidget(parent)
 {
     page_height_ = 200;
-    this->resize(width, height * 5 / 6);
+    resize(width, height * 8 / 9);
     create_widget();
     create_page_linear();
     create_page_non_linear();
