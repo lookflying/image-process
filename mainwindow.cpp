@@ -390,7 +390,12 @@ void MainWindow::filter_morphology(){
                   100,
                   255,
                   cv::THRESH_BINARY);
-
+    cv::Mat se_mat = cv::Mat(5, 5, CV_8UC1, (uchar*)Morphology::distance_metric_);
+    ImageProcess::morphology_transform(image_view_->image_data_,
+                                       tab_filter_->combo_box_morphology_->currentIndex(),
+                                       se_mat,
+                                       -1,
+                                       -1);
 
     emit refresh_image_view();
 }

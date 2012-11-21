@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     filterwidget.cpp \
     edgedetect.cpp \
     blur.cpp \
-    morphology.cpp
+    morphology.cpp \
+    setstructuringelementform.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     filterwidget.h \
     edgedetect.h \
     blur.h \
-    morphology.h
+    morphology.h \
+    setstructuringelementform.h
 
 FORMS    +=
 

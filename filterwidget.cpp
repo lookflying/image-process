@@ -67,7 +67,7 @@ void FilterWidget::create_page_morphology(){
     tool_page_morphology_ = new QWidget();
     tool_page_morphology_->setGeometry(QRect(0, 0, width(), height()));
     combo_box_morphology_ = new QComboBox(tool_page_morphology_);
-    combo_box_morphology_->setGeometry(QRect(width() / 9, 12, width() * 7 * 9, 24));
+    combo_box_morphology_->setGeometry(QRect(width() / 9, 12, width() * 7 / 9, 24));
     combo_box_morphology_->insertItem(Morphology::EROSION, QString::fromUtf8("EROSION"));
     combo_box_morphology_->insertItem(Morphology::DILATION, QString::fromUtf8("DILATION"));
     combo_box_morphology_->insertItem(Morphology::OPENING, QString::fromUtf8("OPENING"));
