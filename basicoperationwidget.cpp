@@ -44,7 +44,7 @@ void BasicOperationWidget::create_page_algebra(){
                                        width() / 3,
                                        24));
     button_algebra_->setText(QString::fromUtf8("Do"));
-    tool_box_->addItem(tool_page_algebra_, QString::fromUtf8("Algebra"));
+    tool_box_->addItem(tool_page_algebra_, QString::fromUtf8("&Algebra"));
 }
 
 void BasicOperationWidget::create_page_geometry(){
@@ -93,5 +93,5 @@ void BasicOperationWidget::create_page_geometry(){
                                       width() * 3 / 5,
                                       24));
     button_rotate_->setText(QString::fromUtf8("Rotate"));
-    tool_box_->addItem(tool_page_geometry_, QString::fromUtf8("Geometry"));
+    tool_box_->addItem(tool_page_geometry_, QString::fromUtf8("Geome&try"));
 }

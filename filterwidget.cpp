@@ -33,7 +33,7 @@ void FilterWidget::create_page_edge_detect(){
     button_edge_detect_->setGeometry(QRect(width() / 3, 40, width() / 3, 24));
 
 
-    tool_box_->addItem(tool_page_edge_detect_, QString::fromUtf8("Edge Detect"));
+    tool_box_->addItem(tool_page_edge_detect_, QString::fromUtf8("Edge &Detect"));
 }
 
 void FilterWidget::create_page_blur(){
@@ -60,12 +60,12 @@ void FilterWidget::create_page_blur(){
 
     button_blur_ = new QPushButton(QString::fromUtf8("Blur"), tool_page_blur_);
     button_blur_->setGeometry(QRect(width() / 3, 68, width() / 3, 24));
-    tool_box_->addItem(tool_page_blur_, QString::fromUtf8("Blur"));
+    tool_box_->addItem(tool_page_blur_, QString::fromUtf8("&Blur"));
 }
 
 void FilterWidget::create_page_morphology(){
     tool_page_morphology_ = new QWidget();
-    tool_page_morphology_->setGeometry(QRect(0, 0, width(), height()));
+    tool_page_morphology_->setGeometry(QRect(0, 0, width(), height() - 100));
     combo_box_morphology_ = new QComboBox(tool_page_morphology_);
     combo_box_morphology_->setGeometry(QRect(width() / 9, 12, width() * 7 / 9, 24));
     combo_box_morphology_->insertItem(Morphology::EROSION, QString::fromUtf8("EROSION"));
@@ -75,7 +75,9 @@ void FilterWidget::create_page_morphology(){
     combo_box_morphology_->insertItem(Morphology::DISTANCE_TRANSFORM, QString::fromUtf8("DISTANCE_TRANSFORM"));
     combo_box_morphology_->insertItem(Morphology::SKELETONIZATION, QString::fromUtf8("SKELETONIZATION"));
     combo_box_morphology_->insertItem(Morphology::RESTORATION, QString::fromUtf8("RESTORATION"));
+
+    se_select_widget_morphology_ = new SESelectWidget(0, 40, width(), height() - 100 - 68, tool_page_morphology_);
     button_morphology_ = new QPushButton(QString::fromUtf8("Transform"), tool_page_morphology_);
-    button_morphology_->setGeometry(QRect(width() / 3, 40, width() / 3, 24));
-    tool_box_->addItem(tool_page_morphology_, QString::fromUtf8("Morphology"));
+    button_morphology_->setGeometry(QRect(width() / 3, 40 + se_select_widget_morphology_->height() + 4, width() / 3, 24));
+    tool_box_->addItem(tool_page_morphology_, QString::fromUtf8("&Morphology"));
 }

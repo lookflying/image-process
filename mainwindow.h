@@ -11,6 +11,7 @@
 #include <QTabWidget>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QShortcut>
 #include "imageview.h"
 #include "grayscaletransformwidget.h"
 #include "basicoperationwidget.h"
@@ -72,6 +73,7 @@ private:
     void create_tool_box();
     void create_tab_widget();
     void connect_signal_slot();
+    void create_shortcut();
     QMenu *file_menu_;
     QMenu *edit_menu_;
 
@@ -101,7 +103,6 @@ private:
     BasicOperationWidget *tab_basic_;
 
     FilterWidget *tab_filter_;
-
 
 protected:
     void mouseMoveEvent(QMouseEvent *);

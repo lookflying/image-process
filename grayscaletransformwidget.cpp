@@ -51,7 +51,7 @@ void GrayScaleTransformWidget::create_page_linear(){
                                 width() / 3,
                                 24));
     button_linear_->setText(QString::fromUtf8("Transform"));
-    tool_box_->addItem(tool_page_linear_, "Linear");
+    tool_box_->addItem(tool_page_linear_, "&Linear");
 }
 
 void GrayScaleTransformWidget::create_page_non_linear(){
@@ -105,7 +105,7 @@ void GrayScaleTransformWidget::create_page_non_linear(){
                                         , width(),
                                         page_height_ - 60));
     chart_non_linear_->set_property(0, 255, 0, 255, ChartWidget::TABLE, ChartWidget::LINE);
-    tool_box_->addItem(tool_page_non_linear_, QString::fromUtf8("Non Linear"));
+    tool_box_->addItem(tool_page_non_linear_, QString::fromUtf8("&Non Linear"));
 
 }
 
@@ -124,5 +124,5 @@ void GrayScaleTransformWidget::create_page_histogram(){
     button_match_ = new QPushButton(tool_page_histogram_);
     button_match_->setGeometry(QRect(width() * 4 / 7, chart_histogram_->height() + button_show_histogram_->height(), width() * 2 / 7, 24));
     button_match_->setText("Match");
-    tool_box_->addItem(tool_page_histogram_, QString::fromUtf8("Histogram"));
+    tool_box_->addItem(tool_page_histogram_, QString::fromUtf8("&Histogram"));
 }

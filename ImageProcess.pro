@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     edgedetect.cpp \
     blur.cpp \
     morphology.cpp \
-    seselectwidget.cpp
+    seselectwidget.cpp \
+    selectwidget.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     edgedetect.h \
     blur.h \
     morphology.h \
-    seselectwidget.h
+    seselectwidget.h \
+    selectwidget.h
 
 FORMS    +=
 

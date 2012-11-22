@@ -87,7 +87,7 @@ void MainWindow::create_actions(){
 }
 
 void MainWindow::create_menus(){
-    file_menu_ = menu_bar_->addMenu(tr("&File"));
+    file_menu_ = menu_bar_->addMenu(tr("F&ile"));
     file_menu_->addAction(file_open_act_);
     file_menu_->addAction(file_save_act_);
     file_menu_->addAction(file_save_act_);
@@ -140,13 +140,12 @@ void MainWindow::create_tab_widget(){
 
 
     tab_basic_ = new BasicOperationWidget(tab_widget_->width(), tab_widget_->height());
-    tab_widget_->addTab(tab_basic_, QString::fromUtf8("Basic"));
-
+    tab_widget_->addTab(tab_basic_, QString::fromUtf8("B&asic"));
     tab_gray_ = new GrayScaleTransformWidget(tab_widget_->width(), tab_widget_->height());
-    tab_widget_->addTab(tab_gray_, QString::fromUtf8("Gray"));
+    tab_widget_->addTab(tab_gray_, QString::fromUtf8("&Gray"));
 
     tab_filter_ = new FilterWidget(tab_widget_->width(), tab_widget_->height());
-    tab_widget_->addTab(tab_filter_, QString::fromUtf8("Filter"));
+    tab_widget_->addTab(tab_filter_, QString::fromUtf8("&Filter"));
 }
 
 
@@ -156,6 +155,10 @@ void MainWindow::open_file(){
         QMessageBox::warning(this, tr("Application"), tr("Can't open file %1:\n").arg(file_name));
         return;
     }
+
+}
+
+void MainWindow::create_shortcut(){
 
 }
 
@@ -402,11 +405,6 @@ void MainWindow::filter_morphology(){
 
 void MainWindow::filter_blur(){
     image_view_->image_data_.turn_gray();
-    cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
-                  image_view_->image_data_.get_opencv_image_gray(),
-                  100,
-                  255,
-                  cv::THRESH_BINARY);
     ImageProcess::blur(image_view_->image_data_,
                        tab_filter_->combo_box_blur_->currentIndex(),
                        tab_filter_->spin_box_blur_size_->value(),
@@ -457,5 +455,6 @@ void MainWindow::status_show_position(int x, int y){
 
 
 void MainWindow::mouseMoveEvent(QMouseEvent * event){
+    (void*)event;
 //    qDebug()<<QString("(%1 , %2)").arg(event->x(), event->y());
 }
