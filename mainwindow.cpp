@@ -393,7 +393,9 @@ void MainWindow::filter_morphology(){
                   100,
                   255,
                   cv::THRESH_BINARY);
-    cv::Mat se_mat = cv::Mat(5, 5, CV_8UC1, (uchar*)Morphology::distance_metric_);
+    cv::Mat temp, se_mat;
+    tab_filter_->se_select_widget_morphology_->select_widget_->get_se_mat(temp);
+    temp.copyTo(se_mat);
     ImageProcess::morphology_transform(image_view_->image_data_,
                                        tab_filter_->combo_box_morphology_->currentIndex(),
                                        se_mat,
@@ -421,29 +423,6 @@ void MainWindow::filter_edge_detect(){
                   cv::THRESH_BINARY);
     ImageProcess::edge_detect(image_view_->image_data_,
                               tab_filter_->combo_box_edge_detect_->currentIndex());
-//    EdgeDetect::run(image_view_->image_data_.get_opencv_image_gray(),
-//                    image_view_->image_data_.get_opencv_image_gray(),
-//                    EdgeDetect::PREWITT);
-//    Blur::run(image_view_->image_data_.get_opencv_image_gray(),
-//              image_view_->image_data_.get_opencv_image_gray(),
-//              Blur::MEAN,
-//              4,
-//              -1);
-//    uchar se[] = {
-//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-//        255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-//    };
-//    cv::Mat se_mat = cv::Mat(5, 5, CV_8UC1, (uchar*)Morphology::distance_metric_);
-//    Morphology::run(image_view_->image_data_.get_opencv_image_gray(),
-//                    image_view_->image_data_.get_opencv_image_gray(),
-//                    Morphology::DISTANCE_TRANSFORM,
-//                    se_mat);
-
-
-
     emit refresh_image_view();
 }
 

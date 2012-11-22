@@ -35,7 +35,10 @@ private:
     int step_;
     cv::Mat se_mat_;
     bool pressed_;
+    uchar value_now_;
     int x_;
     int y_;
+
+    bool is_valid(int i, int j);
 };
 #endif // SELECTWIDGET_H

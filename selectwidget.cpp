@@ -44,19 +44,40 @@ void SelectWidget::mousePressEvent(QMouseEvent *event){
     pressed_ = true;
     x_ = event->x();
     y_ = event->y();
-
+    int i = y_ / row_step_, j = x_ / col_step_;
+    if(is_valid(i, j)){
+        se_mat_.at<uchar>(i, j) = ~se_mat_.at<uchar>(i, j);
+        value_now_ = se_mat_.at<uchar>(i, j);
+        repaint();
+    }
 //    qDebug()<<event->pos();
 }
 
 void SelectWidget::mouseMoveEvent(QMouseEvent *event){
     x_ = event->x();
     y_ = event->y();
+    static int old_i, old_j;
+    int i = y_ / row_step_, j = x_ / col_step_;
+    if (pressed_){
+        if (is_valid(i, j) && (i != old_i || j != old_j)){
+            if (se_mat_.at<uchar>(i, j) != value_now_){
+                se_mat_.at<uchar>(i, j) = value_now_;
+                repaint();
+            }
+        }
+    }
+    old_i = i;
+    old_j = j;
 
 }
 
 void SelectWidget::mouseReleaseEvent(QMouseEvent *event){
     pressed_ = false;
-    int i = y_ / row_step_, j = x_ / col_step_;
-    se_mat_.at<uchar>(i, j) = ~se_mat_.at<uchar>(i, j);
-    repaint();
+//    int i = y_ / row_step_, j = x_ / col_step_;
+
+//    repaint();
+}
+
+bool SelectWidget::is_valid(int i, int j){
+    return i >= 0 && i < cols_ && j >=0 && j < rows_;
 }
