@@ -22,6 +22,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include <iostream>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -41,7 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(central_widget_);
     connect_signal_slot();
     setMouseTracking(true);
-    show();
 
 }
 
