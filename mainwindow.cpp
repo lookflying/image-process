@@ -142,11 +142,17 @@ void MainWindow::create_tab_widget(){
 
     tab_basic_ = new BasicOperationWidget(tab_widget_->width(), tab_widget_->height());
     tab_widget_->addTab(tab_basic_, QString::fromUtf8("B&asic"));
+
     tab_gray_ = new GrayScaleTransformWidget(tab_widget_->width(), tab_widget_->height());
     tab_widget_->addTab(tab_gray_, QString::fromUtf8("&Gray"));
 
     tab_filter_ = new FilterWidget(tab_widget_->width(), tab_widget_->height());
     tab_widget_->addTab(tab_filter_, QString::fromUtf8("&Filter"));
+
+    tab_preprocess_ = new PreprocessWidget(tab_widget_->width(), tab_widget_->height());
+    tab_widget_->addTab(tab_preprocess_, QString::fromUtf8("&Pre"));
+
+
 }
 
 
@@ -181,6 +187,8 @@ void MainWindow::connect_signal_slot(){
     connect(tab_filter_->button_edge_detect_, SIGNAL(clicked()), this, SLOT(filter_edge_detect()));
     connect(tab_filter_->button_blur_, SIGNAL(clicked()), this, SLOT(filter_blur()));
     connect(tab_filter_->button_morphology_, SIGNAL(clicked()), this, SLOT(filter_morphology()));
+    connect(tab_preprocess_->slider_threshold_, SIGNAL(valueChanged(int)), this, SLOT(pre_threshold()));
+    connect(tab_preprocess_->button_threshold_, SIGNAL(clicked()), this, SLOT(pre_auto_threshold()));
 }
 
 void MainWindow::save_file(){
@@ -425,6 +433,19 @@ void MainWindow::filter_edge_detect(){
     ImageProcess::edge_detect(image_view_->image_data_,
                               tab_filter_->combo_box_edge_detect_->currentIndex());
     emit refresh_image_view();
+}
+
+void MainWindow::pre_threshold(){
+    image_view_->image_data_.turn_gray();
+    ImageProcess::threshold(image_view_->image_data_, Miscellaneous::NORMAL_THRESHOLD, tab_preprocess_->slider_threshold_->value(), tab_preprocess_->slider_threshold_optional_->value());
+}
+
+void MainWindow::pre_auto_threshold(){
+    image_view_->image_data_.turn_gray();
+    std::vector<double> p;
+    p.push_back(0.5);
+    unsigned char th = ImageProcess::auto_threshold(image_view_->image_data_, tab_preprocess_->combo_box_threshold_->currentIndex(), p);
+    tab_preprocess_->slider_threshold_->setValue(static_cast<int>(th));
 }
 
 void MainWindow::status_show_position(int x, int y){

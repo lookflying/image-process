@@ -24,13 +24,13 @@ void Convolution::to_float_mat(Mat &in, Mat& out){
         }
         out = tmp_out;
     }else{
-        out = in;
+        out = in.clone();
     }
 }
 
 void Convolution::to_uchar_mat(Mat &in, Mat &out){
     if (in.elemSize() == 1){
-        out = in;
+        out = in.clone();
     }else{
         Mat tmp_out = Mat(in.rows, in.cols, CV_8UC1);
         for (int i = 0; i < in.rows; ++i){
@@ -80,23 +80,4 @@ uchar Convolution::double_to_valid_uchar(double d){
     return static_cast<uchar>(d);
 }
 
-//Scalar ConvolutionEngine::element_mul_sum(Mat a, Mat b){
-//    Mat c;
-//    multiply(a, b, c, 1, CV_MAKE_TYPE(CV_32F, CV_MAT_DEPTH(a.type())));
-//    int channels = a.elemSize()/sizeof(uchar);
-//    Scalar rst(0, 0, 0, 0);
-//    if (channels == 1){
-//        for (int i = 0; i < c.rows; ++i){
-//            for (int j = 0; j < c.cols; ++j){
-//                rst[0] += c.at<uchar>(i, j);
-//            }
-//        }
-//    }
-//    for (int i = 0; i < c.rows; ++i){
-//        for (int j = 0; j < c.cols; ++j){
-//            for (int ch = 0; ch < channels; ++ch){
-//                rst[ch] += c.at<Vec3b>(i, j)[ch];
-//            }
-//        }
-//    }
-//    return rst;
+

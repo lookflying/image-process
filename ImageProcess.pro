@@ -29,7 +29,9 @@ SOURCES += main.cpp\
     blur.cpp \
     morphology.cpp \
     seselectwidget.cpp \
-    selectwidget.cpp
+    selectwidget.cpp \
+    miscellaneous.cpp \
+    preprocesswidget.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -49,7 +51,9 @@ HEADERS  += mainwindow.h \
     blur.h \
     morphology.h \
     seselectwidget.h \
-    selectwidget.h
+    selectwidget.h \
+    miscellaneous.h \
+    preprocesswidget.h
 
 FORMS    +=
 

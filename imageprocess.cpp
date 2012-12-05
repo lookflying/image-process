@@ -1,6 +1,7 @@
 #include "imageprocess.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <cmath>
 
 #include <QDebug>
@@ -384,4 +385,20 @@ void ImageProcess::morphology_transform(FImage &in_out, Blur::blur_type_t type, 
                     se,
                     center_x,
                     center_y);
+}
+
+
+void ImageProcess::threshold(FImage &in_out, Miscellaneous::threshold_type_t type, int t1, int t2){
+    Mat temp;
+    Miscellaneous::threshold(in_out.get_opencv_image_gray(),
+                            temp,
+                             t1,
+                             type,
+                             t2);
+    imshow("threshold", temp);
+}
+
+unsigned char ImageProcess::auto_threshold(FImage &in_out, Miscellaneous::auto_threshold_type_t type, vector<double> parameters){
+    return Miscellaneous::auto_threshold(in_out.get_opencv_image_gray(), NULL, type, parameters);
+
 }

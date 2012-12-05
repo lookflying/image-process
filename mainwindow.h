@@ -16,6 +16,7 @@
 #include "grayscaletransformwidget.h"
 #include "basicoperationwidget.h"
 #include "filterwidget.h"
+#include "preprocesswidget.h"
 
 
 namespace Ui {
@@ -60,6 +61,8 @@ private slots:
     void filter_edge_detect();
     void filter_blur();
     void filter_morphology();
+    void pre_threshold();
+    void pre_auto_threshold();
 
     void status_show_position(int x, int y);
 private:
@@ -103,6 +106,8 @@ private:
     BasicOperationWidget *tab_basic_;
 
     FilterWidget *tab_filter_;
+
+    PreprocessWidget *tab_preprocess_;
 
 protected:
     void mouseMoveEvent(QMouseEvent *);

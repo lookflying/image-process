@@ -168,7 +168,7 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int cen
             ConvolutionEngine::run(erosioned, opened, basic_se, erosion_action, center_x, center_y);
             ConvolutionEngine::run(opened, opened, basic_se, dilation_action, center_x, center_y );
 
-            copyMakeBorder(se, se, 3, 3, 3, 3, BORDER_CONSTANT,  Scalar(0));
+            copyMakeBorder(se, se, 2, 2, 2, 2, BORDER_CONSTANT,  Scalar(0));
             ConvolutionEngine::run(se, se, basic_se, dilation_action, -1, -1);
             cut_black_edge(se, se);
             Mat mask = Mat(src.rows, src.cols, CV_8UC1, Scalar(255));
@@ -178,9 +178,9 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int cen
 //            imshow("erosioned", erosioned);
 //            imshow("opened", opened);
 //            imshow("delta", delta);
-            imshow("rst", rst);
-            imshow("se", se);
-            waitKey(1);
+//            imshow("rst", rst);
+//            imshow("se", se);
+//            waitKey(1);
         }
         dst = rst;
 

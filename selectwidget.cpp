@@ -79,5 +79,5 @@ void SelectWidget::mouseReleaseEvent(QMouseEvent *event){
 }
 
 bool SelectWidget::is_valid(int i, int j){
-    return i >= 0 && i < cols_ && j >=0 && j < rows_;
+    return i >= 0 && i < rows_ && j >=0 && j < cols_;
 }

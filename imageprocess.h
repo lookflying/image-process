@@ -9,6 +9,7 @@
 #include "blur.h"
 #include "morphology.h"
 #include "convolutionengine.h"
+#include "miscellaneous.h"
 class ImageProcess
 {
 public:
@@ -31,6 +32,8 @@ public:
     static void edge_detect(FImage &in_out, EdgeDetect::edge_detect_type_t type);
     static void blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma);
     static void morphology_transform(FImage &in_out, Blur::blur_type_t type, cv::Mat se, int center_x, int center_y);
+    static void threshold(FImage &in_out, Miscellaneous::threshold_type_t type, int t1, int t2);
+    static unsigned char auto_threshold(FImage &in_out, Miscellaneous::auto_threshold_type_t type, std::vector<double> parameters);
 private:
     static int get_gray_scale(cv::Vec3b color);
     static cv::Vec3b to_gray_vec3b(int gray);
