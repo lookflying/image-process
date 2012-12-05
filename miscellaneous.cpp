@@ -229,3 +229,7 @@ unsigned char Miscellaneous::auto_threshold(Mat src, Mat *dst, auto_threshold_ty
     return static_cast<unsigned char>(th);
 }
 
+void Miscellaneous::turn_gray(Mat &src, Mat &dst){
+    CV_Assert(src.channels() == 3 && src.elemSize() == 3);
+    cvtColor(src, dst, CV_RGB2GRAY);
+}

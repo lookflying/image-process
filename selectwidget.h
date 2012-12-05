@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <opencv2/core/core.hpp>
+#include "morphology.h"
 class SelectWidget : public QWidget{
     Q_OBJECT
 public:
@@ -18,7 +19,7 @@ public:
         return max_cols_;
     }
 public slots:
-    void reset_widget(int rows, int cols);
+    void reset_widget(int rows, int cols, int type);
 
 protected:
     void paintEvent(QPaintEvent *event);

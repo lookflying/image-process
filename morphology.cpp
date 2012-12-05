@@ -52,7 +52,6 @@ from_right:
         }
     }
 end:
-    printf("%d\t%d\n%d\t%d\t%d\t%d\n", in.cols, in.rows, x, y, w, h);
     in(Rect(x, y, w, h)).copyTo(out);
 
 }
@@ -103,7 +102,7 @@ Mat Morphology::generate_structing_element(int width, int height, structing_elem
         for(int i = 0; i <= radius_y; ++i){
             for(int j = 0; j <= radius_x; ++j){
                 unsigned char value;
-                if(i < radius_y / 2 && j < radius_x / 2){
+                if(i <= radius_y / 2 && j <= radius_x / 2){
                     value = 0;
                 }else{
                     value = 255;
@@ -156,21 +155,20 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int cen
     }
     case SKELETONIZATION:{
         Mat rst = Mat(src.rows, src.cols, CV_8UC1, Scalar(0));
-        Mat basic_se = generate_structing_element(3, 3, DISC);
-        Mat se = basic_se.clone();
+        Mat nse = se.clone();
         while(true){
             Mat erosioned;
             Mat opened;
-            ConvolutionEngine::run(src, erosioned, se, erosion_action, center_x, center_y);
+            ConvolutionEngine::run(src, erosioned, nse, erosion_action, center_x, center_y);
             if (sum(erosioned)[0] == 0){
                 break;
             }
-            ConvolutionEngine::run(erosioned, opened, basic_se, erosion_action, center_x, center_y);
-            ConvolutionEngine::run(opened, opened, basic_se, dilation_action, center_x, center_y );
+            ConvolutionEngine::run(erosioned, opened, se, erosion_action, center_x, center_y);
+            ConvolutionEngine::run(opened, opened, se, dilation_action, center_x, center_y );
 
-            copyMakeBorder(se, se, 2, 2, 2, 2, BORDER_CONSTANT,  Scalar(0));
-            ConvolutionEngine::run(se, se, basic_se, dilation_action, -1, -1);
-            cut_black_edge(se, se);
+            copyMakeBorder(nse, nse, 2, 2, 2, 2, BORDER_CONSTANT,  Scalar(0));
+            ConvolutionEngine::run(nse, nse, se, dilation_action, -1, -1);
+            cut_black_edge(nse, nse);
             Mat mask = Mat(src.rows, src.cols, CV_8UC1, Scalar(255));
             mask.setTo(0, opened);
             Mat delta = erosioned & mask;

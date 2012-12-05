@@ -189,6 +189,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_filter_->button_morphology_, SIGNAL(clicked()), this, SLOT(filter_morphology()));
     connect(tab_preprocess_->slider_threshold_, SIGNAL(valueChanged(int)), this, SLOT(pre_threshold()));
     connect(tab_preprocess_->button_threshold_, SIGNAL(clicked()), this, SLOT(pre_auto_threshold()));
+    connect(tab_preprocess_->slider_threshold_optional_, SIGNAL(valueChanged(int)), this, SLOT(pre_dual_threshold()));
 }
 
 void MainWindow::save_file(){
@@ -425,11 +426,6 @@ void MainWindow::filter_blur(){
 
 void MainWindow::filter_edge_detect(){
     image_view_->image_data_.turn_gray();
-    cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
-                  image_view_->image_data_.get_opencv_image_gray(),
-                  100,
-                  255,
-                  cv::THRESH_BINARY);
     ImageProcess::edge_detect(image_view_->image_data_,
                               tab_filter_->combo_box_edge_detect_->currentIndex());
     emit refresh_image_view();
@@ -440,12 +436,22 @@ void MainWindow::pre_threshold(){
     ImageProcess::threshold(image_view_->image_data_, Miscellaneous::NORMAL_THRESHOLD, tab_preprocess_->slider_threshold_->value(), tab_preprocess_->slider_threshold_optional_->value());
 }
 
+void MainWindow::pre_dual_threshold(){
+    image_view_->image_data_.turn_gray();
+    ImageProcess::threshold(image_view_->image_data_, Miscellaneous::DUAL_THRESHOLD, tab_preprocess_->slider_threshold_->value(), tab_preprocess_->slider_threshold_optional_->value());
+}
+
 void MainWindow::pre_auto_threshold(){
     image_view_->image_data_.turn_gray();
     std::vector<double> p;
     p.push_back(0.5);
     unsigned char th = ImageProcess::auto_threshold(image_view_->image_data_, tab_preprocess_->combo_box_threshold_->currentIndex(), p);
     tab_preprocess_->slider_threshold_->setValue(static_cast<int>(th));
+}
+
+void MainWindow::pre_turn_gray(){
+    image_view_->image_data_.turn_gray();
+    emit refresh_image_view();
 }
 
 void MainWindow::status_show_position(int x, int y){

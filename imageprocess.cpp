@@ -3,7 +3,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <cmath>
-
+#include <sstream>
 #include <QDebug>
 using namespace std;
 using namespace cv;
@@ -364,27 +364,38 @@ void ImageProcess::algebra(FImage &in_out, FImage &another, algebra_type type){
 }
 
 void ImageProcess::edge_detect(FImage &in_out, EdgeDetect::edge_detect_type_t type){
+    Mat temp;
     EdgeDetect::run(in_out.get_opencv_image_gray(),
-                    in_out.get_opencv_image_gray(),
+                    temp,
                     type);
+    ostringstream str;
+    str<<__FUNCTION__<<type;
+    imshow(str.str(), temp);
 }
 
 void ImageProcess::blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma){
-        Blur::run(in_out.get_opencv_image_gray(),
-                  in_out.get_opencv_image_gray(),
-                  type,
-                  size,
-                  sigma);
-
+    Mat temp;
+    Blur::run(in_out.get_opencv_image_gray(),
+              temp,
+              type,
+              size,
+              sigma);
+    ostringstream str;
+    str<<__FUNCTION__<<type;
+    imshow(str.str(), temp);
 }
 
 void ImageProcess::morphology_transform(FImage &in_out, Blur::blur_type_t type, Mat se, int center_x, int center_y){
+    Mat temp;
     Morphology::run(in_out.get_opencv_image_gray(),
-                    in_out.get_opencv_image_gray(),
+                    temp,
                     type,
                     se,
                     center_x,
                     center_y);
+    ostringstream str;
+    str<<__FUNCTION__<<type;
+    imshow(str.str(), temp);
 }
 
 
@@ -395,10 +406,11 @@ void ImageProcess::threshold(FImage &in_out, Miscellaneous::threshold_type_t typ
                              t1,
                              type,
                              t2);
-    imshow("threshold", temp);
+    ostringstream str;
+    str<<__FUNCTION__<<type<<" "<<t1;
+    imshow(str.str(), temp);
 }
 
 unsigned char ImageProcess::auto_threshold(FImage &in_out, Miscellaneous::auto_threshold_type_t type, vector<double> parameters){
     return Miscellaneous::auto_threshold(in_out.get_opencv_image_gray(), NULL, type, parameters);
-
 }

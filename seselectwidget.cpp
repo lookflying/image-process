@@ -16,13 +16,17 @@ SESelectWidget::SESelectWidget(int x, int y, int width, int height, QWidget *par
 
 void SESelectWidget::create_widget(){
     spin_box_col_ = new QSpinBox(this);
-    spin_box_col_->setGeometry(QRect(width() / 20, 12, width() / 4, 24));
+    spin_box_col_->setGeometry(QRect(width() / 160, 12, width() / 5, 24));
     spin_box_row_ = new QSpinBox(this);
-    spin_box_row_->setGeometry(QRect(width() * 3 / 10, 12, width() / 4, 24));
+    spin_box_row_->setGeometry(QRect(width() * 17 / 80, 12, width() / 5, 24));
 
-
+    combo_box_se_ = new QComboBox(this);
+    combo_box_se_->setGeometry(QRect(width() * 63 / 160, 12, width() *11 / 32, 24));
+    combo_box_se_->addItem(QString::fromUtf8("DISC"));
+    combo_box_se_->addItem(QString::fromUtf8("CUBE"));
+    combo_box_se_->addItem(QString::fromUtf8("CROSS"));
     button_modify_ = new QPushButton(QString::fromUtf8("Modify"), this);
-    button_modify_->setGeometry(QRect(width() * 3 / 5, 12, width() / 4, 24));
+    button_modify_->setGeometry(QRect(width() * 119 / 160, 12, width() / 4, 24));
 
     area_top_ = 36;
     area_bottom_ = height();
@@ -35,7 +39,7 @@ void SESelectWidget::connect_signal_slot(){
     connect(spin_box_col_, SIGNAL(valueChanged(int)), this, SLOT(reset_col(int)));
     connect(spin_box_row_, SIGNAL(valueChanged(int)), this, SLOT(reset_row(int)));
     connect(button_modify_, SIGNAL(clicked()), this, SLOT(modify()));
-    connect(this, SIGNAL(reset_select_widget(int,int)), select_widget_, SLOT(reset_widget(int,int)));
+    connect(this, SIGNAL(reset_select_widget(int,int,int)), select_widget_, SLOT(reset_widget(int,int,int)));
 }
 
 bool SESelectWidget::is_in_area(int x, int y){
@@ -53,5 +57,5 @@ void SESelectWidget::reset_col(int col){
 }
 
 void SESelectWidget::modify(){
-    emit reset_select_widget(rows_, cols_);
+    emit reset_select_widget(rows_, cols_, combo_box_se_->currentIndex());
 }

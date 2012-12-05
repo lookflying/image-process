@@ -6,7 +6,7 @@ SelectWidget::SelectWidget(int x, int y, int width, int height, QWidget *parent)
     setGeometry(x, y, width - 3, height);
     max_rows_ = height / 5;
     max_cols_ = width / 5;
-    reset_widget(3, 3);
+    reset_widget(3, 3, Morphology::DISC);
     pressed_ = false;
     setMouseTracking(true);
 }
@@ -14,12 +14,12 @@ void SelectWidget::get_se_mat(cv::Mat &out){
     out = se_mat_;
 }
 
-void SelectWidget::reset_widget(int rows, int cols){
+void SelectWidget::reset_widget(int rows, int cols, int type){
     rows_ = rows;
     cols_ = cols;
     row_step_ = (height() - 1) / rows_;
     col_step_ = (width() - 1 )  / cols_;
-    se_mat_ = Mat(rows_, cols_, CV_8UC1, Scalar(0));
+    se_mat_ = Morphology::generate_structing_element(cols, rows, type);
     repaint();
 }
 

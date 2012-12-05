@@ -62,7 +62,9 @@ private slots:
     void filter_blur();
     void filter_morphology();
     void pre_threshold();
+    void pre_dual_threshold();
     void pre_auto_threshold();
+    void pre_turn_gray();
 
     void status_show_position(int x, int y);
 private:

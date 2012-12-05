@@ -22,6 +22,7 @@ public:
     typedef int auto_threshold_type_t;
     static unsigned char threshold_action(cv::Mat &input, cv::Mat &kernel);
     static unsigned char auto_threshold(cv::Mat src, cv::Mat *dst, auto_threshold_type_t type, std::vector<double> parameters);
+    static void turn_gray(cv::Mat &src, cv::Mat &dst);
 };
 
 #endif // MISCELLANEOUS_H

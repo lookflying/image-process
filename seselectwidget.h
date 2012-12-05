@@ -8,6 +8,7 @@
 #include <opencv2/core/core.hpp>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QComboBox>
 class SESelectWidget : public QWidget
 {
     Q_OBJECT
@@ -17,11 +18,12 @@ public:
 
     QSpinBox *spin_box_col_;
     QSpinBox *spin_box_row_;
+    QComboBox *combo_box_se_;
     QPushButton *button_modify_;
     SelectWidget *select_widget_;
 
 signals:
-    void reset_select_widget(int rows, int cols);
+    void reset_select_widget(int rows, int cols, int type);
 public slots:
     void reset_row(int row);
     void reset_col(int col);
