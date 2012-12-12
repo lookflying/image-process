@@ -9,7 +9,7 @@ static void on_mouse(int, int, int, int, void* p){
 ShowWindow::ShowWindow(std::string name, Mat &image, ShowWindowManager *manager)
 {
     window_name_ = name;
-    image_ = image;
+    image.copyTo(image_);
     manager_ = manager;
     area_ = Rect(0, 0, image_.cols, image_.rows);
     namedWindow(window_name_);
@@ -35,3 +35,12 @@ void ShowWindow::update_image(Mat image){
     image.copyTo(image_);
     imshow(window_name_, image_);
 }
+
+void ShowWindow::preview(Mat image){
+    imshow(window_name_, image);
+}
+
+void ShowWindow::show(){
+    imshow(window_name_, image_);
+}
+

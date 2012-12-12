@@ -74,7 +74,7 @@ unsigned char Miscellaneous::threshold_action(Mat &input, Mat &kernel){
     return out_value;
 }
 
-unsigned char Miscellaneous::auto_threshold(Mat src, Mat *dst, auto_threshold_type_t type, vector<double> parameters){
+unsigned char Miscellaneous::auto_threshold(Mat &src, Mat &dst, auto_threshold_type_t type, vector<double> parameters){
     CV_Assert(src.channels() == 1);
     Mat rst;
     int th;
@@ -230,9 +230,7 @@ unsigned char Miscellaneous::auto_threshold(Mat src, Mat *dst, auto_threshold_ty
     default:
         break;
     }
-    if (dst != NULL){
-        *dst = rst;
-    }
+    dst = rst;
     return static_cast<unsigned char>(th);
 }
 

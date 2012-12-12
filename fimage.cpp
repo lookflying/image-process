@@ -72,7 +72,6 @@ QImage FImage::get_qimage_origin(){
 }
 
 void FImage::set_image(Mat image){
-    image_.release();
     image.copyTo(image_);
 }
 

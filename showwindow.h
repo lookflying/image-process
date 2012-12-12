@@ -10,6 +10,8 @@ public:
     ~ShowWindow();
     void notify_manager();
     void update_image(cv::Mat image);
+    void preview(cv::Mat image);
+    void show();
     cv::Mat get_image();
 private:
     std::string window_name_;

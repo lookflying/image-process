@@ -33,8 +33,10 @@ public:
     static void blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma);
     static void morphology_transform(FImage &in_out, Blur::blur_type_t type, cv::Mat se, int center_x, int center_y) __attribute__((deprecated));
     static void morphology_transform(cv::Mat &in, cv::Mat &out, Morphology::morphology_type_t type, cv::Mat se, int center_x, int center_y);
-    static void threshold(FImage &in_out, Miscellaneous::threshold_type_t type, int t1, int t2);
-    static unsigned char auto_threshold(FImage &in_out, Miscellaneous::auto_threshold_type_t type, std::vector<double> parameters);
+    static void threshold(FImage &in_out, Miscellaneous::threshold_type_t type, int t1, int t2)__attribute__((deprecated));
+    static void threshold(cv::Mat &in, cv::Mat &out, Miscellaneous::threshold_type_t type, int t1, int t2);
+    static unsigned char auto_threshold(FImage &in_out, Miscellaneous::auto_threshold_type_t type, std::vector<double> parameters)__attribute__((deprecated));
+    static unsigned char auto_threshold(cv::Mat &in, cv::Mat &out, Miscellaneous::auto_threshold_type_t type, std::vector<double> parameters);
 private:
     static int get_gray_scale(cv::Vec3b color);
     static cv::Vec3b to_gray_vec3b(int gray);

@@ -67,18 +67,25 @@ void FilterWidget::create_page_morphology(){
     tool_page_morphology_ = new QWidget();
     tool_page_morphology_->setGeometry(QRect(0, 0, width(), height() - 100));
     combo_box_morphology_ = new QComboBox(tool_page_morphology_);
-    combo_box_morphology_->setGeometry(QRect(width() / 9, 12, width() * 7 / 9, 24));
+    combo_box_morphology_->setGeometry(QRect(width() / 9, 0, width() * 7 / 9, 24));
     combo_box_morphology_->insertItem(Morphology::EROSION_BINARY, QString::fromUtf8("EROSION_BINARY"));
     combo_box_morphology_->insertItem(Morphology::DILATION_BINARY, QString::fromUtf8("DILATION_BINARY"));
     combo_box_morphology_->insertItem(Morphology::OPENING_BINARY, QString::fromUtf8("OPENING_BINARY"));
-    combo_box_morphology_->insertItem(Morphology::CLOSING_BINARY, QString::fromUtf8("CLOSING_BINARY"));
+    combo_box_morphology_->insertItem(Morphology::CLOSING_BINARY, QString::fromUtf8("CLOSING_BINARY"));    
+    combo_box_morphology_->insertItem(Morphology::DISTANCE_TRANSFORM, QString::fromUtf8("DISTANCE_TRANSFORM"));
+    combo_box_morphology_->insertItem(Morphology::SKELETONIZATION, QString::fromUtf8("SKELETONIZATION"));
+    combo_box_morphology_->insertItem(Morphology::RESTORATION, QString::fromUtf8("RESTORATION"));
     combo_box_morphology_->insertItem(Morphology::EROSION_GRAYSCALE, QString::fromUtf8("EROSION_GRAYSCALE"));
     combo_box_morphology_->insertItem(Morphology::DILATION_GRAYSCALE, QString::fromUtf8("DILATION_GRAYSCALE"));
     combo_box_morphology_->insertItem(Morphology::OPENING_GRAYSCALE, QString::fromUtf8("OPENING_GRAYSCALE"));
     combo_box_morphology_->insertItem(Morphology::CLOSING_GRAYSCALE, QString::fromUtf8("CLOSING_GRAYSCALE"));
-    combo_box_morphology_->insertItem(Morphology::DISTANCE_TRANSFORM, QString::fromUtf8("DISTANCE_TRANSFORM"));
-    combo_box_morphology_->insertItem(Morphology::SKELETONIZATION, QString::fromUtf8("SKELETONIZATION"));
-    combo_box_morphology_->insertItem(Morphology::RESTORATION, QString::fromUtf8("RESTORATION"));
+    combo_box_morphology_->insertItem(Morphology::EDGE_STANDARD, QString::fromUtf8("EDGE_STANDARD"));
+    combo_box_morphology_->insertItem(Morphology::EDGE_EXTERNAL, QString::fromUtf8("EDGE_EXTERNAL"));
+    combo_box_morphology_->insertItem(Morphology::EDGE_INTERNAL, QString::fromUtf8("EDGE_INTERNAL"));
+
+    button_mask_ = new QPushButton(QString::fromUtf8("mask..."), tool_page_morphology_);
+    button_mask_->setGeometry(width() / 3, 24, width() / 3, 24);
+
 
     se_select_widget_morphology_ = new SESelectWidget(0, 40, width(), height() - 100 - 68, tool_page_morphology_);
     button_morphology_ = new QPushButton(QString::fromUtf8("Transform"), tool_page_morphology_);

@@ -189,8 +189,9 @@ void MainWindow::open_file(){
 }
 
 static void show_window_action(cv::Mat img, QWidget *ui, string){
-    ((MainWindow*)ui)->image_view_->image_data_.set_image(img);
-    ((MainWindow*)ui)->image_view_->refresh();
+
+    ((MainWindow*)ui)->image_->set_image(img);
+    ((MainWindow*)ui)->image_view_->show_image(((MainWindow*)ui)->image_->get_qimage_image());
 }
 
 void MainWindow::create_shortcut(){
@@ -434,12 +435,6 @@ void MainWindow::basic_algebra_pic(){
 }
 
 void MainWindow::filter_morphology(){
-//    image_view_->image_data_.turn_gray();
-//    cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
-//                  image_view_->image_data_.get_opencv_image_gray(),
-//                  100,
-//                  255,
-//                  cv::THRESH_BINARY);
     cv::Mat temp, se_mat;
     cv::Mat image = show_window_manager_->get_current_image();
     if(!image.empty()){
@@ -453,15 +448,10 @@ void MainWindow::filter_morphology(){
                                                se_mat,
                                                -1,
                                                -1);
-            if (check_box_create_new_window_->isChecked()){
-                show_window_manager_->show_window(temp,
-                                                 show_window_manager_->get_current_window_name() + __FUNCTION__,
-                                                 true);
-            }else{
-                show_window_manager_->show_window(temp);
-            }
+            show_window_manager_->show_window(temp,
+                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                              check_box_create_new_window_->isChecked());
         }
-        emit refresh_image_view();
     }
 }
 
@@ -482,37 +472,79 @@ void MainWindow::filter_edge_detect(){
 }
 
 void MainWindow::pre_threshold(){
-    image_view_->image_data_.turn_gray();
-    ImageProcess::threshold(image_view_->image_data_, Miscellaneous::NORMAL_THRESHOLD, tab_preprocess_->slider_threshold_->value(), tab_preprocess_->slider_threshold_optional_->value());
+    cv::Mat temp;
+    cv::Mat image = show_window_manager_->get_current_origin();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            ImageProcess::threshold(image,
+                                    temp,
+                                    Miscellaneous::NORMAL_THRESHOLD,
+                                    tab_preprocess_->slider_threshold_->value(),
+                                    tab_preprocess_->slider_threshold_optional_->value());
+            show_window_manager_->show_window(temp,
+                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                              check_box_create_new_window_->isChecked(),
+                                              true);
+        }
+    }
 }
 
 void MainWindow::pre_dual_threshold(){
-    image_view_->image_data_.turn_gray();
-    ImageProcess::threshold(image_view_->image_data_, Miscellaneous::DUAL_THRESHOLD, tab_preprocess_->slider_threshold_->value(), tab_preprocess_->slider_threshold_optional_->value());
+    cv::Mat temp;
+    cv::Mat image = show_window_manager_->get_current_origin();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            ImageProcess::threshold(image,
+                                    temp,
+                                    Miscellaneous::DUAL_THRESHOLD,
+                                    tab_preprocess_->slider_threshold_->value(),
+                                    tab_preprocess_->slider_threshold_optional_->value());
+            show_window_manager_->show_window(temp,
+                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                              check_box_create_new_window_->isChecked(),
+                                              true);
+        }
+    }
 }
 
 void MainWindow::pre_auto_threshold(){
-    image_view_->image_data_.turn_gray();
-    std::vector<double> p;
-    p.push_back(0.5);
-    unsigned char th = ImageProcess::auto_threshold(image_view_->image_data_, tab_preprocess_->combo_box_threshold_->currentIndex(), p);
-    tab_preprocess_->slider_threshold_->setValue(static_cast<int>(th));
+    cv::Mat temp;
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            std::vector<double> p;
+            p.push_back(0.5);
+            unsigned char th = ImageProcess::auto_threshold(image,
+                                                            temp,
+                                                            tab_preprocess_->combo_box_threshold_->currentIndex(), p);
+            tab_preprocess_->slider_threshold_->setValue(static_cast<int>(th));
+            show_window_manager_->show_window(temp,
+                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                              check_box_create_new_window_->isChecked(),
+                                              true);
+        }
+    }
 }
 
 void MainWindow::pre_turn_gray(){
+    Mat temp;
     Mat image = show_window_manager_->get_current_image();
     if (!image.empty()){
         if (image.channels() == 3){
-            cvtColor(image, image, CV_BGR2GRAY);
-            show_window_manager_->show_window(image,
+            cvtColor(image, temp, CV_BGR2GRAY);
+            show_window_manager_->show_window(temp,
                                               show_window_manager_->get_current_window_name() + __FUNCTION__,
                                               check_box_create_new_window_->isChecked());
-        }/*
-        image_view_->image_data_.turn_gray();*/
+        }
     }else{
         QMessageBox::warning(this, "No Image File", "no image to process");
     }
-//    emit refresh_image_view();
 }
 
 void MainWindow::status_show_position(int x, int y){

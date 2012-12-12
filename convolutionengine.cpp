@@ -43,12 +43,15 @@ void ConvolutionEngine::run(Mat &src, Mat &dst, Mat &kernel, Mat &mask, convolut
     copyMakeBorder(src, temp, center_y, kernel_row - 1 - center_y, center_x, kernel_col - 1 - center_x, BORDER_REPLICATE);
     for (int i = 0; i < src.rows; ++i){
         for (int j = 0; j < src.cols; ++j){
-            if (mask.at<unsigned char>(i, j) > 0){
-                Mat temp_roi = temp(Rect(j, i, kernel_col, kernel_row));
-                rst.at<uchar>(i, j) = (*action)(temp_roi, kernel);
-            }else{
-                rst.at<uchar>(i, j) = 0;
-            }
+//            if (mask.at<unsigned char>(i, j) > 0){
+//                Mat temp_roi = temp(Rect(j, i, kernel_col, kernel_row));
+//                rst.at<uchar>(i, j) = (*action)(temp_roi, kernel);
+//            }else{
+//                rst.at<uchar>(i, j) = 0;
+//            }
+            //change for grayscale reconstruction
+            Mat temp_roi = temp(Rect(j, i, kernel_col, kernel_row));
+            rst.at<uchar>(i, j) = std::min(mask.at<uchar>(i, j), (*action)(temp_roi, kernel));
         }
     }
     dst = rst;

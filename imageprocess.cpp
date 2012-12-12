@@ -415,6 +415,14 @@ void ImageProcess::threshold(FImage &in_out, Miscellaneous::threshold_type_t typ
     imshow(str.str(), temp);
 }
 
+void ImageProcess::threshold(Mat &in, Mat &out, Miscellaneous::threshold_type_t type, int t1, int t2){
+    Miscellaneous::threshold(in, out, t1, type, t2);
+}
+
 unsigned char ImageProcess::auto_threshold(FImage &in_out, Miscellaneous::auto_threshold_type_t type, vector<double> parameters){
-    return Miscellaneous::auto_threshold(in_out.get_opencv_image_gray(), NULL, type, parameters);
+    return Miscellaneous::auto_threshold(in_out.get_opencv_image_gray(), in_out.get_opencv_image_gray(), type, parameters);
+}
+
+unsigned char ImageProcess::auto_threshold(Mat &in, Mat &out, Miscellaneous::auto_threshold_type_t type, vector<double> parameters){
+    return Miscellaneous::auto_threshold(in, out, type, parameters);
 }

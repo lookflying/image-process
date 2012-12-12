@@ -42,7 +42,7 @@ void ImageView::show_image(QImage img){
 }
 
 void ImageView::refresh(){
-     show_image(image_data_.data());
+     show_image(image_data_.get_qimage_image());
 }
 void ImageView::mouseMoveEvent(QMouseEvent *event){
     emit mouse_position(event->x(), event->y());

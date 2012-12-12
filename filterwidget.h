@@ -30,6 +30,7 @@ public:
 
     QWidget *tool_page_morphology_;
     QComboBox *combo_box_morphology_;
+    QPushButton *button_mask_;
     QPushButton *button_morphology_;
     SESelectWidget *se_select_widget_morphology_;
 signals:

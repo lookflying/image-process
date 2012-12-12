@@ -143,24 +143,6 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int cen
         ConvolutionEngine::run(dst, dst, se, erosion_action_binary, center_x, center_y);
     }
         break;
-    case EROSION_GRAYSCALE:{
-        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
-    }
-        break;
-    case DILATION_GRAYSCALE:{
-        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
-    }
-        break;
-    case OPENING_GRAYSCALE:{
-        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
-        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
-    }
-        break;
-    case CLOSING_GRAYSCALE:{
-        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
-        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
-    }
-        break;
     case DISTANCE_TRANSFORM:
     {
         Mat temp = Mat(src.rows, src.cols, CV_32FC1, Scalar(0)),marked = src.clone();
@@ -193,15 +175,46 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int cen
             mask.setTo(0, opened);
             Mat delta = erosioned & mask;
             rst |= delta;
-//            imshow("erosioned", erosioned);
-//            imshow("opened", opened);
-//            imshow("delta", delta);
-//            imshow("rst", rst);
-//            imshow("se", se);
-//            waitKey(1);
         }
         dst = rst;
 
+    }
+        break;
+    case EROSION_GRAYSCALE:{
+        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
+    }
+        break;
+    case DILATION_GRAYSCALE:{
+        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
+    }
+        break;
+    case OPENING_GRAYSCALE:{
+        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
+        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
+    }
+        break;
+    case CLOSING_GRAYSCALE:{
+        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
+        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
+    }
+        break;
+    case EDGE_STANDARD:{
+        Mat dilated, erosioned;
+        ConvolutionEngine::run(src, dilated, se, dilation_action_grayscale, center_x, center_y);
+        ConvolutionEngine::run(src, erosioned, se, erosion_action_grayscale, center_x, center_y);
+        dst = dilated - erosioned;
+    }
+        break;
+    case EDGE_EXTERNAL:{
+        Mat dilated;
+        ConvolutionEngine::run(src, dilated, se, dilation_action_grayscale, center_x, center_y);
+        dst = dilated - src;
+    }
+        break;
+    case EDGE_INTERNAL:{
+        Mat erosioned;
+        ConvolutionEngine::run(src, erosioned, se, erosion_action_grayscale, center_x, center_y);
+        dst = src - erosioned;
     }
         break;
     default:

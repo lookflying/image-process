@@ -8,13 +8,16 @@ public:
                          DILATION_BINARY,
                          OPENING_BINARY,
                          CLOSING_BINARY,
+                         DISTANCE_TRANSFORM,
+                         SKELETONIZATION,
+                         RESTORATION,
                          EROSION_GRAYSCALE,
                          DILATION_GRAYSCALE,
                          OPENING_GRAYSCALE,
                          CLOSING_GRAYSCALE,
-                         DISTANCE_TRANSFORM,
-                         SKELETONIZATION,
-                         RESTORATION};
+                         EDGE_STANDARD,
+                         EDGE_EXTERNAL,
+                         EDGE_INTERNAL};
     static const uchar distance_metric_[];
     typedef int morphology_type_t;
     //assume to be binary image
