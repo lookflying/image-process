@@ -12,11 +12,13 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QShortcut>
+#include <QCheckBox>
 #include "imageview.h"
 #include "grayscaletransformwidget.h"
 #include "basicoperationwidget.h"
 #include "filterwidget.h"
 #include "preprocesswidget.h"
+#include "showwindowmanager.h"
 
 
 namespace Ui {
@@ -67,18 +69,21 @@ private slots:
     void pre_turn_gray();
 
     void status_show_position(int x, int y);
-private:
+public:
 
+    void create_image();
     void create_actions();
     void create_menus();
     void create_tool_bar();
     void create_status_bar();
     void create_image_view();
+    void create_check_box();
     void create_menu_bar();
     void create_tool_box();
     void create_tab_widget();
     void connect_signal_slot();
     void create_shortcut();
+    void create_show_window_manager();
     QMenu *file_menu_;
     QMenu *edit_menu_;
 
@@ -111,6 +116,11 @@ private:
 
     PreprocessWidget *tab_preprocess_;
 
+    ShowWindowManager *show_window_manager_;
+
+    QCheckBox *check_box_create_new_window_;
+
+    FImage *image_;
 protected:
     void mouseMoveEvent(QMouseEvent *);
 

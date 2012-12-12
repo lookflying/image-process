@@ -4,10 +4,14 @@
 class Morphology
 {
 public:
-    enum morphology_type{EROSION,
-                         DILATION,
-                         OPENING,
-                         CLOSING,
+    enum morphology_type{EROSION_BINARY,
+                         DILATION_BINARY,
+                         OPENING_BINARY,
+                         CLOSING_BINARY,
+                         EROSION_GRAYSCALE,
+                         DILATION_GRAYSCALE,
+                         OPENING_GRAYSCALE,
+                         CLOSING_GRAYSCALE,
                          DISTANCE_TRANSFORM,
                          SKELETONIZATION,
                          RESTORATION};
@@ -15,8 +19,10 @@ public:
     typedef int morphology_type_t;
     //assume to be binary image
     static void run(cv::Mat &src, cv::Mat &dst, morphology_type_t type, cv::Mat se, int center_x = -1, int center_y = - 1);
-    static uchar erosion_action(cv::Mat& input, cv::Mat& se);
-    static uchar dilation_action(cv::Mat& input, cv::Mat& se);
+    static uchar erosion_action_binary(cv::Mat& input, cv::Mat& se);
+    static uchar dilation_action_binary(cv::Mat& input, cv::Mat& se);
+    static uchar erosion_action_grayscale(cv::Mat& input, cv::Mat& se);
+    static uchar dilation_action_grayscale(cv::Mat& input, cv::Mat& se);
     enum structing_element_type{DISC,
                                 CUBE,
                                 CROSS};

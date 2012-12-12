@@ -31,7 +31,9 @@ SOURCES += main.cpp\
     seselectwidget.cpp \
     selectwidget.cpp \
     miscellaneous.cpp \
-    preprocesswidget.cpp
+    preprocesswidget.cpp \
+    showwindow.cpp \
+    showwindowmanager.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
@@ -53,7 +55,9 @@ HEADERS  += mainwindow.h \
     seselectwidget.h \
     selectwidget.h \
     miscellaneous.h \
-    preprocesswidget.h
+    preprocesswidget.h \
+    showwindow.h \
+    showwindowmanager.h
 
 FORMS    +=
 

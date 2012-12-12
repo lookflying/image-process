@@ -398,6 +398,10 @@ void ImageProcess::morphology_transform(FImage &in_out, Blur::blur_type_t type, 
     imshow(str.str(), temp);
 }
 
+void ImageProcess::morphology_transform(Mat &in, Mat &out, Morphology::morphology_type_t type, Mat se, int center_x, int center_y){
+    Morphology::run(in, out, type, se, center_x, center_y);
+}
+
 
 void ImageProcess::threshold(FImage &in_out, Miscellaneous::threshold_type_t type, int t1, int t2){
     Mat temp;
@@ -407,7 +411,7 @@ void ImageProcess::threshold(FImage &in_out, Miscellaneous::threshold_type_t typ
                              type,
                              t2);
     ostringstream str;
-    str<<__FUNCTION__<<type<<" "<<t1;
+    str<<__FUNCTION__<<type;
     imshow(str.str(), temp);
 }
 

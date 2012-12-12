@@ -125,49 +125,69 @@ Mat Morphology::generate_structing_element(int width, int height, structing_elem
 void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int center_x, int center_y){
     CV_Assert(src.channels() == 1);
     switch(type){
-    case EROSION:{
-        ConvolutionEngine::run(src, dst, se, erosion_action, center_x, center_y);
+    case EROSION_BINARY:{
+        ConvolutionEngine::run(src, dst, se, erosion_action_binary, center_x, center_y);
     }
         break;
-    case DILATION:{
-        ConvolutionEngine::run(src, dst, se, dilation_action, center_x, center_y);
+    case DILATION_BINARY:{
+        ConvolutionEngine::run(src, dst, se, dilation_action_binary, center_x, center_y);
     }
         break;
-    case OPENING:{
-        ConvolutionEngine::run(src, dst, se, erosion_action, center_x, center_y);
-        ConvolutionEngine::run(dst, dst, se, dilation_action, center_x, center_y);
+    case OPENING_BINARY:{
+        ConvolutionEngine::run(src, dst, se, erosion_action_binary, center_x, center_y);
+        ConvolutionEngine::run(dst, dst, se, dilation_action_binary, center_x, center_y);
     }
         break;
-    case CLOSING:{
-        ConvolutionEngine::run(src, dst, se, dilation_action, center_x, center_y);
-        ConvolutionEngine::run(dst, dst, se, erosion_action, center_x, center_y);
+    case CLOSING_BINARY:{
+        ConvolutionEngine::run(src, dst, se, dilation_action_binary, center_x, center_y);
+        ConvolutionEngine::run(dst, dst, se, erosion_action_binary, center_x, center_y);
     }
         break;
-    case DISTANCE_TRANSFORM:{
+    case EROSION_GRAYSCALE:{
+        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
+    }
+        break;
+    case DILATION_GRAYSCALE:{
+        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
+    }
+        break;
+    case OPENING_GRAYSCALE:{
+        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
+        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
+    }
+        break;
+    case CLOSING_GRAYSCALE:{
+        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
+        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
+    }
+        break;
+    case DISTANCE_TRANSFORM:
+    {
         Mat temp = Mat(src.rows, src.cols, CV_32FC1, Scalar(0)),marked = src.clone();
         int distance = 0;
         while(sum(marked)[0] != 0){
             ++distance;
-            ConvolutionEngine::run(marked, marked, se, erosion_action, center_x, center_y);
+            ConvolutionEngine::run(marked, marked, se, erosion_action_binary, center_x, center_y);
             temp.setTo(static_cast<float>(distance), marked);
         }
         Convolution::to_normalized_uchar_mat(temp, dst, static_cast<float>(distance));
     }
+        break;
     case SKELETONIZATION:{
         Mat rst = Mat(src.rows, src.cols, CV_8UC1, Scalar(0));
         Mat nse = se.clone();
         while(true){
             Mat erosioned;
             Mat opened;
-            ConvolutionEngine::run(src, erosioned, nse, erosion_action, center_x, center_y);
+            ConvolutionEngine::run(src, erosioned, nse, erosion_action_binary, center_x, center_y);
             if (sum(erosioned)[0] == 0){
                 break;
             }
-            ConvolutionEngine::run(erosioned, opened, se, erosion_action, center_x, center_y);
-            ConvolutionEngine::run(opened, opened, se, dilation_action, center_x, center_y );
+            ConvolutionEngine::run(erosioned, opened, se, erosion_action_binary, center_x, center_y);
+            ConvolutionEngine::run(opened, opened, se, dilation_action_binary, center_x, center_y );
 
             copyMakeBorder(nse, nse, 2, 2, 2, 2, BORDER_CONSTANT,  Scalar(0));
-            ConvolutionEngine::run(nse, nse, se, dilation_action, -1, -1);
+            ConvolutionEngine::run(nse, nse, se, dilation_action_binary, -1, -1);
             cut_black_edge(nse, nse);
             Mat mask = Mat(src.rows, src.cols, CV_8UC1, Scalar(255));
             mask.setTo(0, opened);
@@ -190,7 +210,7 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int cen
 }
 
 //only work with binary images
-uchar Morphology::erosion_action(Mat& input, Mat& se){
+uchar Morphology::erosion_action_binary(Mat& input, Mat& se){
     for (int i = 0; i < se.rows; ++i){
         for (int j = 0; j < se.cols; ++j){
             if (se.at<uchar>(i, j) != 0 && input.at<uchar>(i, j) == 0){
@@ -201,7 +221,7 @@ uchar Morphology::erosion_action(Mat& input, Mat& se){
     return 255;
 }
 
-uchar Morphology::dilation_action(Mat &input, Mat &se){
+uchar Morphology::dilation_action_binary(Mat &input, Mat &se){
     for (int i = 0; i < se.rows; ++i){
         for (int j = 0; j < se.cols; ++j){
             if (se.at<uchar>(i, j) != 0 && input.at<uchar>(i, j) != 0){
@@ -212,3 +232,32 @@ uchar Morphology::dilation_action(Mat &input, Mat &se){
     return 0;
 }
 
+//grayscale erosion
+uchar Morphology::erosion_action_grayscale(Mat &input, Mat &se){
+    int min_value = 255;
+    for (int i = 0; i < se.rows; ++i){
+        for (int j = 0; j < se.cols; ++j){
+            min_value = std::min(static_cast<int>(input.at<uchar>(i, j)) - static_cast<int>(se.at<uchar>(i, j)), min_value);
+        }
+    }
+    if (min_value < 0){
+        return 0;
+    }else{
+        return static_cast<uchar>(min_value);
+    }
+}
+
+//grayscalce dilation
+uchar Morphology::dilation_action_grayscale(Mat &input, Mat &se){
+    int max_value = 0;
+    for (int i = 0; i < se.rows; ++i){
+        for (int j = 0; j < se.cols; ++j){
+            max_value = std::max(static_cast<int>(se.at<uchar>(i, j)) + static_cast<int>(input.at<uchar>(i, j)), max_value);
+        }
+    }
+    if (max_value > 255){
+        return 255;
+    }else{
+        return static_cast<uchar>(max_value);
+    }
+}

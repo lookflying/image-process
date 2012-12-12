@@ -33,8 +33,8 @@ void Miscellaneous::threshold(Mat src, Mat &dst, int th, threshold_type_t type, 
     case NORMAL_THRESHOLD:
     {
         Mat se(1, 2, CV_8UC1);
-        se.at<unsigned char>(0, 0) = 0;
-        se.at<unsigned char>(0, 1) = static_cast<unsigned char>(th);
+        se.at<unsigned char>(0, 0) = static_cast<unsigned char>(th);
+        se.at<unsigned char>(0, 1) = 255;
         ConvolutionEngine::run(src, dst, se, threshold_action);
     }
         break;
@@ -52,23 +52,23 @@ void Miscellaneous::threshold(Mat src, Mat &dst, int th, threshold_type_t type, 
 }
 
 /*
-  every row in kernel represent a range that should be turned into 0, otherwise maxval(255)
+  every row in kernel represent a range that should be turned into maxval(255), otherwise 0
   example:
   kernel = { 100, 150;
              45, 70;}
-  then if( (src(x, y) < 150 && src(x, y) >= 100) || (src(x, y) < 70 && src(x, y) >= 45))
-            dst(x, y) = 0
-        else
+  then if( (src(x, y) =< 150 && src(x, y) > 100) || (src(x, y) =< 70 && src(x, y) > 45))
             dst(x, y) = 255
+        else
+            dst(x, y) = 0
   */
 unsigned char Miscellaneous::threshold_action(Mat &input, Mat &kernel){
     CV_Assert(kernel.cols == 2);
     unsigned char in_value = input.at<unsigned char>(0, 0);
-    unsigned char out_value = 255;
+    unsigned char out_value = 0;
     for(int i = 0; i < kernel.rows; ++i){
-        if (in_value >= kernel.at<unsigned char>(0, 0)
-                && in_value < kernel.at<unsigned char>(0, 1)){
-            out_value = 0;
+        if (in_value > kernel.at<unsigned char>(0, 0)
+                && in_value <= kernel.at<unsigned char>(0, 1)){
+            out_value = 255;
         }
     }
     return out_value;
@@ -127,8 +127,15 @@ unsigned char Miscellaneous::auto_threshold(Mat src, Mat *dst, auto_threshold_ty
             u[i] = u[i - 1] + px[i];
         }
         for (unsigned int i = 0; i < w.size(); ++i){
-             double theta = w[i] * (1 - w[i]) * (u[i] - (u[255] - u[i])) * (u[i] - (u[255] - u[i]));
-             thetas[theta] = i;
+            double theta;
+            if (w[i] != 0 && 1 - w[i] != 0){
+                theta = w[i] * (1 - w[i])
+                        * (u[i] / w[i] - (u[255] - u[i]) / (1 - w[i]))
+                        * (u[i] / w[i] - (u[255] - u[i]) / (1 - w[i]));
+            }else{
+                theta = 0;
+            }
+            thetas[theta] = i;
         }
         map<double, unsigned int>::reverse_iterator rit = thetas.rbegin();
         th = static_cast<int>(rit->second);

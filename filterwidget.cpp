@@ -68,10 +68,14 @@ void FilterWidget::create_page_morphology(){
     tool_page_morphology_->setGeometry(QRect(0, 0, width(), height() - 100));
     combo_box_morphology_ = new QComboBox(tool_page_morphology_);
     combo_box_morphology_->setGeometry(QRect(width() / 9, 12, width() * 7 / 9, 24));
-    combo_box_morphology_->insertItem(Morphology::EROSION, QString::fromUtf8("EROSION"));
-    combo_box_morphology_->insertItem(Morphology::DILATION, QString::fromUtf8("DILATION"));
-    combo_box_morphology_->insertItem(Morphology::OPENING, QString::fromUtf8("OPENING"));
-    combo_box_morphology_->insertItem(Morphology::CLOSING, QString::fromUtf8("CLOSING"));
+    combo_box_morphology_->insertItem(Morphology::EROSION_BINARY, QString::fromUtf8("EROSION_BINARY"));
+    combo_box_morphology_->insertItem(Morphology::DILATION_BINARY, QString::fromUtf8("DILATION_BINARY"));
+    combo_box_morphology_->insertItem(Morphology::OPENING_BINARY, QString::fromUtf8("OPENING_BINARY"));
+    combo_box_morphology_->insertItem(Morphology::CLOSING_BINARY, QString::fromUtf8("CLOSING_BINARY"));
+    combo_box_morphology_->insertItem(Morphology::EROSION_GRAYSCALE, QString::fromUtf8("EROSION_GRAYSCALE"));
+    combo_box_morphology_->insertItem(Morphology::DILATION_GRAYSCALE, QString::fromUtf8("DILATION_GRAYSCALE"));
+    combo_box_morphology_->insertItem(Morphology::OPENING_GRAYSCALE, QString::fromUtf8("OPENING_GRAYSCALE"));
+    combo_box_morphology_->insertItem(Morphology::CLOSING_GRAYSCALE, QString::fromUtf8("CLOSING_GRAYSCALE"));
     combo_box_morphology_->insertItem(Morphology::DISTANCE_TRANSFORM, QString::fromUtf8("DISTANCE_TRANSFORM"));
     combo_box_morphology_->insertItem(Morphology::SKELETONIZATION, QString::fromUtf8("SKELETONIZATION"));
     combo_box_morphology_->insertItem(Morphology::RESTORATION, QString::fromUtf8("RESTORATION"));

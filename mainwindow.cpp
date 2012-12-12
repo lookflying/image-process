@@ -23,6 +23,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include <iostream>
+using namespace std;
+using namespace cv;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -32,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     resize(800, 500);
     central_widget_ = new QWidget(this);
     central_widget_->setObjectName(QString::fromUtf8("centralWidget"));
-
+    create_image();
     create_actions();
     create_menu_bar();
     create_menus();
@@ -40,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     create_status_bar();
     create_image_view();
     create_tab_widget();
+    create_show_window_manager();
     setCentralWidget(central_widget_);
     connect_signal_slot();
     setMouseTracking(true);
@@ -48,6 +51,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete show_window_manager_;
+}
+
+void MainWindow::create_image(){
+    image_ = new FImage();
 }
 
 void MainWindow::create_actions(){
@@ -101,6 +109,10 @@ void MainWindow::create_menus(){
     edit_menu_->addAction(edit_redo_act_);
 
 }
+void MainWindow::create_check_box(){
+   //created in image view
+}
+
 void MainWindow::create_image_view(){
     image_view_ = new ImageView(central_widget_);
     image_view_->setObjectName(QString::fromUtf8("ImageView"));
@@ -108,6 +120,10 @@ void MainWindow::create_image_view(){
                                  main_tool_bar_->height(),
                                  width() * 5 / 7,
                                  height() - menu_bar_->height() - main_tool_bar_->height() - status_bar_->height()));
+    check_box_create_new_window_ = new QCheckBox(central_widget_);
+    check_box_create_new_window_->setText(QString::fromUtf8("New Window Mode"));
+    check_box_create_new_window_->setGeometry(QRect(600, image_view_->height() + image_view_->y(), 200, 24));
+    check_box_create_new_window_->setChecked(false);
 }
 
 void MainWindow::create_status_bar(){
@@ -158,15 +174,35 @@ void MainWindow::create_tab_widget(){
 
 void MainWindow::open_file(){
     QString file_name = QFileDialog::getOpenFileName(this);
-    if (!image_view_->openImage(file_name)){
+//    if (!image_view_->openImage(file_name)){
+//        QMessageBox::warning(this, tr("Application"), tr("Can't open file %1:\n").arg(file_name));
+//        return;
+//    }
+
+    if (!image_->load(file_name)){
         QMessageBox::warning(this, tr("Application"), tr("Can't open file %1:\n").arg(file_name));
         return;
     }
+    show_window_manager_->show_window(image_->get_image(), file_name.toStdString(), true);
 
+
+}
+
+static void show_window_action(cv::Mat img, QWidget *ui, string){
+    ((MainWindow*)ui)->image_view_->image_data_.set_image(img);
+    ((MainWindow*)ui)->image_view_->refresh();
 }
 
 void MainWindow::create_shortcut(){
 
+}
+
+
+
+void MainWindow::create_show_window_manager(){
+    show_window_manager_ = new ShowWindowManager();
+    show_window_manager_->set_ui(this);
+    show_window_manager_->set_refresh_action(&show_window_action);
 }
 
 void MainWindow::connect_signal_slot(){
@@ -190,6 +226,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_preprocess_->slider_threshold_, SIGNAL(valueChanged(int)), this, SLOT(pre_threshold()));
     connect(tab_preprocess_->button_threshold_, SIGNAL(clicked()), this, SLOT(pre_auto_threshold()));
     connect(tab_preprocess_->slider_threshold_optional_, SIGNAL(valueChanged(int)), this, SLOT(pre_dual_threshold()));
+    connect(tab_preprocess_->button_turn_gray_, SIGNAL(clicked()), this, SLOT(pre_turn_gray()));
 }
 
 void MainWindow::save_file(){
@@ -397,22 +434,35 @@ void MainWindow::basic_algebra_pic(){
 }
 
 void MainWindow::filter_morphology(){
-    image_view_->image_data_.turn_gray();
-    cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
-                  image_view_->image_data_.get_opencv_image_gray(),
-                  100,
-                  255,
-                  cv::THRESH_BINARY);
+//    image_view_->image_data_.turn_gray();
+//    cv::threshold(image_view_->image_data_.get_opencv_image_gray(),
+//                  image_view_->image_data_.get_opencv_image_gray(),
+//                  100,
+//                  255,
+//                  cv::THRESH_BINARY);
     cv::Mat temp, se_mat;
-    tab_filter_->se_select_widget_morphology_->select_widget_->get_se_mat(temp);
-    temp.copyTo(se_mat);
-    ImageProcess::morphology_transform(image_view_->image_data_,
-                                       tab_filter_->combo_box_morphology_->currentIndex(),
-                                       se_mat,
-                                       -1,
-                                       -1);
-
-    emit refresh_image_view();
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            tab_filter_->se_select_widget_morphology_->select_widget_->get_se_mat(se_mat);
+            ImageProcess::morphology_transform(image,
+                                               temp,
+                                               this->tab_filter_->combo_box_morphology_->currentIndex(),
+                                               se_mat,
+                                               -1,
+                                               -1);
+            if (check_box_create_new_window_->isChecked()){
+                show_window_manager_->show_window(temp,
+                                                 show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                                 true);
+            }else{
+                show_window_manager_->show_window(temp);
+            }
+        }
+        emit refresh_image_view();
+    }
 }
 
 void MainWindow::filter_blur(){
@@ -450,18 +500,26 @@ void MainWindow::pre_auto_threshold(){
 }
 
 void MainWindow::pre_turn_gray(){
-    image_view_->image_data_.turn_gray();
-    emit refresh_image_view();
+    Mat image = show_window_manager_->get_current_image();
+    if (!image.empty()){
+        if (image.channels() == 3){
+            cvtColor(image, image, CV_BGR2GRAY);
+            show_window_manager_->show_window(image,
+                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                              check_box_create_new_window_->isChecked());
+        }/*
+        image_view_->image_data_.turn_gray();*/
+    }else{
+        QMessageBox::warning(this, "No Image File", "no image to process");
+    }
+//    emit refresh_image_view();
 }
 
 void MainWindow::status_show_position(int x, int y){
 
     label_position_->setText(QString("(%1 , %2)").arg(x).arg(y));
-//    image_view_->
 }
 
 
-void MainWindow::mouseMoveEvent(QMouseEvent * event){
-    (void*)event;
-//    qDebug()<<QString("(%1 , %2)").arg(event->x(), event->y());
+void MainWindow::mouseMoveEvent(QMouseEvent *){
 }
