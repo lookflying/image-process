@@ -122,8 +122,11 @@ Mat Morphology::generate_structing_element(int width, int height, structing_elem
 
 }
 
-void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int center_x, int center_y){
+void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, cv::Mat mask, int center_x, int center_y){
     CV_Assert(src.channels() == 1);
+    if (mask.size != src.size){
+        mask = Mat();
+    }
     switch(type){
     case EROSION_BINARY:{
         ConvolutionEngine::run(src, dst, se, erosion_action_binary, center_x, center_y);
@@ -180,6 +183,19 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int cen
 
     }
         break;
+    case CONDITIONAL_DILATION:{
+        Mat rst = Mat(src.rows, src.cols, src.type());
+        do{
+            Mat temp;
+            ConvolutionEngine::run(src, temp, se, mask, dilation_action_binary, center_x, center_y);
+            if (sum(rst - temp)[0] == 0){
+                break;
+            }
+            temp.copyTo(rst);
+        }while(true);
+        dst = rst;
+    }
+        break;
     case EROSION_GRAYSCALE:{
         ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
     }
@@ -215,6 +231,19 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, int cen
         Mat erosioned;
         ConvolutionEngine::run(src, erosioned, se, erosion_action_grayscale, center_x, center_y);
         dst = src - erosioned;
+    }
+        break;
+    case GRAYSCALE_RECONSTRUCTION:{
+        Mat rst = Mat(src.rows, src.cols, src.type());
+        do{
+            Mat temp;
+            ConvolutionEngine::run(src, temp, se, mask, dilation_action_grayscale, center_x, center_y);
+            if (sum(rst - temp)[0] == 0){
+                break;
+            }
+            temp.copyTo(rst);
+        }while(true);
+        dst = rst;
     }
         break;
     default:

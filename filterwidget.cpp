@@ -82,10 +82,11 @@ void FilterWidget::create_page_morphology(){
     combo_box_morphology_->insertItem(Morphology::EDGE_STANDARD, QString::fromUtf8("EDGE_STANDARD"));
     combo_box_morphology_->insertItem(Morphology::EDGE_EXTERNAL, QString::fromUtf8("EDGE_EXTERNAL"));
     combo_box_morphology_->insertItem(Morphology::EDGE_INTERNAL, QString::fromUtf8("EDGE_INTERNAL"));
+    combo_box_morphology_->insertItem(Morphology::CONDITIONAL_DILATION, QString::fromUtf8("CONDITIONAL_DILATION"));
+    combo_box_morphology_->insertItem(Morphology::GRAYSCALE_RECONSTRUCTION, QString::fromUtf8("GRAYSCALE_RECONSTRUCTION"));
 
     button_mask_ = new QPushButton(QString::fromUtf8("mask..."), tool_page_morphology_);
     button_mask_->setGeometry(width() / 3, 24, width() / 3, 24);
-
 
     se_select_widget_morphology_ = new SESelectWidget(0, 40, width(), height() - 100 - 68, tool_page_morphology_);
     button_morphology_ = new QPushButton(QString::fromUtf8("Transform"), tool_page_morphology_);

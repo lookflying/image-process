@@ -33,6 +33,7 @@ public:
     static void blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma);
     static void morphology_transform(FImage &in_out, Blur::blur_type_t type, cv::Mat se, int center_x, int center_y) __attribute__((deprecated));
     static void morphology_transform(cv::Mat &in, cv::Mat &out, Morphology::morphology_type_t type, cv::Mat se, int center_x, int center_y);
+    static cv::Mat& morphology_mask();
     static void threshold(FImage &in_out, Miscellaneous::threshold_type_t type, int t1, int t2)__attribute__((deprecated));
     static void threshold(cv::Mat &in, cv::Mat &out, Miscellaneous::threshold_type_t type, int t1, int t2);
     static unsigned char auto_threshold(FImage &in_out, Miscellaneous::auto_threshold_type_t type, std::vector<double> parameters)__attribute__((deprecated));
@@ -46,6 +47,8 @@ private:
     static cv::Vec3b divide(cv::Vec3b v1, cv::Vec3b v2);
     static void get_postion_after_rotation(int x, int y, double rad, int &x_r, int &y_r);
     static void get_edge(int x, int y, int &pos_x, int &neg_x, int &pos_y, int &neg_y);
+
+    static cv::Mat morphology_mask_;
 };
 
 #endif // IMAGEPROCESS_H

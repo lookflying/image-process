@@ -38,7 +38,11 @@ void ShowWindowManager::set_ui(QWidget *ui){
 
 void ShowWindowManager::show_window( Mat image, string name, bool create_new, bool preview){
     if (create_new || current_window_.compare("") == 0){
-        windows_[name] = new ShowWindow(name, image, this);
+        if (windows_.find(name) != windows_.end()){
+            windows_[name]->update_image(image);
+        }else{
+            windows_[name] = new ShowWindow(name, image, this);
+        }
         current_window_ = name;
     }else{
         windows_[current_window_]->update_image(image);

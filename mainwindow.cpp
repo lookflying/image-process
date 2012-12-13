@@ -121,7 +121,7 @@ void MainWindow::create_image_view(){
                                  width() * 5 / 7,
                                  height() - menu_bar_->height() - main_tool_bar_->height() - status_bar_->height()));
     check_box_create_new_window_ = new QCheckBox(central_widget_);
-    check_box_create_new_window_->setText(QString::fromUtf8("New Window Mode"));
+    check_box_create_new_window_->setText(QString::fromUtf8("&New Window Mode"));
     check_box_create_new_window_->setGeometry(QRect(600, image_view_->height() + image_view_->y(), 200, 24));
     check_box_create_new_window_->setChecked(false);
 }
@@ -228,6 +228,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_preprocess_->button_threshold_, SIGNAL(clicked()), this, SLOT(pre_auto_threshold()));
     connect(tab_preprocess_->slider_threshold_optional_, SIGNAL(valueChanged(int)), this, SLOT(pre_dual_threshold()));
     connect(tab_preprocess_->button_turn_gray_, SIGNAL(clicked()), this, SLOT(pre_turn_gray()));
+    connect(tab_filter_->button_mask_, SIGNAL(clicked()), this, SLOT(filter_morphology_mask()));
 }
 
 void MainWindow::save_file(){
@@ -451,6 +452,19 @@ void MainWindow::filter_morphology(){
             show_window_manager_->show_window(temp,
                                               show_window_manager_->get_current_window_name() + __FUNCTION__,
                                               check_box_create_new_window_->isChecked());
+        }
+    }
+}
+void MainWindow::filter_morphology_mask(){
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            image.copyTo(ImageProcess::morphology_mask());
+            show_window_manager_->show_window(ImageProcess::morphology_mask(),
+                                              "mask",
+                                              true);
         }
     }
 }

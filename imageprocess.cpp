@@ -391,6 +391,7 @@ void ImageProcess::morphology_transform(FImage &in_out, Blur::blur_type_t type, 
                     temp,
                     type,
                     se,
+                    morphology_mask(),
                     center_x,
                     center_y);
     ostringstream str;
@@ -399,7 +400,12 @@ void ImageProcess::morphology_transform(FImage &in_out, Blur::blur_type_t type, 
 }
 
 void ImageProcess::morphology_transform(Mat &in, Mat &out, Morphology::morphology_type_t type, Mat se, int center_x, int center_y){
-    Morphology::run(in, out, type, se, center_x, center_y);
+    Morphology::run(in, out, type, se, morphology_mask(), center_x, center_y);
+}
+
+Mat ImageProcess::morphology_mask_;
+Mat& ImageProcess::morphology_mask(){
+    return morphology_mask_;
 }
 
 
