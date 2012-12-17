@@ -209,7 +209,7 @@ unsigned char Miscellaneous::auto_threshold(Mat &src, Mat &dst, auto_threshold_t
 
 
         Mat se(3, 3, CV_32FC1, Scalar(1.0 / 9));
-        ConvolutionEngine::run(src, temp, se, mask);
+        ConvolutionEngine::run(src, temp, se, mask,  Convolution::normal_convolution_action);
 
         imshow("temp", temp);
 

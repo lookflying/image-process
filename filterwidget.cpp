@@ -84,6 +84,10 @@ void FilterWidget::create_page_morphology(){
     combo_box_morphology_->insertItem(Morphology::EDGE_INTERNAL, QString::fromUtf8("EDGE_INTERNAL"));
     combo_box_morphology_->insertItem(Morphology::CONDITIONAL_DILATION, QString::fromUtf8("CONDITIONAL_DILATION"));
     combo_box_morphology_->insertItem(Morphology::GRAYSCALE_RECONSTRUCTION, QString::fromUtf8("GRAYSCALE_RECONSTRUCTION"));
+    combo_box_morphology_->insertItem(Morphology::GRADIENT, QString::fromUtf8("GRADIENT"));
+    combo_box_morphology_->insertItem(Morphology::GRADIENT_EXTERNAL, QString::fromUtf8("GRADIENT_EXTERNAL"));
+    combo_box_morphology_->insertItem(Morphology::GRADIENT_INTERNAL, QString::fromUtf8("GRADIENT_INTERNAL"));
+    combo_box_morphology_->insertItem(Morphology::WATERSHED, QString::fromUtf8("WATERSHED"));
 
     button_mask_ = new QPushButton(QString::fromUtf8("mask..."), tool_page_morphology_);
     button_mask_->setGeometry(width() / 3, 24, width() / 3, 24);

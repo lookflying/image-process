@@ -19,7 +19,11 @@ public:
                          EDGE_STANDARD,
                          EDGE_EXTERNAL,
                          EDGE_INTERNAL,
-                         GRAYSCALE_RECONSTRUCTION
+                         GRAYSCALE_RECONSTRUCTION,
+                         GRADIENT,
+                         GRADIENT_EXTERNAL,
+                         GRADIENT_INTERNAL,
+                         WATERSHED
                         };
     static const uchar distance_metric_[];
     typedef int morphology_type_t;
@@ -29,6 +33,9 @@ public:
     static uchar dilation_action_binary(cv::Mat& input, cv::Mat& se);
     static uchar erosion_action_grayscale(cv::Mat& input, cv::Mat& se);
     static uchar dilation_action_grayscale(cv::Mat& input, cv::Mat& se);
+    static uchar watershed_action_flood(cv::Mat &input, cv::Mat &input2, cv::Mat& se);
+    static int watershed_action_find_minimum(cv::Mat &input, cv::Mat &input2, cv::Mat& se);
+
     enum structing_element_type{DISC,
                                 CUBE,
                                 CROSS};

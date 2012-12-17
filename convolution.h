@@ -3,6 +3,7 @@
 #include <opencv2/core/core.hpp>
 
 typedef uchar convolution_action(cv::Mat& input, cv::Mat& kernel);
+typedef int convolution_action2(cv::Mat& input, cv::Mat& input2, cv::Mat &kernel);
 typedef double convolution_action_raw(cv::Mat& input, cv::Mat& kernel);
 
 
