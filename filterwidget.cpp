@@ -89,8 +89,11 @@ void FilterWidget::create_page_morphology(){
     combo_box_morphology_->insertItem(Morphology::GRADIENT_INTERNAL, QString::fromUtf8("GRADIENT_INTERNAL"));
     combo_box_morphology_->insertItem(Morphology::WATERSHED, QString::fromUtf8("WATERSHED"));
 
+    slider_morphology_ = new QSlider(Qt::Horizontal, tool_page_morphology_);
+    slider_morphology_->setGeometry(4, 24, width() * 2 / 5, 24);
+    slider_morphology_->setRange(0, 255);
     button_mask_ = new QPushButton(QString::fromUtf8("mask..."), tool_page_morphology_);
-    button_mask_->setGeometry(width() / 3, 24, width() / 3, 24);
+    button_mask_->setGeometry(width() * 3 / 5, 24, width() / 4, 24);
 
     se_select_widget_morphology_ = new SESelectWidget(0, 40, width(), height() - 100 - 68, tool_page_morphology_);
     button_morphology_ = new QPushButton(QString::fromUtf8("Transform"), tool_page_morphology_);

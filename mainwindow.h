@@ -64,6 +64,7 @@ private slots:
     void filter_blur();
     void filter_morphology();
     void filter_morphology_mask();
+    void filter_morphology_watershed_mask();
     void pre_threshold();
     void pre_dual_threshold();
     void pre_auto_threshold();

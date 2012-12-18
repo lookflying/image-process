@@ -33,8 +33,6 @@ public:
     static uchar dilation_action_binary(cv::Mat& input, cv::Mat& se);
     static uchar erosion_action_grayscale(cv::Mat& input, cv::Mat& se);
     static uchar dilation_action_grayscale(cv::Mat& input, cv::Mat& se);
-    static uchar watershed_action_flood(cv::Mat &input, cv::Mat &input2, cv::Mat& se);
-    static int watershed_action_find_minimum(cv::Mat &input, cv::Mat &input2, cv::Mat& se);
 
     enum structing_element_type{DISC,
                                 CUBE,
@@ -43,7 +41,10 @@ public:
 
     static cv::Mat generate_structing_element(int width = 3, int height = 3, structing_element_type_t type = DISC);
     static void cut_black_edge(cv::Mat in, cv::Mat &out);
+    static void watershed_seeds(cv::Mat src, cv::Mat &seeds, cv::Mat se, int min_value = 0);
+    static void watershed_segment(cv::Mat src, cv::Mat seeds, cv::Mat &marked, cv::Mat &result, int init_level = 0);
 private:
+
 };
 
 #endif // MORPHOLOGY_H

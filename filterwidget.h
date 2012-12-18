@@ -29,6 +29,7 @@ public:
     QDoubleSpinBox *double_spin_box_blur_sigma_;
 
     QWidget *tool_page_morphology_;
+    QSlider *slider_morphology_;
     QComboBox *combo_box_morphology_;
     QPushButton *button_mask_;
     QPushButton *button_morphology_;

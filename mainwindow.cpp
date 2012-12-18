@@ -229,6 +229,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_preprocess_->slider_threshold_optional_, SIGNAL(valueChanged(int)), this, SLOT(pre_dual_threshold()));
     connect(tab_preprocess_->button_turn_gray_, SIGNAL(clicked()), this, SLOT(pre_turn_gray()));
     connect(tab_filter_->button_mask_, SIGNAL(clicked()), this, SLOT(filter_morphology_mask()));
+    connect(tab_filter_->slider_morphology_, SIGNAL(valueChanged(int)), this, SLOT(filter_morphology_watershed_mask()));
 }
 
 void MainWindow::save_file(){
@@ -455,6 +456,22 @@ void MainWindow::filter_morphology(){
         }
     }
 }
+
+void MainWindow::filter_morphology_watershed_mask(){
+    cv::Mat image = show_window_manager_->get_current_origin();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            Mat se, seeds;
+            tab_filter_->se_select_widget_morphology_->select_widget_->get_se_mat(se);
+            Morphology::watershed_seeds(image, seeds, se, tab_filter_->slider_morphology_->value());
+            seeds.copyTo(ImageProcess::morphology_mask());
+            show_window_manager_->show_window(seeds, "watershed seeds", true, true);
+        }
+    }
+}
+
 void MainWindow::filter_morphology_mask(){
     cv::Mat image = show_window_manager_->get_current_image();
     if(!image.empty()){

@@ -12,12 +12,21 @@ public:
     void update_image(cv::Mat image);
     void preview(cv::Mat image);
     void show();
+    void start_draw(int x, int y);
+    void stop_draw(int x, int y);
+    void draw(int x, int y);
     cv::Mat get_image();
+    cv::Mat get_overlay();
 private:
     std::string window_name_;
     cv::Mat image_;
+    cv::Mat overlay_;
     ShowWindowManager* manager_;
     cv::Rect area_;
+    bool drawing_;
+    int last_x_;
+    int last_y_;
+
 
 };
 
