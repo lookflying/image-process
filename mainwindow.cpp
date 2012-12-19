@@ -319,7 +319,9 @@ void MainWindow::gray_non_linear_transform(non_linear_action action){
 }
 
 void MainWindow::gray_histogram_display(){
-     Function *fun  = ImageProcess::get_gray_histogram(image_view_->image_data_, ImageProcess::FREQUENCE);
+     Function *fun  = ImageProcess::get_gray_histogram(
+                 show_window_manager_->get_current_image(),
+                 ImageProcess::FREQUENCE);
      if (!fun->ready()){
          delete fun;
          return;
@@ -333,46 +335,79 @@ void MainWindow::gray_histogram_display(){
 }
 
 void MainWindow::gray_histogram_equalization(){
-    Function *fun  = ImageProcess::get_gray_histogram(image_view_->image_data_, ImageProcess::FREQUENCE);
-    if (!fun->ready()){
-        delete fun;
-        return;
+    cv::Mat temp;
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            Function *fun  = ImageProcess::get_gray_histogram(
+                        image,
+                        ImageProcess::FREQUENCE);
+            if (!fun->ready()){
+                delete fun;
+                return;
+            }
+            Function *equal = ImageProcess::get_histogram_equalization_fun(fun);
+            if (!equal->ready()){
+                delete equal;
+                return;
+            }
+            ImageProcess::gray_fun_transform(
+                        image,
+                        temp,
+                        equal);
+            show_window_manager_->show_window(temp,
+                                              __FUNCTION__ + show_window_manager_->get_current_window_name(),
+                                              check_box_create_new_window_->isChecked());
+            gray_histogram_display();
+            delete equal;
+            delete fun;
+
+        }
     }
-    Function *equal = ImageProcess::get_histogram_equalization_fun(fun);
-    if (!equal->ready()){
-        delete equal;
-        return;
-    }
-    ImageProcess::gray_fun_transform(image_view_->image_data_, equal);
-    gray_histogram_display();
-    emit refresh_image_view();
-    delete equal;
-    delete fun;
+
 }
 
 void MainWindow::gray_histogram_match(){
-    Function *origin = ImageProcess::get_gray_histogram(image_view_->image_data_, ImageProcess::FREQUENCE);
-    if (!origin->ready()){
-        delete origin;
-        return;
+    cv::Mat temp;
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            Function *origin = ImageProcess::get_gray_histogram(
+                        image,
+                        ImageProcess::FREQUENCE);
+            if (!origin->ready()){
+                delete origin;
+                return;
+            }
+            Function *target = tab_gray_->chart_histogram_->fun_;
+            if (target == NULL)
+                return;
+            else if (!target->ready()){
+                delete target;
+                return;
+            }
+            Function *match = ImageProcess::get_histogram_match_fun(origin, target);
+            if (!match->ready()){
+                delete match;
+                return;
+            }
+            ImageProcess::gray_fun_transform(image,
+                                             temp,
+                                             match);
+            show_window_manager_->show_window(temp,
+                                              __FUNCTION__ + show_window_manager_->get_current_window_name(),
+                                              check_box_create_new_window_->isChecked());
+            gray_histogram_display();
+            delete match;
+            delete origin;
+
+        }
     }
-    Function *target = tab_gray_->chart_histogram_->fun_;
-    if (target == NULL)
-        return;
-    else if (!target->ready()){
-        delete target;
-        return;
-    }
-    Function *match = ImageProcess::get_histogram_match_fun(origin, target);
-    if (!match->ready()){
-        delete match;
-        return;
-    }
-    ImageProcess::gray_fun_transform(image_view_->image_data_, match);
-    gray_histogram_display();
-    delete match;
-    delete origin;
-    emit refresh_image_view();
+
 
 
 }
@@ -491,19 +526,37 @@ void MainWindow::filter_morphology_mask(){
 }
 
 void MainWindow::filter_blur(){
-    image_view_->image_data_.turn_gray();
-    ImageProcess::blur(image_view_->image_data_,
-                       tab_filter_->combo_box_blur_->currentIndex(),
-                       tab_filter_->spin_box_blur_size_->value(),
-                       tab_filter_->double_spin_box_blur_sigma_->value());
-    emit refresh_image_view();
+    cv::Mat temp;
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            ImageProcess::blur(image,
+                               temp,
+                               tab_filter_->combo_box_blur_->currentIndex(),
+                               tab_filter_->spin_box_blur_size_->value(),
+                               tab_filter_->double_spin_box_blur_sigma_->value());
+            show_window_manager_->show_window(temp,
+                                              __FUNCTION__ + show_window_manager_->get_current_window_name(),
+                                              check_box_create_new_window_->isChecked());
+        }
+    }
 }
 
 void MainWindow::filter_edge_detect(){
-    image_view_->image_data_.turn_gray();
-    ImageProcess::edge_detect(image_view_->image_data_,
-                              tab_filter_->combo_box_edge_detect_->currentIndex());
-    emit refresh_image_view();
+    cv::Mat temp;
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            ImageProcess::edge_detect(image, temp, tab_filter_->combo_box_edge_detect_->currentIndex());
+            show_window_manager_->show_window(temp,
+                                              __FUNCTION__ + show_window_manager_->get_current_window_name(),
+                                              check_box_create_new_window_->isChecked());
+        }
+    }
 }
 
 void MainWindow::pre_threshold(){

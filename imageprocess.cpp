@@ -95,6 +95,16 @@ void ImageProcess::gray_linear_transform(FImage &in_out, int x_min, int x_max, i
     }
 }
 
+void ImageProcess::gray_fun_transform(Mat in, Mat &out, Function *fun){
+    CV_Assert(in.channels() == 1 && in.elemSize() == 1);
+    out = Mat(in.rows, in.cols, in.type());
+    for (int i = 0; i < in.rows; ++i){
+        for (int j = 0; j < in.cols; ++j){
+            out.at<uchar>(i, j) = static_cast<uchar>(fun->get(static_cast<int>(in.at<uchar>(i, j))));
+        }
+    }
+}
+
 void ImageProcess::gray_fun_transform(FImage &in_out, Function *fun){
     Mat* img = &in_out.get_opencv_image_3channels();
     for (int i = 0; i < img->rows; ++i){
@@ -102,6 +112,63 @@ void ImageProcess::gray_fun_transform(FImage &in_out, Function *fun){
             img->at<Vec3b>(i, j) = to_gray_vec3b(fun->get(get_gray_scale(img->at<Vec3b>(i, j))));
         }
     }
+}
+Function* ImageProcess::get_gray_histogram(Mat in, histogram_type type){
+    if (in.empty()){
+        return new Function();
+    }
+    vector<int> count(256);
+    count.assign(count.size(), 0);
+    if(in.channels() == 3){
+        for (int i = 0; i < in.rows; ++i){
+            for (int j = 0; j < in.cols; ++j){
+                count[get_gray_scale(in.at<Vec3b>(i, j))] += 1;
+            }
+        }
+    }else if (in.channels() == 1){
+        for (int i = 0; i < in.rows; ++i){
+            for (int j = 0; j < in.cols; ++j){
+                count[static_cast<int>(in.at<uchar>(i, j))] += 1;
+            }
+        }
+    }else{
+        return new Function;
+    }
+    Function *fun;
+    switch (type){
+    case FREQUENCE:
+    {
+        int max = 0;
+        for (unsigned int i = 0; i < count.size(); ++i){
+            if (count[i] > max){
+                max = count[i];
+            }
+        }
+        fun = new Function(0, 255, 0, max);
+        for (unsigned int i = 0; i < count.size(); ++i){
+            fun->set(i, count[i]);
+        }
+        break;
+    }
+    case PROBABILITY:
+    {
+        int sum = in.rows * in.cols;
+        int max = 0;
+        for (unsigned int i = 0; i < count.size(); ++i){
+            count[i] = count[i] * 100 / sum;
+            if (count[i] > max)
+                max = count[i];
+        }
+        fun = new Function(0, 255, 0, max);
+        for (unsigned int i = 0; i < count.size(); ++i){
+            fun->set(i, count[i]);
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return fun;
 }
 
 Function* ImageProcess::get_gray_histogram(FImage &in, histogram_type type){
@@ -373,6 +440,10 @@ void ImageProcess::edge_detect(FImage &in_out, EdgeDetect::edge_detect_type_t ty
     imshow(str.str(), temp);
 }
 
+void ImageProcess::edge_detect(Mat &in, Mat &out, EdgeDetect::edge_detect_type_t type){
+    EdgeDetect::run(in, out, type);
+}
+
 void ImageProcess::blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma){
     Mat temp;
     Blur::run(in_out.get_opencv_image_gray(),
@@ -383,6 +454,10 @@ void ImageProcess::blur(FImage &in_out, Blur::blur_type_t type, int size, double
     ostringstream str;
     str<<__FUNCTION__<<type;
     imshow(str.str(), temp);
+}
+
+void ImageProcess::blur(Mat in, Mat &out, Blur::blur_type_t type, int size, double sigma){
+    Blur::run(in, out, type, size, sigma);
 }
 
 void ImageProcess::morphology_transform(FImage &in_out, Blur::blur_type_t type, Mat se, int center_x, int center_y){
@@ -399,7 +474,7 @@ void ImageProcess::morphology_transform(FImage &in_out, Blur::blur_type_t type, 
     imshow(str.str(), temp);
 }
 
-void ImageProcess::morphology_transform(Mat &in, Mat &out, Morphology::morphology_type_t type, Mat se, int center_x, int center_y){
+void ImageProcess::morphology_transform(Mat in, Mat &out, Morphology::morphology_type_t type, Mat se, int center_x, int center_y){
     Morphology::run(in, out, type, se, morphology_mask(), center_x, center_y);
 }
 
@@ -421,7 +496,7 @@ void ImageProcess::threshold(FImage &in_out, Miscellaneous::threshold_type_t typ
     imshow(str.str(), temp);
 }
 
-void ImageProcess::threshold(Mat &in, Mat &out, Miscellaneous::threshold_type_t type, int t1, int t2){
+void ImageProcess::threshold(Mat in, Mat &out, Miscellaneous::threshold_type_t type, int t1, int t2){
     Miscellaneous::threshold(in, out, t1, type, t2);
 }
 
@@ -429,6 +504,6 @@ unsigned char ImageProcess::auto_threshold(FImage &in_out, Miscellaneous::auto_t
     return Miscellaneous::auto_threshold(in_out.get_opencv_image_gray(), in_out.get_opencv_image_gray(), type, parameters);
 }
 
-unsigned char ImageProcess::auto_threshold(Mat &in, Mat &out, Miscellaneous::auto_threshold_type_t type, vector<double> parameters){
+unsigned char ImageProcess::auto_threshold(Mat in, Mat &out, Miscellaneous::auto_threshold_type_t type, vector<double> parameters){
     return Miscellaneous::auto_threshold(in, out, type, parameters);
 }

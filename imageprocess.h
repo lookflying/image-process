@@ -15,10 +15,13 @@ class ImageProcess
 public:
     ImageProcess();
     static void gray_linear_transform(FImage &in_out, int x_min, int x_max, int y_min, int y_max);
-    static void gray_fun_transform(FImage &in_out, Function* fun);
+    static void gray_fun_transform(FImage &in_out, Function* fun)__attribute__((deprecated));
+    //only accept one channel image
+    static void gray_fun_transform(cv::Mat in, cv::Mat &out, Function *fun);
     enum histogram_types{FREQUENCE, PROBABILITY};
     typedef int histogram_type;
-    static Function* get_gray_histogram(FImage &in, histogram_type type = PROBABILITY);
+    static Function* get_gray_histogram(FImage &in, histogram_type type = PROBABILITY)__attribute__((deprecated));
+    static Function* get_gray_histogram(cv::Mat in, histogram_type type = PROBABILITY);
     static Function* get_histogram_equalization_fun(Function *fun);
     static Function* get_histogram_match_fun(Function *origin, Function *target);
     enum zoom_types{Nearest, BILINEAR, BICUBIC};
@@ -29,15 +32,17 @@ public:
     typedef int algebra_type;
     static void algebra(FImage &in_out, FImage &another, algebra_type type);
 
-    static void edge_detect(FImage &in_out, EdgeDetect::edge_detect_type_t type);
-    static void blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma);
+    static void edge_detect(FImage &in_out, EdgeDetect::edge_detect_type_t type)__attribute__((deprecated));
+    static void edge_detect(cv::Mat &in, cv::Mat &out, EdgeDetect::edge_detect_type_t type);
+    static void blur(FImage &in_out, Blur::blur_type_t type, int size, double sigma) __attribute__((deprecated));
+    static void blur(cv::Mat in, cv::Mat &out, Blur::blur_type_t type, int size, double sigma);
     static void morphology_transform(FImage &in_out, Blur::blur_type_t type, cv::Mat se, int center_x, int center_y) __attribute__((deprecated));
-    static void morphology_transform(cv::Mat &in, cv::Mat &out, Morphology::morphology_type_t type, cv::Mat se, int center_x, int center_y);
+    static void morphology_transform(cv::Mat in, cv::Mat &out, Morphology::morphology_type_t type, cv::Mat se, int center_x, int center_y);
     static cv::Mat& morphology_mask();
     static void threshold(FImage &in_out, Miscellaneous::threshold_type_t type, int t1, int t2)__attribute__((deprecated));
-    static void threshold(cv::Mat &in, cv::Mat &out, Miscellaneous::threshold_type_t type, int t1, int t2);
+    static void threshold(cv::Mat in, cv::Mat &out, Miscellaneous::threshold_type_t type, int t1, int t2);
     static unsigned char auto_threshold(FImage &in_out, Miscellaneous::auto_threshold_type_t type, std::vector<double> parameters)__attribute__((deprecated));
-    static unsigned char auto_threshold(cv::Mat &in, cv::Mat &out, Miscellaneous::auto_threshold_type_t type, std::vector<double> parameters);
+    static unsigned char auto_threshold(cv::Mat in, cv::Mat &out, Miscellaneous::auto_threshold_type_t type, std::vector<double> parameters);
 private:
     static int get_gray_scale(cv::Vec3b color);
     static cv::Vec3b to_gray_vec3b(int gray);

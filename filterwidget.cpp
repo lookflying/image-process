@@ -51,6 +51,7 @@ void FilterWidget::create_page_blur(){
     spin_box_blur_size_->setGeometry(QRect(width() / 7, 40, width() * 2 / 7, 24));
     spin_box_blur_size_->setRange(1, 100);
     spin_box_blur_size_->setSingleStep(2);
+    spin_box_blur_size_->setValue(3);
     label_blur_sigma_ = new QLabel(QString::fromUtf8("sigma"), tool_page_blur_);
     label_blur_sigma_->setGeometry(QRect(width() * 3 / 7, 40, width() * 3 / 14, 24));
     double_spin_box_blur_sigma_ = new QDoubleSpinBox(tool_page_blur_);

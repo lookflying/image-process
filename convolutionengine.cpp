@@ -6,7 +6,7 @@
 using namespace cv;
 using namespace std;
 
-void ConvolutionEngine::run(Mat &src, Mat &dst, Mat &kernel, convolution_action* action, int center_x, int center_y){
+void ConvolutionEngine::run(Mat src, Mat &dst, Mat &kernel, convolution_action* action, int center_x, int center_y){
     CV_Assert(src.channels() == 1 && kernel.channels() == 1 && src.elemSize() == 1);//ensure gray and uchar, kernel can use double
     int kernel_row, kernel_col;
     Mat temp, rst = Mat(src.rows, src.cols, src.type());
@@ -28,7 +28,7 @@ void ConvolutionEngine::run(Mat &src, Mat &dst, Mat &kernel, convolution_action*
     dst = rst;
 }
 
-void ConvolutionEngine::run(Mat &src, Mat &dst, Mat &kernel, Mat &mask, convolution_action *action, int center_x, int center_y){
+void ConvolutionEngine::run(Mat src, Mat &dst, Mat &kernel, Mat &mask, convolution_action *action, int center_x, int center_y){
     CV_Assert(src.channels() == 1 && kernel.channels() == 1 && mask.channels() == 1 && src.elemSize() == 1 && kernel.elemSize() == 1);//ensure gray and uchar, kernel can use double
     int kernel_row, kernel_col;
     Mat temp, rst = Mat(src.rows, src.cols, src.type());
@@ -50,7 +50,7 @@ void ConvolutionEngine::run(Mat &src, Mat &dst, Mat &kernel, Mat &mask, convolut
     dst = rst;
 }
 
-void ConvolutionEngine::run2(Mat &src, Mat &src2, Mat &dst, Mat &kernel, Mat &mask, convolution_action2 *action, int center_x, int center_y){
+void ConvolutionEngine::run2(Mat src, Mat &src2, Mat &dst, Mat &kernel, Mat &mask, convolution_action2 *action, int center_x, int center_y){
     CV_Assert(src.channels() == 1 && kernel.channels() == 1 && mask.channels() == 1 && src2.channels() == 1 );
     int kernel_row, kernel_col;
     Mat temp, temp2, rst = Mat(src.rows, src.cols, CV_32SC1);
@@ -75,7 +75,7 @@ void ConvolutionEngine::run2(Mat &src, Mat &src2, Mat &dst, Mat &kernel, Mat &ma
     dst = rst;
 }
 
-void ConvolutionEngine::run_raw(Mat &src, Mat &dst, Mat &kernel, convolution_action_raw* action, int center_x, int center_y){
+void ConvolutionEngine::run_raw(Mat src, Mat &dst, Mat &kernel, convolution_action_raw* action, int center_x, int center_y){
     CV_Assert(src.channels() == 1 && kernel.channels() == 1 && src.elemSize() == 1);//ensure gray and uchar, kernel can use double
     int kernel_row, kernel_col;
     Mat temp, rst = Mat(src.rows, src.cols, CV_32FC1);

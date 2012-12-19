@@ -2,12 +2,13 @@
 #include <convolution.h>
 #include <convolutionengine.h>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <algorithm>
 using namespace cv;
 
 
-void Blur::run(Mat &src, Mat &dst, blur_type_t type, int size, double sigma){
+void Blur::run(Mat src, Mat &dst, blur_type_t type, int size, double sigma){
     Mat kernel, temp;
     CV_Assert(src.channels() == 1);
     switch(type){
@@ -47,7 +48,7 @@ void Blur::get_gaussian_kernel(Mat &out, int size, double sigma){
     out = getGaussianKernel(size, sigma, CV_32F);
 }
 
-uchar Blur::mean_blur_action(Mat& input, Mat& kernel){
+uchar Blur::mean_blur_action(Mat& input, Mat&){
     Scalar rst = mean(input);
     return rst[0];
 }
@@ -59,7 +60,7 @@ void Blur::get_mean_kernel(Mat &out, int size){
     out = Mat(size, size, CV_32FC1);
 }
 
-uchar Blur::median_blur_action(Mat& input, Mat& kernel){
+uchar Blur::median_blur_action(Mat& input, Mat&){
     Mat temp;
     input.copyTo(temp);
     MatIterator_<uchar> it = temp.begin<uchar>(), it_end = temp.end<uchar>();
