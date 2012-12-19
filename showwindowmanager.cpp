@@ -26,6 +26,12 @@ void ShowWindowManager::on_notify(string name, cv::Rect area){
     }
 }
 
+void ShowWindowManager::clear_drawing(){
+    if (windows_.find(current_window_) != windows_.end()){
+        windows_[current_window_]->clear_overlay();
+    }
+}
+
 
 
 void ShowWindowManager::set_refresh_action(show_window_refresh_action *action){
@@ -37,7 +43,7 @@ void ShowWindowManager::set_ui(QWidget *ui){
 }
 
 void ShowWindowManager::show_window( Mat image, string name, bool create_new, bool preview){
-    if (create_new || current_window_.compare("") == 0){
+        if (create_new || current_window_.compare("") == 0){
         if (windows_.find(name) != windows_.end()){
             windows_[name]->update_image(image);
         }else{
@@ -66,6 +72,14 @@ Mat ShowWindowManager::get_current_origin(){
         return Mat();
     }else{
         return current_origin_;
+    }
+}
+
+Mat ShowWindowManager::get_current_overlay(){
+    if (windows_.find(current_window_) != windows_.end()){
+        return windows_[current_window_]->get_overlay();
+    }else{
+        return Mat();
     }
 }
 

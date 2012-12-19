@@ -387,14 +387,18 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, cv::Mat
     }
         break;
     case CONDITIONAL_DILATION:{
-        Mat rst = Mat(src.rows, src.cols, src.type());
+        Mat rst;
+        src.copyTo(rst);
+        double old_sum = sum(rst)[0], new_sum;
         do{
             Mat temp;
-            ConvolutionEngine::run(src, temp, se, mask, dilation_action_binary, center_x, center_y);
-            if (sum(rst - temp)[0] == 0){
+            ConvolutionEngine::run(rst, temp, se, mask, dilation_action_binary, center_x, center_y);
+            new_sum = sum(temp)[0];
+            if (old_sum == new_sum){
                 break;
             }
             temp.copyTo(rst);
+            old_sum = new_sum;
         }while(true);
         dst = rst;
     }
@@ -409,12 +413,12 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, cv::Mat
         break;
     case OPENING_GRAYSCALE:{
         ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
-        ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
+        ConvolutionEngine::run(dst, dst, se, dilation_action_grayscale, center_x, center_y);
     }
         break;
     case CLOSING_GRAYSCALE:{
         ConvolutionEngine::run(src, dst, se, dilation_action_grayscale, center_x, center_y);
-        ConvolutionEngine::run(src, dst, se, erosion_action_grayscale, center_x, center_y);
+        ConvolutionEngine::run(dst, dst, se, erosion_action_grayscale, center_x, center_y);
     }
         break;
     case EDGE_STANDARD:{
@@ -437,14 +441,19 @@ void Morphology::run(Mat &src, Mat &dst, morphology_type_t type, Mat se, cv::Mat
     }
         break;
     case GRAYSCALE_RECONSTRUCTION:{
-        Mat rst = Mat(src.rows, src.cols, src.type());
+        Mat rst;
+        src.copyTo(rst);
+        double old_sum, cur_sum;
+        old_sum = sum(rst)[0];
         do{
             Mat temp;
-            ConvolutionEngine::run(src, temp, se, mask, dilation_action_grayscale, center_x, center_y);
-            if (sum(rst - temp)[0] == 0){
+            ConvolutionEngine::run(rst, temp, se, mask, dilation_action_grayscale, center_x, center_y);
+            cur_sum = sum(temp)[0];
+            if (cur_sum == old_sum){
                 break;
             }
             temp.copyTo(rst);
+            old_sum = cur_sum;
         }while(true);
         dst = rst;
     }
@@ -526,7 +535,7 @@ uchar Morphology::dilation_action_grayscale(Mat &input, Mat &se){
     int max_value = 0;
     for (int i = 0; i < se.rows; ++i){
         for (int j = 0; j < se.cols; ++j){
-            max_value = std::max(static_cast<int>(se.at<uchar>(i, j)) + static_cast<int>(input.at<uchar>(i, j)), max_value);
+            max_value = std::max(static_cast<int>(se.at<uchar>(se.rows - 1 - i, se.cols - 1 - j)) + static_cast<int>(input.at<uchar>(i, j)), max_value);
         }
     }
     if (max_value > 255){

@@ -21,6 +21,7 @@ public:
 
     QLabel *label_turn_gray_;
     QPushButton *button_turn_gray_;
+    QPushButton *button_split_overlay_;
 
     QLabel *label_threshold_;
     QSlider *slider_threshold_;

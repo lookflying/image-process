@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     create_image_view();
     create_tab_widget();
     create_show_window_manager();
+    create_shortcut();
     setCentralWidget(central_widget_);
     connect_signal_slot();
     setMouseTracking(true);
@@ -93,6 +94,7 @@ void MainWindow::create_actions(){
     edit_redo_act_->setShortcut(QKeySequence::Redo);
     edit_redo_act_->setStatusTip(tr("Redo last step"));
     connect(edit_redo_act_, SIGNAL(triggered()), this, SLOT(redo()));
+
 }
 
 void MainWindow::create_menus(){
@@ -195,7 +197,8 @@ static void show_window_action(cv::Mat img, QWidget *ui, string){
 }
 
 void MainWindow::create_shortcut(){
-
+    short_cut_clear_ = new QShortcut(QKeySequence::Copy, this);
+    connect(short_cut_clear_, SIGNAL(activated()), this, SLOT(show_window_clear_()));
 }
 
 
@@ -230,6 +233,7 @@ void MainWindow::connect_signal_slot(){
     connect(tab_preprocess_->button_turn_gray_, SIGNAL(clicked()), this, SLOT(pre_turn_gray()));
     connect(tab_filter_->button_mask_, SIGNAL(clicked()), this, SLOT(filter_morphology_mask()));
     connect(tab_filter_->slider_morphology_, SIGNAL(valueChanged(int)), this, SLOT(filter_morphology_watershed_mask()));
+    connect(tab_preprocess_->button_split_overlay_, SIGNAL(clicked()), this, SLOT(pre_show_window_split_overlay()));
 }
 
 void MainWindow::save_file(){
@@ -451,7 +455,7 @@ void MainWindow::filter_morphology(){
                                                -1,
                                                -1);
             show_window_manager_->show_window(temp,
-                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                              __FUNCTION__ +                                               show_window_manager_->get_current_window_name(),
                                               check_box_create_new_window_->isChecked());
         }
     }
@@ -515,7 +519,7 @@ void MainWindow::pre_threshold(){
                                     tab_preprocess_->slider_threshold_->value(),
                                     tab_preprocess_->slider_threshold_optional_->value());
             show_window_manager_->show_window(temp,
-                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                              __FUNCTION__ + show_window_manager_->get_current_window_name(),
                                               check_box_create_new_window_->isChecked(),
                                               true);
         }
@@ -535,7 +539,7 @@ void MainWindow::pre_dual_threshold(){
                                     tab_preprocess_->slider_threshold_->value(),
                                     tab_preprocess_->slider_threshold_optional_->value());
             show_window_manager_->show_window(temp,
-                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                              __FUNCTION__ + show_window_manager_->get_current_window_name(),
                                               check_box_create_new_window_->isChecked(),
                                               true);
         }
@@ -556,7 +560,7 @@ void MainWindow::pre_auto_threshold(){
                                                             tab_preprocess_->combo_box_threshold_->currentIndex(), p);
             tab_preprocess_->slider_threshold_->setValue(static_cast<int>(th));
             show_window_manager_->show_window(temp,
-                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                               __FUNCTION__ + show_window_manager_->get_current_window_name(),
                                               check_box_create_new_window_->isChecked(),
                                               true);
         }
@@ -570,7 +574,7 @@ void MainWindow::pre_turn_gray(){
         if (image.channels() == 3){
             cvtColor(image, temp, CV_BGR2GRAY);
             show_window_manager_->show_window(temp,
-                                              show_window_manager_->get_current_window_name() + __FUNCTION__,
+                                               __FUNCTION__ + show_window_manager_->get_current_window_name(),
                                               check_box_create_new_window_->isChecked());
         }
     }else{
@@ -586,3 +590,24 @@ void MainWindow::status_show_position(int x, int y){
 
 void MainWindow::mouseMoveEvent(QMouseEvent *){
 }
+
+void MainWindow::show_window_clear_(){
+    show_window_manager_->clear_drawing();
+}
+
+void MainWindow::pre_show_window_split_overlay(){
+    Mat img = show_window_manager_->get_current_image();
+    Mat overlay = show_window_manager_->get_current_overlay();
+    if (img.empty() || overlay.empty()){
+        QMessageBox::warning(this, "No Image File", "no image to process");
+    }else{
+        show_window_manager_->show_window(img, "origin" + show_window_manager_->get_current_window_name(), check_box_create_new_window_->isChecked());
+        show_window_manager_->show_window(overlay, "overlay" + show_window_manager_->get_current_window_name(), true);
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *){
+    exit(0);
+}
+
+

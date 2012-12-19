@@ -65,12 +65,17 @@ private slots:
     void filter_morphology();
     void filter_morphology_mask();
     void filter_morphology_watershed_mask();
+
     void pre_threshold();
     void pre_dual_threshold();
     void pre_auto_threshold();
     void pre_turn_gray();
 
+    void show_window_clear_();
+    void pre_show_window_split_overlay();
+
     void status_show_position(int x, int y);
+    void closeEvent(QCloseEvent *);
 public:
 
     void create_image();
@@ -100,6 +105,8 @@ public:
 
     QAction *edit_undo_act_;
     QAction *edit_redo_act_;
+
+    QShortcut *short_cut_clear_;
 
     ImageView *image_view_;
     QWidget *central_widget_;

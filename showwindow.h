@@ -17,6 +17,7 @@ public:
     void draw(int x, int y);
     cv::Mat get_image();
     cv::Mat get_overlay();
+    void clear_overlay();
 private:
     std::string window_name_;
     cv::Mat image_;

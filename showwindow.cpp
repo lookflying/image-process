@@ -1,5 +1,6 @@
 #include "showwindow.h"
-#include "highgui.h"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include "showwindowmanager.h"
 using namespace cv;
 static void on_mouse(int event, int x, int y, int, void* p){
@@ -47,8 +48,14 @@ Mat ShowWindow::get_overlay(){
     return overlay_;
 }
 
+void ShowWindow::clear_overlay(){
+    overlay_ = Mat(image_.rows, image_.cols, CV_8UC3, Scalar(0, 0, 0));
+    show();
+}
+
 void ShowWindow::update_image(Mat image){
     image.copyTo(image_);
+    overlay_ = Mat(image_.rows, image_.cols, CV_8UC3, Scalar(0, 0, 0));
     imshow(window_name_, image_);
 }
 
@@ -57,6 +64,11 @@ void ShowWindow::preview(Mat image){
 }
 
 void ShowWindow::show(){
+    if (image_.channels() == 1 && overlay_.channels() == 3){
+        cvtColor(overlay_, overlay_, CV_BGR2GRAY);
+    }else if (image_.channels() == 3 && overlay_.channels() == 1){
+         cvtColor(overlay_, overlay_, CV_GRAY2BGR);
+    }
     imshow(window_name_, max(image_, overlay_));
 }
 
