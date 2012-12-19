@@ -81,6 +81,19 @@ void ImageProcess::get_edge(int x, int y, int &pos_x, int &neg_x, int &pos_y, in
     else if (y < neg_y)
         neg_y = y;
 }
+void ImageProcess::gray_linear_transform(Mat in, Mat &out, int x_min, int x_max, int y_min, int y_max){
+    CV_Assert(in.channels() == 1 && in.elemSize() == 1);
+    LinearFunction fun(0, 255, 0, 255);
+    out = Mat(in.rows, in.cols, in.type());
+    fun.set(255, 255);
+    fun.set(x_min, y_min);
+    fun.set(x_max, y_max);
+    for (int i = 0; i < in.rows; ++i){
+        for (int j = 0; j < in.cols; ++j){
+            out.at<uchar>(i, j) = static_cast<uchar>(fun.get(static_cast<int>(in.at<uchar>(i, j))));
+        }
+    }
+}
 
 void ImageProcess::gray_linear_transform(FImage &in_out, int x_min, int x_max, int y_min, int y_max){
     LinearFunction fun(0, 255, 0, 255);

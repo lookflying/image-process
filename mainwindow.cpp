@@ -261,12 +261,27 @@ void MainWindow::undo(){
 }
 
 void MainWindow::gray_linear_transform(){
-    int min_x = tab_gray_->spin_box_input_1_->value();
-    int max_x = tab_gray_->spin_box_input_2_->value();
-    int min_y = tab_gray_->spin_box_output_1_->value();
-    int max_y = tab_gray_->spin_box_output_2_->value();
-    ImageProcess::gray_linear_transform(image_view_->image_data_, min_x, max_x, min_y, max_y);
-    emit refresh_image_view();
+    cv::Mat temp, se_mat;
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.channels() != 1){
+            QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+        }else{
+            int min_x = tab_gray_->spin_box_input_1_->value();
+            int max_x = tab_gray_->spin_box_input_2_->value();
+            int min_y = tab_gray_->spin_box_output_1_->value();
+            int max_y = tab_gray_->spin_box_output_2_->value();
+            ImageProcess::gray_linear_transform(image,
+                                                temp,
+                                                min_x, max_x, min_y, max_y);
+
+            emit refresh_image_view();
+            show_window_manager_->show_window(temp,
+                                              __FUNCTION__ +                                               show_window_manager_->get_current_window_name(),
+                                              check_box_create_new_window_->isChecked());
+        }
+    }
+
 }
 void MainWindow::gray_log_transform(){
     gray_non_linear_transform(LOG);
@@ -307,10 +322,24 @@ void MainWindow::gray_non_linear_transform(non_linear_action action){
     }
     case DO:
     {
-        if (tab_gray_->chart_non_linear_->fun_ != NULL){
-            ImageProcess::gray_fun_transform(image_view_->image_data_, tab_gray_->chart_non_linear_->fun_);
-            emit refresh_image_view();
+        cv::Mat temp;
+        cv::Mat image = show_window_manager_->get_current_image();
+        if(!image.empty()){
+            if (image.channels() != 1){
+                QMessageBox::warning(this, "Image Type Error", "Image is not single channel!");
+            }else{
+
+                if (tab_gray_->chart_non_linear_->fun_ != NULL){
+                    ImageProcess::gray_fun_transform(image,
+                                                     temp,
+                                                     tab_gray_->chart_non_linear_->fun_);
+                    show_window_manager_->show_window(temp,
+                                                      __FUNCTION__ + show_window_manager_->get_current_window_name(),
+                                                      check_box_create_new_window_->isChecked());
+                }
+            }
         }
+
         break;
     }
     default:

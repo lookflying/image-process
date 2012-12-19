@@ -14,7 +14,8 @@ class ImageProcess
 {
 public:
     ImageProcess();
-    static void gray_linear_transform(FImage &in_out, int x_min, int x_max, int y_min, int y_max);
+    static void gray_linear_transform(FImage &in_out, int x_min, int x_max, int y_min, int y_max)__attribute__((deprecated));
+    static void gray_linear_transform(cv::Mat in, cv::Mat &out, int x_min, int x_max, int y_min, int y_max);
     static void gray_fun_transform(FImage &in_out, Function* fun)__attribute__((deprecated));
     //only accept one channel image
     static void gray_fun_transform(cv::Mat in, cv::Mat &out, Function *fun);
