@@ -5,6 +5,7 @@
 #include <cmath>
 #include <sstream>
 #include <QDebug>
+#include <vector>
 using namespace std;
 using namespace cv;
 ImageProcess::ImageProcess()
@@ -62,13 +63,28 @@ Vec3b ImageProcess::divide(Vec3b v1, Vec3b v2){
         return to_gray_vec3b(a1);
     }
 }
+void ImageProcess::get_position_after_rotation_center(int center_x, int center_y, int x, int y, double rad, int &x_r, int &y_r){
+    int xx = x - center_x;
+    int yy = y - center_y;
+    int xx_r , yy_r;
+    get_position_after_rotation(xx, yy, rad, xx_r, yy_r);
+    x_r = xx_r + center_x;
+    y_r = yy_r + center_y;
+}
 
+void ImageProcess::get_position_before_rotation_center(int center_x, int center_y, int x_r, int y_r, double rad, int &x, int &y){
+    get_position_after_rotation_center(center_x, center_y, x_r, y_r, -rad, x, y);
+}
 
-void ImageProcess::get_postion_after_rotation(int x, int y, double rad, int &x_r, int &y_r){
+void ImageProcess::get_position_after_rotation(int x, int y, double rad, int &x_r, int &y_r){
     double xx = static_cast<double>(x);
     double yy = static_cast<double>(y);
     x_r = static_cast<int>(xx * cos(rad) - yy * sin(rad));
     y_r = static_cast<int>(xx * sin(rad) + yy * cos(rad));
+}
+
+void ImageProcess::get_position_before_rotation(int x_r, int y_r, double rad, int &x, int &y){
+    get_position_after_rotation(x_r, y_r, -rad, x, y);
 }
 
 void ImageProcess::get_edge(int x, int y, int &pos_x, int &neg_x, int &pos_y, int &neg_y){
@@ -307,7 +323,7 @@ void ImageProcess::geometry_zoom(FImage &in_out, int percentage, zoom_type type)
     for (int i = 0; i < height; ++i){
         for (int j = 0; j < width; j++){
             switch (type){
-            case Nearest:
+            case NEAREST:
                 new_img.at<Vec3b>(j, i) = img->at<Vec3b>(j * 100 / percentage, i * 100 / percentage);
                 break;
             case BILINEAR:
@@ -349,6 +365,127 @@ void ImageProcess::geometry_zoom(FImage &in_out, int percentage, zoom_type type)
     new_img.copyTo(in_out.get_opencv_image_3channels());
 }
 
+void ImageProcess::get_rotated_vertex(Mat image, int center_x, int center_y, double rad, vector<Point> &points){
+    vector<Point> ori_points;
+    points.clear();
+    ori_points.push_back(Point(0, 0));
+    ori_points.push_back(Point(0, image.rows));
+    ori_points.push_back(Point(image.cols, 0));
+    ori_points.push_back(Point(image.cols, image.rows));
+    for (unsigned int i = 0; i < ori_points.size(); ++i){
+        int x, y;
+        get_position_after_rotation_center(center_x, center_y, ori_points[i].x, ori_points[i].y, rad, x, y);
+        points.push_back(Point(x, y));
+    }
+}
+void ImageProcess::cut_edge(Mat in, Mat &out, uchar edge_value){
+    CV_Assert(in.channels() == 1);
+    int x = 0, y = 0, w = 0, h = 0;
+from_top:
+    for (int i = 0; i < in.rows; ++i){
+        for (int j = 0; j < in.cols; ++j){
+            if (in.at<unsigned char>(i, j) != edge_value){
+                y = i;
+                goto from_bottom;
+            }
+        }
+    }
+from_bottom:
+    for (int i = in.rows - 1; i > y; --i){
+        for (int j = 0; j < in.cols; ++j){
+            if (in.at<unsigned char>(i, j) != edge_value){
+                h = i - y + 1;
+                goto from_left;
+            }
+        }
+    }
+from_left:
+    for (int j = 0; j < in.cols; ++j){
+        for (int i = y; i < y + h; ++i){
+            if (in.at<unsigned char>(i, j) != edge_value){
+                x = j;
+                goto from_right;
+            }
+        }
+    }
+from_right:
+    for (int j = in.cols - 1; j > x; --j){
+        for (int i = y; i < y + h; ++i){
+            if (in.at<unsigned char>(i, j) != edge_value){
+                w = j - x + 1;
+                goto end;
+            }
+        }
+    }
+end:
+    in(Rect(x, y, w, h)).copyTo(out);
+
+}
+
+uchar ImageProcess::get_zoom_value(Mat in, int x, int y, double scale, zoom_type type, uchar d_value){
+    uchar value;
+    if (x < 0 || x >= in.cols || y < 0 || y >= in.rows){
+        value =  d_value;
+    }else{
+        switch(type){
+        case  NEAREST:{
+
+
+        }
+            break;
+        case BILINEAR:
+        {
+
+        }
+            break;
+        case BICUBIC:
+            break;
+        default:
+            break;
+        }
+    }
+    return value;
+}
+
+void ImageProcess::geometry_rotate(Mat in, Mat &out, double degree, zoom_type type){
+    if (in.channels() != 1){
+        vector<Mat> channels;
+        split(in, channels);
+        for (unsigned int i = 0; i < channels.size(); ++i){
+            geometry_rotate(channels[i], channels[i], degree, type);
+        }
+        merge(channels, out);
+    }else{
+        int center_x = in.cols / 2, center_y = in.rows / 2;
+        int x_min, x_max, y_min, y_max;
+        double theta = degree * CV_PI / 180.0;
+        vector<Point> vertex;
+        get_rotated_vertex(in, center_x, center_y, theta, vertex);
+        CV_Assert(vertex.size() == 4);
+        x_min = x_max = vertex[0].x;
+        y_min = y_max = vertex[0].y;
+        for (unsigned int i = 1; i < vertex.size(); ++i){
+            x_min = std::min(vertex[i].x, x_min);
+            x_max = std::max(vertex[i].x, x_max);
+            y_min = std::min(vertex[i].y, y_min);
+            y_max = std::max(vertex[i].y, y_max);
+        }
+        int x_offset = 0 - x_min;
+        int y_offset = 0 - y_min;
+        out = Mat(y_max - y_min, x_max - x_min, CV_8UC1, Scalar(255));
+        for (int i = y_min; i < y_max; ++i){
+            for (int j = x_min ; j < x_max; ++j){
+                int x, y;
+                get_position_before_rotation_center(center_x, center_y, j, i, theta, x, y);
+                if (x >= 0 && x < in.cols && y >=0 && y < in.rows){
+                    out.at<uchar>(i + y_offset, j + x_offset) = in.at<uchar>(y, x);
+                }
+            }
+        }
+        cut_edge(out, out, 255);
+    }
+}
+
 void ImageProcess::geometry_rotate(FImage &in_out, double rad, zoom_type type){
     Mat *img = &in_out.get_opencv_image_3channels();
     if (img->empty())
@@ -361,11 +498,11 @@ void ImageProcess::geometry_rotate(FImage &in_out, double rad, zoom_type type){
     pos_x = neg_x = pos_y = neg_y = 0;
     {
         int x_r, y_r;
-        get_postion_after_rotation(0, ori_h, rad, x_r, y_r);
+        get_position_after_rotation(0, ori_h, rad, x_r, y_r);
         get_edge(x_r, y_r, pos_x, neg_x, pos_y, neg_y);
-        get_postion_after_rotation(ori_w, 0, rad, x_r, y_r);
+        get_position_after_rotation(ori_w, 0, rad, x_r, y_r);
         get_edge(x_r, y_r, pos_x, neg_x, pos_y, neg_y);
-        get_postion_after_rotation(ori_w, ori_h, rad, x_r, y_r);
+        get_position_after_rotation(ori_w, ori_h, rad, x_r, y_r);
         get_edge(x_r, y_r, pos_x, neg_x, pos_y, neg_y);
         width = pos_x - neg_x;
         height = pos_y - neg_y;
@@ -374,9 +511,9 @@ void ImageProcess::geometry_rotate(FImage &in_out, double rad, zoom_type type){
     for (int i = 0; i < ori_h; ++i){
         for (int j = 0; j < ori_w; j++){
             int x, y;
-            get_postion_after_rotation(i, j, rad, x, y);
+            get_position_after_rotation(i, j, rad, x, y);
             switch (type){
-            case Nearest:
+            case NEAREST:
                 new_img.at<Vec3b>(y - neg_y, x - neg_x) = img->at<Vec3b>(j, i);
                 break;
             case BILINEAR:

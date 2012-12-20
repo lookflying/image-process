@@ -442,10 +442,10 @@ void MainWindow::gray_histogram_match(){
 }
 
 void MainWindow::geometry_zoom(){
-    ImageProcess::zoom_type type = ImageProcess::Nearest;
+    ImageProcess::zoom_type type = ImageProcess::NEAREST;
     switch(tab_basic_->combo_zoom_->currentIndex()){
     case 0:
-        type = ImageProcess::Nearest;
+        type = ImageProcess::NEAREST;
         break;
     case 1:
         type = ImageProcess::BILINEAR;
@@ -460,22 +460,21 @@ void MainWindow::geometry_zoom(){
 }
 
 void MainWindow::geometry_rotate(){
-    ImageProcess::zoom_type type = ImageProcess::Nearest;
-    switch(tab_basic_->combo_zoom_->currentIndex()){
-    case 0:
-        type = ImageProcess::Nearest;
-        break;
-    case 1:
-        type = ImageProcess::BILINEAR;
-        break;
-    case 2:
-        type = ImageProcess::BICUBIC;
-        break;
+    cv::Mat temp;
+    cv::Mat image = show_window_manager_->get_current_image();
+    if(!image.empty()){
+        if (image.type() != CV_8UC1 && image.type() != CV_8UC3){
+            QMessageBox::warning(this, "Image Type Error", "Image type is not supported!");
+        }else{
+            ImageProcess::zoom_type type = tab_basic_->combo_zoom_->currentIndex();
+            int degree = tab_basic_->spin_box_rotate_->value();
+            ImageProcess::geometry_rotate(image, temp, degree, type);
+
+            show_window_manager_->show_window(temp,
+                                              __FUNCTION__ + show_window_manager_->get_current_window_name(),
+                                              check_box_create_new_window_->isChecked());
+        }
     }
-    int degree = tab_basic_->spin_box_rotate_->value();
-    double rad = static_cast<double>(degree) * 3.14159 / 180.0;
-    ImageProcess::geometry_rotate(image_view_->image_data_, rad, type);
-    emit refresh_image_view();
 }
 
 void MainWindow::basic_algebra(){

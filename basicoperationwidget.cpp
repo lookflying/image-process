@@ -1,4 +1,5 @@
 #include "basicoperationwidget.h"
+#include "imageprocess.h"
 
 BasicOperationWidget::BasicOperationWidget(int width, int height, QWidget *parent) :
     QWidget(parent)
@@ -52,9 +53,9 @@ void BasicOperationWidget::create_page_geometry(){
     tool_page_geometry_->setGeometry(QRect(0, 0, width(), page_height_));
     combo_zoom_ = new QComboBox(tool_page_geometry_);
     combo_zoom_->setGeometry(width() / 6, 0, width() * 2 / 3, 24);
-    combo_zoom_->insertItem(0, QString::fromUtf8("Nearest Neighbour"));
-    combo_zoom_->insertItem(1, QString::fromUtf8("Bilinear"));
-    combo_zoom_->insertItem(2, QString::fromUtf8("Bicubic"));
+    combo_zoom_->insertItem(ImageProcess::NEAREST, QString::fromUtf8("NEAREST"));
+    combo_zoom_->insertItem(ImageProcess::BILINEAR, QString::fromUtf8("BILINEAR"));
+    combo_zoom_->insertItem(ImageProcess::BICUBIC, QString::fromUtf8("BICUBIC"));
     label_zoom_ = new QLabel(tool_page_geometry_);
     label_zoom_->setGeometry(QRect(width() / 6, combo_zoom_->height(), width() / 3, 24));
     label_zoom_->setText(QString::fromUtf8("Zoom"));

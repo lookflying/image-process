@@ -25,10 +25,14 @@ public:
     static Function* get_gray_histogram(cv::Mat in, histogram_type type = PROBABILITY);
     static Function* get_histogram_equalization_fun(Function *fun);
     static Function* get_histogram_match_fun(Function *origin, Function *target);
-    enum zoom_types{Nearest, BILINEAR, BICUBIC};
+    enum zoom_types{NEAREST, BILINEAR, BICUBIC};
     typedef int zoom_type;
     static void geometry_zoom(FImage &in_out, int percentage, zoom_type type = BICUBIC);
     static void geometry_rotate(FImage &in_out, double rad, zoom_type type = BICUBIC);
+    static void geometry_rotate(cv::Mat in, cv::Mat &out, double degree, zoom_type type = BICUBIC);
+    static uchar get_zoom_value(cv::Mat in, int x, int y, double scale, zoom_type type = BICUBIC, uchar d_value = 255);
+    static void cut_edge(cv::Mat in, cv::Mat &out, uchar edge_value = 255);
+    static void get_rotated_vertex(cv::Mat image, int center_x, int center_y, double rad, std::vector<cv::Point> &points);
     enum algebra_types{ADD, SUB, MUL, DIV};
     typedef int algebra_type;
     static void algebra(FImage &in_out, FImage &another, algebra_type type);
@@ -51,7 +55,10 @@ private:
     static cv::Vec3b subtract(cv::Vec3b v1, cv::Vec3b v2);
     static cv::Vec3b multiply(cv::Vec3b v1, cv::Vec3b v2);
     static cv::Vec3b divide(cv::Vec3b v1, cv::Vec3b v2);
-    static void get_postion_after_rotation(int x, int y, double rad, int &x_r, int &y_r);
+    static void get_position_after_rotation_center(int center_x, int center_y, int x, int y, double rad, int &x_r, int &y_r);
+    static void get_position_before_rotation_center(int center_x, int center_y, int x_r, int y_r, double rad, int &x, int &y);
+    static void get_position_after_rotation(int x, int y, double rad, int &x_r, int &y_r);
+    static void get_position_before_rotation(int x_r, int y_r, double rad, int &x, int &y);
     static void get_edge(int x, int y, int &pos_x, int &neg_x, int &pos_y, int &neg_y);
 
     static cv::Mat morphology_mask_;
